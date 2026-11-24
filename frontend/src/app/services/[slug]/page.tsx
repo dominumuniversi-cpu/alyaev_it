@@ -8,7 +8,7 @@ import { ButtonLink } from "@/components/ui/Button";
 import { Section } from "@/components/ui/Section";
 import { JsonLd, serviceSchema } from "@/components/seo/JsonLd";
 import { fetchService, formatPrice } from "@/lib/api";
-import { canonicalUrl } from "@/lib/seo";
+import { canonicalUrl, siteBase } from "@/lib/seo";
 
 type Params = { params: Promise<{ slug: string }> };
 
@@ -57,7 +57,7 @@ export default async function ServicePage({ params }: Params) {
     <>
     <JsonLd
       data={serviceSchema({
-        site: (process.env.SITE_URL ?? "https://alyaev.it") + (process.env.BASE_PATH ?? ""),
+        site: siteBase(),
         name: service.title,
         description: service.short_description,
         priceFrom: service.price_on_request ? null : service.price_from,

@@ -2,8 +2,10 @@
 
 import type { MetadataRoute } from "next";
 
+import { siteBase } from "@/lib/seo";
+
 const BASE_PATH = process.env.BASE_PATH ?? "/alyaev";
-const SITE = (process.env.SITE_URL ?? "https://alyaev.it") + BASE_PATH;
+const SITE = siteBase();
 
 /** Правила индексации. Кабинет, вход и API закрыты. */
 export default function robots(): MetadataRoute.Robots {

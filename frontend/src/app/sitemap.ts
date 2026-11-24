@@ -3,9 +3,10 @@
 import type { MetadataRoute } from "next";
 
 import { fetchServices } from "@/lib/api";
+import { siteBase } from "@/lib/seo";
 
 const BASE_PATH = process.env.BASE_PATH ?? "/alyaev";
-const SITE = (process.env.SITE_URL ?? "https://alyaev.it") + BASE_PATH;
+const SITE = siteBase();
 
 const STATIC_PATHS = ["/", "/services/", "/contacts/", "/about/", "/portfolio/", "/blog/", "/privacy/", "/consent/"];
 

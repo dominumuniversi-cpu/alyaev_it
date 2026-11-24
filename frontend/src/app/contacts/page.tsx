@@ -32,9 +32,17 @@ export default async function ContactsPage() {
         <div className="rounded-2xl border border-[color:var(--c-border)] bg-[color:var(--c-surface)] p-6">
           <h2 className="mb-3 text-base font-semibold">Как связаться напрямую</h2>
           {contacts.telegram ? (
-            <p className="mt-2 text-base">
-              Telegram: <span className="text-[color:var(--c-gold)]">{contacts.telegram}</span>
-            </p>
+            <div className="mt-3">
+              <p className="mb-3 text-base">Telegram: <span className="text-[color:var(--c-gold)]">{contacts.telegram}</span></p>
+              <a
+                href={contacts.telegram_url || "https://t.me/" + contacts.telegram.replace(/^@/, "")}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center rounded-xl bg-[color:var(--c-gold)] px-5 py-2.5 text-sm font-semibold text-[#0A0C12] no-underline transition-colors hover:bg-[#EFCF98]"
+              >
+                Написать в Telegram
+              </a>
+            </div>
           ) : null}
           {contacts.email ? (
             <p className="mt-2 text-base">

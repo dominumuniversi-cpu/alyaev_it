@@ -83,7 +83,19 @@ export function Footer({
             </ul>
             {(telegram || email) ? (
               <ul className="mt-4 space-y-2 text-sm text-[color:var(--c-text-muted)]">
-                {telegram ? <li>Telegram: {telegram}</li> : null}
+                {telegram ? (
+                  <li>
+                    Telegram:{" "}
+                    <a
+                      href={contacts.telegram_url || "https://t.me/" + telegram.replace(/^@/, "")}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-[color:var(--c-gold)] no-underline hover:underline"
+                    >
+                      {telegram}
+                    </a>
+                  </li>
+                ) : null}
                 {email ? <li>E-mail: {email}</li> : null}
               </ul>
             ) : null}

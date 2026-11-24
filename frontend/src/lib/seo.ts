@@ -1,9 +1,11 @@
 /** Единый источник адресов для canonical, OG и sitemap. */
 
-const SITE_URL = (process.env.SITE_URL ?? "https://alyaev.it").replace(/\/$/, "");
+// Адрес сайта берётся из окружения. Пока домена нет, это адрес стенда,
+// поэтому сайт не публикует ссылок на несуществующий домен.
+const SITE_URL = (process.env.SITE_URL ?? "http://localhost").replace(/\/$/, "");
 const BASE_PATH = process.env.BASE_PATH ?? "/alyaev";
 
-/** Канонический адрес страницы: домен + basePath + путь со слэшем. */
+/** Канонический адрес страницы: адрес сайта + basePath + путь со слэшем. */
 export function canonicalUrl(path: string): string {
   const clean = path === "/" ? "/" : path.replace(/\/+$/, "") + "/";
   return SITE_URL + BASE_PATH + clean;

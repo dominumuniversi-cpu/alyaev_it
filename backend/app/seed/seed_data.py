@@ -100,7 +100,7 @@ SERVICES = [
 ]
 
 SETTINGS = [
-    {"key": "contacts", "value": {"telegram": "@alyaev", "email": "", "phone": "", "note": "Заполняется владельцем"}},
+    {"key": "contacts", "value": {"telegram": "@dima_alyaev", "telegram_url": "https://t.me/dima_alyaev", "email": "", "phone": ""}},
     {"key": "brand", "value": {"name": "Дмитрий Аляев", "tagline": "AI & Business Automation"}},
     {"key": "analytics", "value": {"metrika_id": "", "ga4_id": ""}},
     {"key": "privacy", "value": {"policy_version": "1.0", "policy_date": "2026-11-24"}},
@@ -137,8 +137,7 @@ def run() -> None:
             row = session.scalars(select(SiteSetting).where(SiteSetting.key == setting['key'])).first()
             if row is None:
                 session.add(SiteSetting(**setting))
-            else:
-                row.value = setting['value']
+            # Существующие настройки не перезаписываем: их правит владелец через БД.
         if session.scalars(select(SeoMetadata).where(SeoMetadata.path == '/')).first() is None:
             session.add(SeoMetadata(
                 entity_type='page', path='/',

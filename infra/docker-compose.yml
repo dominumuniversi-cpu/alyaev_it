@@ -41,6 +41,9 @@ services:
       BACKEND_URL: http://backend:8000
       # На стенде сайт по префиксу /alyaev/; на домене — пусто (корень).
       BASE_PATH: ${FRONTEND_BASE_PATH:-/alyaev}
+      # Публичный адрес для canonical, OG и sitemap. Домена пока нет — стендовый адрес.
+      # При появлении домена: поменять SITE_URL в .env и пересобрать frontend.
+      SITE_URL: ${SITE_URL:-https://188.226.71.169}
     depends_on: [backend]
     networks: [shared]
 

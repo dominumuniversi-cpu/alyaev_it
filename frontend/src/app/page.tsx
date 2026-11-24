@@ -8,7 +8,7 @@ import { ServiceCard } from "@/components/site/ServiceCard";
 import { JsonLd, websiteSchema } from "@/components/seo/JsonLd";
 import { fetchServices } from "@/lib/api";
 import { LeadForm } from "@/components/site/LeadForm";
-import { canonicalUrl } from "@/lib/seo";
+import { canonicalUrl, siteBase } from "@/lib/seo";
 
 const ADVANTAGES = [
   { title: "Понимание бизнес-процессов", text: "Сначала разбираю процесс, потом предлагаю решение — не наоборот." },
@@ -50,7 +50,7 @@ export default async function HomePage() {
     <>
       <JsonLd
         data={websiteSchema(
-          (process.env.SITE_URL ?? "https://alyaev.it") + (process.env.BASE_PATH ?? ""),
+          siteBase(),
           "Дмитрий Аляев — автоматизация бизнеса и AI-разработка",
         )}
       />

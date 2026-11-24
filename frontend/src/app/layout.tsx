@@ -2,11 +2,12 @@ import type { Metadata } from 'next';
 import './globals.css';
 
 import { SiteChrome } from '@/components/layout/SiteChrome';
+import { siteBase } from '@/lib/seo';
 
 export const metadata: Metadata = {
   title: { default: 'Автоматизация бизнеса и AI-разработка — Дмитрий Аляев', template: '%s — Дмитрий Аляев' },
   description: 'Разрабатываю и внедряю решения для автоматизации бизнеса: Telegram-боты, AI-ассистенты, интеграции, сайты.',
-  metadataBase: new URL(process.env.SITE_URL || 'https://alyaev.it'),
+  metadataBase: new URL(siteBase()),
   robots: { index: true, follow: true },
   openGraph: {
     type: "website",
