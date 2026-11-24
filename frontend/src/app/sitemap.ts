@@ -1,0 +1,28 @@
+/** sitemap.xml: только проиндексированные страницы с данными из БД. */
+
+import type { MetadataRoute } from "next";
+
+import { fetchServices } from "@/lib/api";
+
+const BASE_PATH = process.env.BASE_PATH ?? "/alyaev";
+const SITE = (process.env.SITE_URL ?? "https://alyaev.it") + BASE_PATH;
+
+const STATIC_PATHS = ["/", "/services/", "/contacts/", "/about/", "/portfolio/", "/blog/", "/privacy/", "/consent/"];
+
+/** Карта сайта: статические страницы плюс опубликованные услуги. */
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const services = await fetchServices();
+  const staticRoutes = STATIC_PATHS.map((path) => ({
+    url: SITE + path,
+    lastModified: new Date(),
+    changeFrequency: (path === "/" ? "weekly" : "monthly") as "weekly" | "monthly",
+    priority: path === "/" ? 1 : 0.7,
+  }));
+  const serviceRoutes = services.map((service) => ({
+    url: SITE + "/services/" + service.slug + "/",
+    lastModified: new Date(),
+    changeFrequency: "monthly" as const,
+    priority: 0.8,
+  }));
+  return [...staticRoutes, ...serviceRoutes];
+}

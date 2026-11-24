@@ -2,9 +2,11 @@
 
 from fastapi import FastAPI
 
+from app.api import public
 from app.core.config import settings
 
 app = FastAPI(title=settings.app_name, docs_url=None, redoc_url=None, openapi_url=None)
+app.include_router(public.router)
 
 
 @app.get("/api/health")

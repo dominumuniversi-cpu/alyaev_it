@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import './globals.css';
 
+import { SiteChrome } from '@/components/layout/SiteChrome';
+
 export const metadata: Metadata = {
   title: { default: 'Автоматизация бизнеса и AI-разработка — Дмитрий Аляев', template: '%s — Дмитрий Аляев' },
   description: 'Разрабатываю и внедряю решения для автоматизации бизнеса: Telegram-боты, AI-ассистенты, интеграции, сайты.',
@@ -12,7 +14,9 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="ru">
-      <body>{children}</body>
+      <body>
+        <SiteChrome>{children}</SiteChrome>
+      </body>
     </html>
   );
 }
