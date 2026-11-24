@@ -3,11 +3,12 @@
 import hashlib
 from datetime import UTC, datetime
 
-from fastapi import APIRouter, Depends, HTTPException, Request
+from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Request
 from sqlalchemy.orm import Session
 
 from app.api.schemas import LeadCreate
 from app.db.models import Lead
+from app.core.telegram import notify_new_lead
 from app.db.session import get_session
 
 router = APIRouter(prefix="/api/v1/leads", tags=["leads"])
@@ -36,6 +37,7 @@ def _hash_ip(request: Request) -> str | None:
 def create_lead(
     payload: LeadCreate,
     request: Request,
+    background: BackgroundTasks,
     session: Session = Depends(get_session),
 ) -> dict[str, str]:
     """Сохраняет заявку. Возвращает public_id, внутренний id наружу не отдаём."""
@@ -60,4 +62,9 @@ def create_lead(
     )
     session.add(lead)
     session.commit()
+
+    # Уведомление уходит после ответа: посетитель не ждёт Telegram, а сбой отправки
+    # не может отменить уже сохранённую заявку (docs/manifests/telegram-notifications.md).
+    background.add_task(notify_new_lead, lead)
+
     return {"status": "ok", "public_id": lead.public_id}
