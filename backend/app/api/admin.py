@@ -1,6 +1,6 @@
 """Админка: заявки и смена статусов. Только для персонала (проверка на сервере)."""
 
-from datetime import UTC, datetime
+from datetime import UTC, datetime, timedelta
 
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from pydantic import BaseModel, Field
@@ -8,7 +8,7 @@ from sqlalchemy import func, select
 from sqlalchemy.orm import Session as DbSession
 
 from app.core.permissions import Permission, require_permission
-from app.db.models import Lead, LeadEvent, User
+from app.db.models import Lead, LeadEvent, Message, Project, User
 from app.db.session import get_session
 
 router = APIRouter(prefix="/api/v1/admin", tags=["admin"])
@@ -37,6 +37,41 @@ def _lead_dict(lead: Lead) -> dict:
         "status": lead.status,
         "utm": lead.utm_json,
         "created_at": lead.created_at.isoformat() if lead.created_at else None,
+    }
+
+
+@router.get("/attention")
+def attention_summary(
+    session: DbSession = Depends(get_session),
+    _: User = Depends(require_permission(Permission.LEADS_READ)),
+) -> dict:
+    """Что требует внимания сотрудника — одним запросом на каждый показатель.
+
+    Считается на сервере, а не на клиенте: клиенту пришлось бы тянуть все
+    заявки и все сообщения только чтобы посчитать три числа.
+    """
+    new_leads = session.scalar(
+        select(func.count())
+        .select_from(Lead)
+        .where(Lead.status == "new", Lead.deleted_at.is_(None))
+    )
+    client_messages = session.scalar(
+        select(func.count())
+        .select_from(Message)
+        .join(Project, Project.id == Message.project_id)
+        .where(Message.author_role == "client")
+    )
+    # Проект «без движения» — активный, но не менявшийся неделю.
+    stale_before = datetime.now(UTC) - timedelta(days=7)
+    stale = session.scalar(
+        select(func.count())
+        .select_from(Project)
+        .where(Project.status != "done", Project.updated_at < stale_before)
+    )
+    return {
+        "new_leads": new_leads or 0,
+        "client_messages": client_messages or 0,
+        "stale_projects": stale or 0,
     }
 
 

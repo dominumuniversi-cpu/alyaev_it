@@ -3,6 +3,7 @@
 import type { Metadata } from "next";
 
 import { AdminNav } from "@/components/admin/AdminNav";
+import { AttentionSummary } from "@/components/admin/AttentionSummary";
 import { LeadsTable } from "@/components/admin/LeadsTable";
 
 export const metadata: Metadata = {
@@ -19,6 +20,7 @@ export default function AdminPage() {
           <h1 className="text-2xl font-semibold">Заявки</h1>
           <p className="mt-1 text-sm text-[color:var(--c-text-muted)]">Все обращения с сайта.</p>
       </div>
+      <AttentionSummary />
       <LeadsTable />
     </main>
   );
