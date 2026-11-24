@@ -44,12 +44,42 @@ if ($size -lt 1024) {
     exit 1
 }
 Write-Output "Создан: $fileName ($([math]::Round($size/1KB,1)) КБ)"
+# Файлы (документы клиентов, изображения) живут отдельно от базы:
+# bind-монтирование E:\DockerData\alyaev-it\media. Без них восстановление
+# вернёт записи в documents с битыми ссылками на несуществующие файлы.
+$MediaDir = "E:\DockerData\alyaev-it\media"
+if (Test-Path $MediaDir) {
+    $mediaCount = (Get-ChildItem $MediaDir -Recurse -File -ErrorAction SilentlyContinue | Measure-Object).Count
+    if ($mediaCount -gt 0) {
+        $mediaFile = "alyaev-media-$stamp.zip"
+        $mediaZip = Join-Path $BackupDir $mediaFile
+        Add-Type -AssemblyName System.IO.Compression.FileSystem
+        [System.IO.Compression.ZipFile]::CreateFromDirectory($MediaDir, $mediaZip)
+        $mz = (Get-Item $mediaZip).Length
+        Write-Output "Файлы: $mediaCount шт., архив $mediaFile ($([math]::Round($mz/1KB,1)) КБ)"
+    } else {
+        Write-Output "Файлов нет — архив media пропущен."
+    }
+} else {
+    Write-Output "Каталог media не найден — архив пропущен."
+}
 
 # Ротация: только по возрасту И только если хватает копий.
-$all = Get-ChildItem $BackupDir -Filter "alyaev-*.dump" | Sort-Object LastWriteTime
+# Ловушка: Get-ChildItem -Include без -Recurse на каталоге возвращает 0 файлов
+# (проверено: без -Recurse 0, через Where-Object 4) — ротация молча не работала.
+# Плюс в ротацию попадают только файлы самого скрипта (alyaev-DATE.dump /
+# alyaev-media-DATE.zip): чужой pre-migration_*.dump трогать нельзя.
+$all = @(Get-ChildItem $BackupDir -File | Where-Object {
+    ($_.Name -like "alyaev-*.dump" -or $_.Name -like "alyaev-media-*.zip") -and
+    $_.Name -match "^alyaev-(media-)?\d{4}-\d{2}-\d{2}_\d{6}\.(dump|zip)" -and
+    $_.Name -notlike "pre-migration*"
+} | Sort-Object LastWriteTime)
 $old = $all | Where-Object { $_.LastWriteTime -lt (Get-Date).AddDays(-$KeepDays) }
 if ($old.Count -gt 0) {
-    $remaining = $all.Count - $old.Count
+    # Остаток считаем по свежим файлам, а не вычитанием: иначе после первого
+    # прохода $all сдвигается и счёт врёт.
+    $left = @($all | Where-Object { $_.LastWriteTime -ge (Get-Date).AddDays(-$KeepDays) })
+    $remaining = $left.Count
     if ($remaining -ge $MinCopies) {
         $old | ForEach-Object { Remove-Item $_.FullName -Force; Write-Output "Удалён старый: $($_.Name)" }
     } else {
@@ -57,6 +87,8 @@ if ($old.Count -gt 0) {
     }
 }
 
-$total = (Get-ChildItem $BackupDir -Filter "alyaev-*.dump").Count
-Write-Output "Всего копий: $total"
+$totalDump = @(Get-ChildItem $BackupDir -File | Where-Object { $_.Name -like "alyaev-*.dump" }).Count
+$totalMedia = @(Get-ChildItem $BackupDir -File | Where-Object { $_.Name -like "alyaev-media-*.zip" }).Count
+Write-Output "Всего копий: баз $totalDump, архивов файлов $totalMedia"
+
 exit 0
