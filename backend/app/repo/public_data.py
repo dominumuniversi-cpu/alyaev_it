@@ -96,7 +96,13 @@ def get_calculator_config(session: Session) -> dict:
     ))
     complexity = list(session.scalars(
         select(CalculatorComplexity)
-        .where(CalculatorComplexity.is_active.is_(True))
+        .where(
+            CalculatorComplexity.is_active.is_(True),
+            # Коэффициент ниже 1.0 продавал бы дешевле базовой цены. Правило из
+            # манифеста раньше жило только в комментарии к модели — теперь оно здесь,
+            # на выходе к клиенту, независимо от того, кто и как завёл строку.
+            CalculatorComplexity.factor >= 1,
+        )
         .order_by(CalculatorComplexity.sort_order, CalculatorComplexity.id)
     ))
     return {"services": services, "options": options, "complexity": complexity}
