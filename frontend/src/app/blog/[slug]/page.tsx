@@ -36,7 +36,22 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
 
 /** Абзацы из markdown: заголовки ##, таблицы, списки и обычный текст. */
 function renderBody(md: string) {
-  const blocks = md.split(/\n{2,}/).map((b) => b.trim()).filter(Boolean);
+  // Строки таблицы склеиваем в один блок: автор текста обычно оставляет пустую
+  // строку между строками, и без склейки таблица распадается на абзацы с «|».
+  const lines = md.split("\n");
+  const merged: string[] = [];
+  for (const line of lines) {
+    const isTableRow = line.trim().startsWith("|");
+    const lastFilled = [...merged].reverse().find((l) => l.trim() !== "");
+    const previousIsTableRow = lastFilled !== undefined && lastFilled.trim().startsWith("|");
+    if (isTableRow && previousIsTableRow) {
+      // Выкидываем пустые строки между строками таблицы.
+      while (merged.length > 0 && merged[merged.length - 1].trim() === "") merged.pop();
+    }
+    merged.push(line);
+  }
+  const joined = merged.join("\n");
+  const blocks = joined.split(/\n{2,}/).map((b) => b.trim()).filter(Boolean);
   return blocks.map((block, index) => {
     if (block.startsWith("## ")) {
       return (
