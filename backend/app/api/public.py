@@ -297,6 +297,22 @@ def solutions(session: Session = Depends(get_session)) -> list[dict]:
     ]
 
 
+@router.get("/solutions-by-service/{service_slug}")
+def solutions_by_service(service_slug: str, session: Session = Depends(get_session)) -> list[dict]:
+    """Готовые решения по услуге — для перелинковки страниц услуг."""
+    rows = content.list_solutions_by_service(session, service_slug)
+    return [
+        {
+            "slug": row.slug,
+            "title": row.title,
+            "summary": row.summary,
+            "price_from": row.price_from,
+            "price_on_request": row.price_on_request,
+        }
+        for row in rows
+    ]
+
+
 @router.get("/solutions/{slug}")
 def solution_item(slug: str, session: Session = Depends(get_session)) -> dict:
     """Одно решение; 404 если черновик или удалено."""

@@ -426,6 +426,9 @@ class Solution(Base, TimestampMixin):
     )
     # Демо только реальное: NULL честнее нерабочей ссылки.
     demo_url: Mapped[str | None] = mapped_column(String(255), nullable=True)
+    # Услуга, по которой внедряется модуль: даёт перелинковку с /services/<slug>/.
+    # Слаги услуг не переименовываются, поэтому храним слагом, а не внешним ключом.
+    service_slug: Mapped[str | None] = mapped_column(String(160), nullable=True)
     status: Mapped[str] = mapped_column(
         String(16), default="draft", server_default="draft", nullable=False
     )

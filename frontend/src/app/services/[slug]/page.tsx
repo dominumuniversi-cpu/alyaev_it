@@ -1,13 +1,14 @@
 /** Посадочная страница услуги: цена, сроки, состав, FAQ. */
 
 import type { Metadata } from "next";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { Badge } from "@/components/ui/Badge";
 import { ButtonLink } from "@/components/ui/Button";
 import { Section } from "@/components/ui/Section";
 import { faqSchema, JsonLd, serviceSchema } from "@/components/seo/JsonLd";
-import { type CategoryFull, fetchCategory, fetchSeo, fetchService, formatPrice } from "@/lib/api";
+import { type CategoryFull, fetchCategory, fetchSeo, fetchService, fetchSolutionsForService, formatPrice } from "@/lib/api";
 import { canonicalUrl, siteBase } from "@/lib/seo";
 
 type Params = { params: Promise<{ slug: string }> };
@@ -124,6 +125,8 @@ function CategoryPage({ category }: { category: CategoryFull }) {
 export default async function ServicePage({ params }: Params) {
   const { slug } = await params;
   const service = await fetchService(slug);
+  // Готовые модули по теме услуги: перелинковка ТЗ 11.10.
+  const related = service ? await fetchSolutionsForService(service.slug) : [];
   // FAQ-разметка строится только из вопросов, которые реально показаны на странице.
   const faqJson = service && service.faq.length > 0 ? faqSchema(service.faq) : null;
   if (!service) {
@@ -224,6 +227,26 @@ export default async function ServicePage({ params }: Params) {
               </details>
             ))}
           </div>
+        </div>
+      ) : null}
+
+      {related.length > 0 ? (
+        <div className="mt-8">
+          <h2 className="mb-3 text-base font-semibold">Готовые решения по этой теме</h2>
+          <ul className="grid gap-3 sm:grid-cols-2">
+            {related.map((item) => (
+              <li key={item.slug}>
+                <Link
+                  href={"/solutions/" + item.slug + "/"}
+                  className="flex h-full flex-col rounded-xl border border-[color:var(--c-border)] bg-[color:var(--c-surface)] p-4 transition-colors hover:border-[color:var(--c-gold)]"
+                >
+                  <span className="text-sm font-medium">{item.title}</span>
+                  <span className="mt-1 text-xs leading-relaxed text-[color:var(--c-text-muted)]">{item.summary}</span>
+                  <span className="mt-2 text-xs text-[color:var(--c-cyan)]">Внедрение быстрее, чем разработка с нуля →</span>
+                </Link>
+              </li>
+            ))}
+          </ul>
         </div>
       ) : null}
 

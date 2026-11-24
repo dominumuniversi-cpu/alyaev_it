@@ -68,3 +68,17 @@ def get_published_solution(session: Session, slug: str) -> Solution | None:
         Solution.deleted_at.is_(None),
     )
     return session.scalars(stmt).first()
+
+
+def list_solutions_by_service(session: Session, service_slug: str) -> list[Solution]:
+    """Опубликованные решения, привязанные к услуге."""
+    stmt = (
+        select(Solution)
+        .where(
+            Solution.service_slug == service_slug,
+            Solution.status == "published",
+            Solution.deleted_at.is_(None),
+        )
+        .order_by(Solution.sort_order, Solution.id)
+    )
+    return list(session.scalars(stmt))

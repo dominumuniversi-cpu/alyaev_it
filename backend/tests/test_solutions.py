@@ -68,3 +68,17 @@ def test_empty_summary_rejected():
     """Краткое описание обязательно: карточка без него пустая."""
     with pytest.raises(ValidationError):
         SolutionPayload(slug="a", title="A", summary="")
+
+
+def test_service_slug_links_solution_to_service():
+    """Перелинковка: модуль привязывается к услуге, иначе страница услуги о нём не узнает."""
+    row = Solution(slug="a", title="A", summary="s", kind="bot")
+    _apply(row, _payload(service_slug="telegram-bot-for-business"))
+    assert row.service_slug == "telegram-bot-for-business"
+
+
+def test_service_slug_empty_means_no_link():
+    """Пустая строка — это «не привязан», а не пустой слаг в базе."""
+    row = Solution(slug="a", title="A", summary="s", kind="bot")
+    _apply(row, _payload(service_slug=""))
+    assert row.service_slug is None

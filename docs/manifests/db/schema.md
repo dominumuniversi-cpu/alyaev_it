@@ -361,6 +361,7 @@ UNIQUE `(query, region)`. Индексы: `(group_slug)`, `(target_path)`, `(pri
 | `price_from` | integer null | стартовая цена внедрения, ₽; NULL при `price_on_request` |
 | `price_on_request` | boolean not null default false | «по запросу» вместо цены |
 | `demo_url` | varchar(255) null | ссылка на живую демонстрацию; NULL = демо нет |
+| `service_slug` | varchar(160) null | услуга, по которой внедряется модуль; NULL = модуль не привязан |
 | `status` | varchar(16) not null default 'draft' | `draft` / `published` / `archived` |
 | `sort_order` | integer not null default 0 | порядок в каталоге |
 | `deleted_at` | timestamptz null | soft-delete: слаг остаётся занятым |

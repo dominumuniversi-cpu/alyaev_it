@@ -39,6 +39,7 @@ class SolutionPayload(BaseModel):
     price_from: int | None = Field(default=None, ge=0, le=10_000_000)
     price_on_request: bool = False
     demo_url: str | None = Field(default=None, max_length=255)
+    service_slug: str | None = Field(default=None, max_length=160)
     status: str = Field(default="draft")
     sort_order: int = 0
 
@@ -53,6 +54,7 @@ def _apply(row: Solution, payload: SolutionPayload) -> None:
     row.requirements_md = payload.requirements_md
     row.technologies = [t.strip() for t in payload.technologies if t.strip()]
     row.demo_url = payload.demo_url.strip() if payload.demo_url else None
+    row.service_slug = payload.service_slug.strip() if payload.service_slug else None
     row.sort_order = payload.sort_order
     row.status = payload.status
 
@@ -89,6 +91,7 @@ def _row(row: Solution) -> dict:
         "price_from": row.price_from,
         "price_on_request": row.price_on_request,
         "demo_url": row.demo_url,
+        "service_slug": row.service_slug,
         "status": row.status,
         "sort_order": row.sort_order,
     }
