@@ -1,0 +1,50 @@
+"""Чтения портфолио и статей. Манифест: docs/manifests/ui/portfolio-articles.md
+
+Наружу отдаём только опубликованное и не удалённое: черновик не должен
+утечь на сайт даже по прямому адресу.
+"""
+
+from sqlalchemy import select
+from sqlalchemy.orm import Session
+
+from app.db.models import Article, Portfolio
+
+
+def list_published_portfolio(session: Session) -> list[Portfolio]:
+    """Опубликованные неудалённые кейсы по порядку сортировки."""
+    stmt = (
+        select(Portfolio)
+        .where(Portfolio.published.is_(True), Portfolio.deleted_at.is_(None))
+        .order_by(Portfolio.sort_order, Portfolio.id)
+    )
+    return list(session.scalars(stmt))
+
+
+def get_published_portfolio(session: Session, slug: str) -> Portfolio | None:
+    """Опубликованный кейс по слагу."""
+    stmt = select(Portfolio).where(
+        Portfolio.slug == slug,
+        Portfolio.published.is_(True),
+        Portfolio.deleted_at.is_(None),
+    )
+    return session.scalars(stmt).first()
+
+
+def list_published_articles(session: Session) -> list[Article]:
+    """Опубликованные статьи, свежие сверху."""
+    stmt = (
+        select(Article)
+        .where(Article.status == "published", Article.deleted_at.is_(None))
+        .order_by(Article.published_at.desc().nullslast(), Article.id.desc())
+    )
+    return list(session.scalars(stmt))
+
+
+def get_published_article(session: Session, slug: str) -> Article | None:
+    """Опубликованная статья по слагу."""
+    stmt = select(Article).where(
+        Article.slug == slug,
+        Article.status == "published",
+        Article.deleted_at.is_(None),
+    )
+    return session.scalars(stmt).first()

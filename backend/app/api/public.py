@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 
 from app.db.session import get_session
-from app.repo import public_data
+from app.repo import content, public_data
 
 router = APIRouter(prefix="/api/v1/public", tags=["public"])
 
@@ -149,6 +149,71 @@ def calculator(session: Session = Depends(get_session)) -> dict:
             {"slug": row.slug, "title": row.title, "factor": float(row.factor)}
             for row in config["complexity"]
         ],
+    }
+
+
+@router.get("/portfolio")
+def portfolio(session: Session = Depends(get_session)) -> list[dict]:
+    """Опубликованные кейсы. Пустой список — раздел скрыт на сайте."""
+    rows = content.list_published_portfolio(session)
+    return [
+        {
+            "slug": row.slug,
+            "title": row.title,
+            "summary": row.summary,
+            "problem_md": row.problem_md,
+            "solution_md": row.solution_md,
+            "technologies": row.technologies,
+            "status": row.status,
+        }
+        for row in rows
+    ]
+
+
+@router.get("/portfolio/{slug}")
+def portfolio_item(slug: str, session: Session = Depends(get_session)) -> dict:
+    """Один опубликованный кейс; 404 если черновик или удалён."""
+    row = content.get_published_portfolio(session, slug)
+    if row is None:
+        raise HTTPException(status_code=404, detail="Кейс не найден")
+    return {
+        "slug": row.slug,
+        "title": row.title,
+        "summary": row.summary,
+        "problem_md": row.problem_md,
+        "solution_md": row.solution_md,
+        "technologies": row.technologies,
+        "status": row.status,
+    }
+
+
+@router.get("/articles")
+def articles(session: Session = Depends(get_session)) -> list[dict]:
+    """Опубликованные статьи без текста тела — для списка блога."""
+    rows = content.list_published_articles(session)
+    return [
+        {
+            "slug": row.slug,
+            "title": row.title,
+            "excerpt": row.excerpt,
+            "published_at": row.published_at.isoformat() if row.published_at else None,
+        }
+        for row in rows
+    ]
+
+
+@router.get("/articles/{slug}")
+def article_item(slug: str, session: Session = Depends(get_session)) -> dict:
+    """Одна опубликованная статья; 404 если черновик или удалён."""
+    row = content.get_published_article(session, slug)
+    if row is None:
+        raise HTTPException(status_code=404, detail="Статья не найдена")
+    return {
+        "slug": row.slug,
+        "title": row.title,
+        "excerpt": row.excerpt,
+        "body_md": row.body_md,
+        "published_at": row.published_at.isoformat() if row.published_at else None,
     }
 
 

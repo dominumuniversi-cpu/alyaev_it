@@ -280,3 +280,51 @@ class CalculatorComplexity(Base, TimestampMixin):
     factor: Mapped[float] = mapped_column(Numeric(4, 2), default=1, server_default="1.00", nullable=False)
     is_active: Mapped[bool] = mapped_column(Boolean, default=True, server_default="true", nullable=False)
     sort_order: Mapped[int] = mapped_column(Integer, default=0, server_default="0", nullable=False)
+
+
+class Portfolio(Base, TimestampMixin):
+    """Кейс портфолио. Манифест: docs/manifests/ui/portfolio-articles.md."""
+
+    __tablename__ = "portfolio"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    slug: Mapped[str] = mapped_column(String(160), unique=True, nullable=False, index=True)
+    title: Mapped[str] = mapped_column(String(200), nullable=False)
+    summary: Mapped[str] = mapped_column(String(320), nullable=False)
+    problem_md: Mapped[str] = mapped_column(Text, default="", nullable=False)
+    solution_md: Mapped[str] = mapped_column(Text, default="", nullable=False)
+    technologies: Mapped[list] = mapped_column(JSONB, default=list, nullable=False)
+    # demo / own / commercial — статус обязателен: выдуманное внедрение недопустимо.
+    status: Mapped[str] = mapped_column(
+        String(16), default="demo", server_default="demo", nullable=False
+    )
+    published: Mapped[bool] = mapped_column(
+        Boolean, default=False, server_default="false", nullable=False
+    )
+    sort_order: Mapped[int] = mapped_column(
+        Integer, default=0, server_default="0", nullable=False
+    )
+    # Soft-delete: удалённое физически не вернуть, а ошибку надо уметь отменить.
+    deleted_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+
+
+class Article(Base, TimestampMixin):
+    """Статья блога. Манифест: docs/manifests/ui/portfolio-articles.md."""
+
+    __tablename__ = "articles"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    slug: Mapped[str] = mapped_column(String(160), unique=True, nullable=False, index=True)
+    title: Mapped[str] = mapped_column(String(200), nullable=False)
+    excerpt: Mapped[str] = mapped_column(String(320), default="", nullable=False)
+    body_md: Mapped[str] = mapped_column(Text, default="", nullable=False)
+    # draft / published / archived
+    status: Mapped[str] = mapped_column(
+        String(16), default="draft", server_default="draft", nullable=False
+    )
+    # Ставится один раз при первой публикации и больше не меняется.
+    published_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    sort_order: Mapped[int] = mapped_column(
+        Integer, default=0, server_default="0", nullable=False
+    )
+    deleted_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
