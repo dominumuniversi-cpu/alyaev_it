@@ -6,7 +6,7 @@ import { notFound } from "next/navigation";
 import { Badge } from "@/components/ui/Badge";
 import { ButtonLink } from "@/components/ui/Button";
 import { Section } from "@/components/ui/Section";
-import { JsonLd, serviceSchema } from "@/components/seo/JsonLd";
+import { faqSchema, JsonLd, serviceSchema } from "@/components/seo/JsonLd";
 import { type CategoryFull, fetchCategory, fetchSeo, fetchService, formatPrice } from "@/lib/api";
 import { canonicalUrl, siteBase } from "@/lib/seo";
 
@@ -124,6 +124,8 @@ function CategoryPage({ category }: { category: CategoryFull }) {
 export default async function ServicePage({ params }: Params) {
   const { slug } = await params;
   const service = await fetchService(slug);
+  // FAQ-разметка строится только из вопросов, которые реально показаны на странице.
+  const faqJson = service && service.faq.length > 0 ? faqSchema(service.faq) : null;
   if (!service) {
     const category = await fetchCategory(slug);
     if (!category) notFound();
@@ -132,6 +134,7 @@ export default async function ServicePage({ params }: Params) {
 
   return (
     <>
+    {faqJson ? <JsonLd data={faqJson} /> : null}
     <JsonLd
       data={serviceSchema({
         site: siteBase(),

@@ -22,6 +22,25 @@ export function websiteSchema(site: string, name: string): Record<string, unknow
 }
 
 /** Схема Service для посадочной страницы услуги. */
+/**
+ * FAQPage для страниц услуг. Включается только когда вопросы действительно
+ * показаны на странице — Google и Яндекс требуют совпадения разметки и текста.
+ * Пустой или неполный список не размечаем: разметка без содержимого = обман.
+ */
+export function faqSchema(items: { q: string; a: string }[]): Record<string, unknown> | null {
+  const clean = items.filter((i) => i.q.trim() && i.a.trim());
+  if (clean.length === 0) return null;
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: clean.map((i) => ({
+      "@type": "Question",
+      name: i.q,
+      acceptedAnswer: { "@type": "Answer", text: i.a },
+    })),
+  };
+}
+
 export function serviceSchema(input: {
   site: string;
   name: string;
