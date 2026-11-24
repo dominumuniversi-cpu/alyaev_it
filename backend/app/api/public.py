@@ -132,6 +132,26 @@ def reviews(session: Session = Depends(get_session)) -> list[dict]:
     ]
 
 
+@router.get("/calculator")
+def calculator(session: Session = Depends(get_session)) -> dict:
+    """Конфиг калькулятора: услуги с ценами, опции и коэффициенты. Пустой список = калькулятор не работает."""
+    config = public_data.get_calculator_config(session)
+    return {
+        "services": [
+            {"slug": row.slug, "title": row.title, "price_from": row.price_from}
+            for row in config["services"]
+        ],
+        "options": [
+            {"slug": row.slug, "title": row.title, "price_delta": row.price_delta}
+            for row in config["options"]
+        ],
+        "complexity": [
+            {"slug": row.slug, "title": row.title, "factor": float(row.factor)}
+            for row in config["complexity"]
+        ],
+    }
+
+
 @router.get("/settings")
 def settings(session: Session = Depends(get_session)) -> dict[str, dict]:
     """Публичные настройки сайта (контакты и т.п.)."""

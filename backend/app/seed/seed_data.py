@@ -6,7 +6,14 @@
 
 from sqlalchemy import select
 
-from app.db.models import SeoMetadata, Service, ServiceCategory, SiteSetting
+from app.db.models import (
+    CalculatorComplexity,
+    CalculatorOption,
+    SeoMetadata,
+    Service,
+    ServiceCategory,
+    SiteSetting,
+)
 from app.db.session import SessionLocal
 
 CATEGORIES = [
@@ -74,6 +81,25 @@ SERVICE_CONTENT: dict[str, dict] = {
         "faq": [{"q": "Что если конструктор не даёт править код?", "a": "Некоторые дают частично — через вставки HTML. Проверю конкретно ваш конструктор."}, {"q": "Сколько правок можно сделать за раз?", "a": "Любое количество в рамках задачи — считаем по объёму работы."}, {"q": "Через сколько будет готово?", "a": "Мелкая правка — 1–2 дня, новый раздел — от 3 дней."}],
     },
 }
+
+
+# Конфиг калькулятора (манифест: docs/manifests/ui/calculator.md).
+# Надбавки отражают реальный объём работ: AI-модуль дороже простого уведомления.
+CALCULATOR_OPTIONS = [
+    {"slug": "telegram", "title": "Приём заявок в Telegram", "price_delta": 2000, "sort_order": 0},
+    {"slug": "crm", "title": "Передача заявок в CRM", "price_delta": 5000, "sort_order": 1},
+    {"slug": "1c", "title": "Обмен данными с 1С", "price_delta": 8000, "sort_order": 2},
+    {"slug": "ai", "title": "AI-модуль: ответы по вашим данным", "price_delta": 9000, "sort_order": 3},
+    {"slug": "reports", "title": "Отчёты и аналитика", "price_delta": 4000, "sort_order": 4},
+    {"slug": "auth", "title": "Личный кабинет и авторизация", "price_delta": 12000, "sort_order": 5},
+    {"slug": "parser", "title": "Сбор данных с внешних сайтов", "price_delta": 7000, "sort_order": 6},
+]
+
+CALCULATOR_COMPLEXITY = [
+    {"slug": "basic", "title": "Базовая", "factor": 1.00, "sort_order": 0},
+    {"slug": "medium", "title": "Средняя", "factor": 1.35, "sort_order": 1},
+    {"slug": "hard", "title": "Сложная", "factor": 1.80, "sort_order": 2},
+]
 
 SERVICES = [
     {
@@ -194,6 +220,16 @@ def run() -> None:
             if extra:
                 row.body_md = extra['body_md']
                 row.faq = extra['faq']
+        for item in CALCULATOR_OPTIONS:
+            row = session.scalars(select(CalculatorOption).where(CalculatorOption.slug == item['slug'])).first()
+            if row is None:
+                row = CalculatorOption(**item)
+                session.add(row)
+        for item in CALCULATOR_COMPLEXITY:
+            row = session.scalars(select(CalculatorComplexity).where(CalculatorComplexity.slug == item['slug'])).first()
+            if row is None:
+                row = CalculatorComplexity(**item)
+                session.add(row)
         for setting in SETTINGS:
             row = session.scalars(select(SiteSetting).where(SiteSetting.key == setting['key'])).first()
             if row is None:

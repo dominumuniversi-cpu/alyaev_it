@@ -6,7 +6,7 @@
 from sqlalchemy import select
 from sqlalchemy.orm import Session, selectinload
 
-from app.db.models import Review, SeoMetadata, Service, ServiceCategory, SiteSetting
+from app.db.models import CalculatorComplexity, CalculatorOption, Review, SeoMetadata, Service, ServiceCategory, SiteSetting
 
 
 def list_categories(session: Session) -> list[ServiceCategory]:
@@ -76,3 +76,27 @@ def list_public_reviews(session: Session) -> list[Review]:
         .order_by(Review.sort_order, Review.published_at.desc().nullslast())
     )
     return list(session.scalars(stmt))
+
+def get_calculator_config(session: Session) -> dict:
+    """Активные услуги с ценой, опции и коэффициенты сложности для калькулятора."""
+    services = list(session.scalars(
+        select(Service)
+        .where(
+            Service.deleted_at.is_(None),
+            Service.status == "published",
+            Service.price_on_request.is_(False),
+            Service.price_from.is_not(None),
+        )
+        .order_by(Service.id)
+    ))
+    options = list(session.scalars(
+        select(CalculatorOption)
+        .where(CalculatorOption.is_active.is_(True))
+        .order_by(CalculatorOption.sort_order, CalculatorOption.id)
+    ))
+    complexity = list(session.scalars(
+        select(CalculatorComplexity)
+        .where(CalculatorComplexity.is_active.is_(True))
+        .order_by(CalculatorComplexity.sort_order, CalculatorComplexity.id)
+    ))
+    return {"services": services, "options": options, "complexity": complexity}

@@ -91,3 +91,20 @@ export function formatPrice(card: ServiceCard): string {
   const sign = card.price_currency === "RUB" ? "₽" : card.price_currency;
   return "от " + value + " " + sign;
 }
+
+export type CalculatorConfig = {
+  services: { slug: string; title: string; price_from: number }[];
+  options: { slug: string; title: string; price_delta: number }[];
+  complexity: { slug: string; title: string; factor: number }[];
+};
+
+/** Конфиг калькулятора. Пустой список услуг = калькулятор не работает. */
+export async function fetchCalculator(): Promise<CalculatorConfig> {
+  return (
+    (await getJson<CalculatorConfig>("/api/v1/public/calculator")) ?? {
+      services: [],
+      options: [],
+      complexity: [],
+    }
+  );
+}

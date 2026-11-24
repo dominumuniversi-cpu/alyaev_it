@@ -1,38 +1,38 @@
-/** Публичная страница раздела. */
+/** Калькулятор предварительной стоимости. Манифест: docs/manifests/ui/calculator.md
+ *  Цены приходят из базы, а не из кода (ТЗ 7.1). Если конфиг пуст — страница не публикуется. */
 
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 
-import { ButtonLink } from "@/components/ui/Button";
+import { Calculator } from "@/components/site/Calculator";
 import { Section } from "@/components/ui/Section";
+import { fetchCalculator } from "@/lib/api";
 import { canonicalUrl } from "@/lib/seo";
 
 export const metadata: Metadata = {
-  title: "Калькулятор",
-  description: "Калькулятор будет считать стоимость по ценам из базы, а не по цифрам, зашитым в интерфейс. Пока оценку даю после короткого обсуждения задачи.",
+  title: "Калькулятор стоимости автоматизации",
+  description:
+    "Оцените стоимость автоматизации за минуту: выберите задачу, сложность и нужные функции. Расчёт ориентировочный, цены из прайса.",
   alternates: { canonical: canonicalUrl("/calculator/") },
-  openGraph: {
-    title: "Калькулятор — Дмитрий Аляев",
-    description: "Калькулятор будет считать стоимость по ценам из базы, а не по цифрам, зашитым в интерфейс. Пока оценку даю после короткого обсуждения задачи.",
-    url: canonicalUrl("/calculator/"),
-    type: "website",
-  },
-  robots: { index: false, follow: true },
 };
 
-/** Раздел без ложных обещаний и пустых блоков. */
-export default function Page() {
+/** Пустой конфиг = считать нечего, страницу не показываем. */
+export default async function CalculatorPage() {
+  const config = await fetchCalculator();
+  if (config.services.length === 0 || config.complexity.length === 0) notFound();
+
   return (
-    <Section id="page"
-      breadcrumbs={[{ label: "Главная", href: "/" }, { label: "Калькулятор" }]} title={"Предварительная оценка"}>
-      <p className="max-w-2xl text-base leading-relaxed text-[color:var(--c-text-muted)]">
-        {"Калькулятор будет считать стоимость по ценам из базы, а не по цифрам, зашитым в интерфейс. Пока оценку даю после короткого обсуждения задачи."}
-      </p>
-      <div className="mt-8 flex flex-wrap gap-3">
-        <ButtonLink href="/contacts/#lead">Обсудить задачу</ButtonLink>
-        <ButtonLink href="/services/" variant="secondary">
-          Услуги и цены
-        </ButtonLink>
-      </div>
+    <Section
+      id="calculator"
+      breadcrumbs={[{ label: "Главная", href: "/" }, { label: "Калькулятор" }]}
+      title="Предварительная оценка"
+      subtitle="Выберите, что нужно, и отметьте функции. Сумма считается по актуальному прайсу."
+    >
+      <Calculator
+        services={config.services}
+        options={config.options}
+        complexity={config.complexity}
+      />
     </Section>
   );
 }

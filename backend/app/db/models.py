@@ -13,6 +13,7 @@ from sqlalchemy import (
     ForeignKey,
     Index,
     Integer,
+    Numeric,
     String,
     Table,
     Text,
@@ -254,3 +255,28 @@ class Review(Base, TimestampMixin):
     def is_public(self) -> bool:
         """Отзыв виден на сайте только при согласии автора и статусе published."""
         return self.status == "published" and self.consent_given and self.deleted_at is None
+
+class CalculatorOption(Base, TimestampMixin):
+    """Дополнительная опция калькулятора. Цена настраивается, не зашита в код. Манифест схемы, п. 13."""
+
+    __tablename__ = "calculator_options"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    slug: Mapped[str] = mapped_column(String(64), unique=True, nullable=False)
+    title: Mapped[str] = mapped_column(String(120), nullable=False)
+    price_delta: Mapped[int] = mapped_column(Integer, default=0, server_default="0", nullable=False)
+    is_active: Mapped[bool] = mapped_column(Boolean, default=True, server_default="true", nullable=False)
+    sort_order: Mapped[int] = mapped_column(Integer, default=0, server_default="0", nullable=False)
+
+
+class CalculatorComplexity(Base, TimestampMixin):
+    """Коэффициент сложности. Ниже 1.0 опускаться нельзя: калькулятор не даёт цену ниже базовой."""
+
+    __tablename__ = "calculator_complexity"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    slug: Mapped[str] = mapped_column(String(32), unique=True, nullable=False)
+    title: Mapped[str] = mapped_column(String(60), nullable=False)
+    factor: Mapped[float] = mapped_column(Numeric(4, 2), default=1, server_default="1.00", nullable=False)
+    is_active: Mapped[bool] = mapped_column(Boolean, default=True, server_default="true", nullable=False)
+    sort_order: Mapped[int] = mapped_column(Integer, default=0, server_default="0", nullable=False)
