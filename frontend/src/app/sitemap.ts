@@ -2,7 +2,7 @@
 
 import type { MetadataRoute } from "next";
 
-import { fetchCategories, fetchServices } from "@/lib/api";
+import { fetchArticles, fetchCategories, fetchPortfolio, fetchServices } from "@/lib/api";
 import { siteBase } from "@/lib/seo";
 
 const BASE_PATH = process.env.BASE_PATH ?? "/alyaev";
@@ -12,8 +12,12 @@ const STATIC_PATHS = ["/", "/services/", "/contacts/", "/about/", "/portfolio/",
 
 /** Карта сайта: статические страницы плюс опубликованные услуги. */
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const services = await fetchServices();
-  const categories = await fetchCategories();
+  const [services, categories, articles, portfolio] = await Promise.all([
+    fetchServices(),
+    fetchCategories(),
+    fetchArticles(),
+    fetchPortfolio(),
+  ]);
   // Страницы категорий и алиасы из ТЗ, у которых есть услуги
   const categorySlugs = [
     ...categories.map((category) => category.slug),
@@ -38,5 +42,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     changeFrequency: "monthly" as const,
     priority: 0.75,
   }));
-  return [...staticRoutes, ...categoryRoutes, ...serviceRoutes];
+  // Статьи и кейсы появляются в карте только после публикации — их отдаёт публичный API.
+  const articleRoutes = articles.map((article) => ({
+    url: SITE + "/blog/" + article.slug,
+    lastModified: article.published_at ? new Date(article.published_at) : new Date(),
+    changeFrequency: "monthly" as const,
+    priority: 0.6,
+  }));
+  const portfolioRoutes = portfolio.map((item) => ({
+    url: SITE + "/portfolio/" + item.slug,
+    lastModified: new Date(),
+    changeFrequency: "monthly" as const,
+    priority: 0.6,
+  }));
+  return [...staticRoutes, ...categoryRoutes, ...serviceRoutes, ...articleRoutes, ...portfolioRoutes];
 }

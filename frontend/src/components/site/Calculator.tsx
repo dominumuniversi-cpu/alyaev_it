@@ -4,7 +4,9 @@
  *  Расчёт повторяет серверную логику (app/core/calculator.py): округление вверх до 1000 ₽,
  *  минимум — базовая цена. Цифры в интерфейсе и в заявке обязаны совпадать. */
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+
+import { reachGoal } from "@/components/site/Analytics";
 
 import { ButtonLink } from "@/components/ui/Button";
 
@@ -44,6 +46,16 @@ export function Calculator({
 
   const service = services.find((s) => s.slug === serviceSlug) ?? services[0];
   const factor = complexity.find((c) => c.slug === complexitySlug)?.factor ?? 1;
+
+  // Цель считаем один раз за визит и только когда отмечена хотя бы одна функция:
+  // иначе простое открытие страницы раздуло бы отчёт.
+  const firedRef = useRef(false);
+  useEffect(() => {
+    if (selected.length > 0 && !firedRef.current) {
+      firedRef.current = true;
+      reachGoal("calculator_use");
+    }
+  }, [selected]);
 
   const total = useMemo(() => {
     const deltas = options.filter((o) => selected.includes(o.slug)).map((o) => o.price_delta);

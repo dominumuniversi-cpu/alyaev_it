@@ -2,6 +2,8 @@
 
 "use client";
 
+import { reachGoal } from "@/components/site/Analytics";
+
 import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/Button";
@@ -113,6 +115,8 @@ export function LeadForm({
       }
 
       form.reset();
+      // Цель ставим только после ответа сервера: считать неудачные попытки — обманывать себя.
+      reachGoal("lead_submit");
       setState("sent");
     } catch {
       setServerError("Сеть недоступна. Проверьте соединение и попробуйте снова.");
