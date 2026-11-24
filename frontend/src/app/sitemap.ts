@@ -65,7 +65,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const solutionRoutes = solutions.length > 0
     ? [
         {
-          url: SITE + "/solutions/",
+          url: SITE + "/solutions",
           lastModified: new Date(),
           changeFrequency: "weekly" as const,
           priority: 0.7,
