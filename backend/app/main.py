@@ -6,6 +6,7 @@ from sqlalchemy import text
 from app.api import (
     account,
     admin,
+    admin_clients,
     admin_audit,
     admin_content,
     admin_reviews,
@@ -27,6 +28,7 @@ app.include_router(leads.router)
 app.include_router(auth.router)
 app.include_router(account.router)
 app.include_router(admin.router)
+app.include_router(admin_clients.router)
 app.include_router(admin_services.router)
 app.include_router(admin_seo.router)
 app.include_router(admin_content.router)
