@@ -1,0 +1,33 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Токены — единственный источник цветов/шрифтов. См. docs/manifests/ui/tokens.md */
+:root {
+  --c-bg: #05070D;
+  --c-surface: #0B1220;
+  --c-surface-2: #0F1A2B;
+  --c-border: #1D2A3A;
+  --c-border-strong: #2A3B50;
+  --c-gold: #E3BC7A;
+  --c-gold-dim: #B8935A;
+  --c-cyan: #22B8E6;
+  --c-text: #F3F5F8;
+  --c-text-muted: #929CAB;
+  --c-success: #3FBF7F;
+  --c-warning: #E0A64A;
+  --c-danger: #E5544B;
+  --font-sans: Inter, system-ui, -apple-system, Segoe UI, sans-serif;
+  --font-display: Manrope, Inter, system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+  --space-section: clamp(64px, 10vw, 128px);
+}
+
+html { color-scheme: dark; scroll-behavior: smooth; }
+body { background: var(--c-bg); color: var(--c-text); font-family: var(--font-sans); }
+
+:focus-visible { outline: 2px solid var(--c-cyan); outline-offset: 2px; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+}

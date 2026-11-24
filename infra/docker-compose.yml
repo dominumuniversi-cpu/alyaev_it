@@ -1,0 +1,50 @@
+# Стенд alyaev.it — продакшн-подобная среда на DIMAS.
+# Данные: E:\DockerData\alyaev-it (bind-mount), конфиг: E:\DockerData\alyaev-it\.env
+name: alyaev-it
+
+services:
+  db:
+    image: pgvector/pgvector:pg17
+    container_name: alyaev-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - /e/DockerData/alyaev-it/pgdata:/var/lib/postgresql/data
+    networks: [shared]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build: ../backend
+    container_name: alyaev-api
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgresql+psycopg://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
+      ENVIRONMENT: stand
+    depends_on:
+      db:
+        condition: service_healthy
+    networks: [shared]
+
+  frontend:
+    build: ../frontend
+    container_name: alyaev-web
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      BACKEND_URL: http://backend:8000
+      # На стенде сайт по префиксу /alyaev/; на домене — пусто (корень).
+      BASE_PATH: ${FRONTEND_BASE_PATH:-/alyaev}
+    depends_on: [backend]
+    networks: [shared]
+
+networks:
+  shared:
+    name: npc-proxy-net
+    external: true
