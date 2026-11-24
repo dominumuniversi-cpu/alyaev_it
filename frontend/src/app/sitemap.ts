@@ -2,7 +2,7 @@
 
 import type { MetadataRoute } from "next";
 
-import { fetchArticles, fetchCategories, fetchPortfolio, fetchServices } from "@/lib/api";
+import { fetchArticles, fetchCategories, fetchPortfolio, fetchServices, fetchSolutions } from "@/lib/api";
 import { siteBase } from "@/lib/seo";
 
 const BASE_PATH = process.env.BASE_PATH ?? "/alyaev";
@@ -12,11 +12,12 @@ const STATIC_PATHS = ["/", "/services/", "/contacts/", "/about/", "/portfolio/",
 
 /** Карта сайта: статические страницы плюс опубликованные услуги. */
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const [services, categories, articles, portfolio] = await Promise.all([
+  const [services, categories, articles, portfolio, solutions] = await Promise.all([
     fetchServices(),
     fetchCategories(),
     fetchArticles(),
     fetchPortfolio(),
+    fetchSolutions(),
   ]);
   // Страницы категорий и алиасы из ТЗ, у которых есть услуги
   const categorySlugs = [
@@ -49,11 +50,28 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     changeFrequency: "monthly" as const,
     priority: 0.6,
   }));
+  // Пустой каталог решений не попадает в карту: индексировать нечего.
+  const solutionRoutes = solutions.length > 0
+    ? [
+        {
+          url: SITE + "/solutions/",
+          lastModified: new Date(),
+          changeFrequency: "weekly" as const,
+          priority: 0.7,
+        },
+        ...solutions.map((item) => ({
+          url: SITE + "/solutions/" + item.slug,
+          lastModified: new Date(),
+          changeFrequency: "monthly" as const,
+          priority: 0.7,
+        })),
+      ]
+    : [];
   const portfolioRoutes = portfolio.map((item) => ({
     url: SITE + "/portfolio/" + item.slug,
     lastModified: new Date(),
     changeFrequency: "monthly" as const,
     priority: 0.6,
   }));
-  return [...staticRoutes, ...categoryRoutes, ...serviceRoutes, ...articleRoutes, ...portfolioRoutes];
+  return [...staticRoutes, ...categoryRoutes, ...serviceRoutes, ...articleRoutes, ...portfolioRoutes, ...solutionRoutes];
 }

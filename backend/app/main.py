@@ -11,6 +11,7 @@ from app.api import (
     admin_semantic,
     admin_seo,
     admin_services,
+    admin_solutions,
     admin_uploads,
     auth,
     leads,
@@ -29,6 +30,7 @@ app.include_router(admin_seo.router)
 app.include_router(admin_content.router)
 app.include_router(admin_reviews.router)
 app.include_router(admin_semantic.router)
+app.include_router(admin_solutions.router)
 app.include_router(admin_audit.router)
 app.include_router(admin_uploads.router)
 

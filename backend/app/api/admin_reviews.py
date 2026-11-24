@@ -116,6 +116,8 @@ def create_review(
     )
     session.add(row)
     _apply(row, payload)
+    # flush даёт новый id до записи в журнал: иначе entity_id остаётся NULL.
+    session.flush()
     audit.record(
         session,
         actor_user_id=user.id,

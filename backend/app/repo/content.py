@@ -7,7 +7,7 @@
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-from app.db.models import Article, Portfolio
+from app.db.models import Article, Portfolio, Solution
 
 
 def list_published_portfolio(session: Session) -> list[Portfolio]:
@@ -46,5 +46,25 @@ def get_published_article(session: Session, slug: str) -> Article | None:
         Article.slug == slug,
         Article.status == "published",
         Article.deleted_at.is_(None),
+    )
+    return session.scalars(stmt).first()
+
+
+def list_published_solutions(session: Session) -> list[Solution]:
+    """Опубликованные неудалённые решения по порядку сортировки."""
+    stmt = (
+        select(Solution)
+        .where(Solution.status == "published", Solution.deleted_at.is_(None))
+        .order_by(Solution.sort_order, Solution.id)
+    )
+    return list(session.scalars(stmt))
+
+
+def get_published_solution(session: Session, slug: str) -> Solution | None:
+    """Опубликованное решение по слагу; черновик и удалённое не находятся."""
+    stmt = select(Solution).where(
+        Solution.slug == slug,
+        Solution.status == "published",
+        Solution.deleted_at.is_(None),
     )
     return session.scalars(stmt).first()

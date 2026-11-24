@@ -194,6 +194,8 @@ def create_query(
         notes=payload.notes.strip(),
     )
     session.add(row)
+    # flush даёт новый id до записи в журнал: иначе entity_id остаётся NULL.
+    session.flush()
     audit.record(
         session,
         actor_user_id=user.id,

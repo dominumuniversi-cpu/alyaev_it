@@ -34,6 +34,9 @@ ACTION_LABELS: dict[str, str] = {
     "semantic.update": "Изменён запрос ядра",
     "semantic.position": "Обновлена позиция",
     "semantic.delete": "Удалён запрос из ядра",
+    "solution.create": "Создано решение",
+    "solution.update": "Изменено решение",
+    "solution.delete": "Удалено решение",
     "upload.create": "Загружен файл",
     "upload.delete": "Удалён файл",
 }

@@ -278,3 +278,41 @@ def seo(path: str = Query(max_length=255), session: Session = Depends(get_sessio
 def settings(session: Session = Depends(get_session)) -> dict[str, dict]:
     """Публичные настройки сайта (контакты и т.п.)."""
     return public_data.list_settings(session)
+
+@router.get("/solutions")
+def solutions(session: Session = Depends(get_session)) -> list[dict]:
+    """Опубликованные готовые решения. Пустой список — раздел скрыт на сайте."""
+    rows = content.list_published_solutions(session)
+    return [
+        {
+            "slug": row.slug,
+            "title": row.title,
+            "summary": row.summary,
+            "kind": row.kind,
+            "technologies": row.technologies,
+            "price_from": row.price_from,
+            "price_on_request": row.price_on_request,
+        }
+        for row in rows
+    ]
+
+
+@router.get("/solutions/{slug}")
+def solution_item(slug: str, session: Session = Depends(get_session)) -> dict:
+    """Одно решение; 404 если черновик или удалено."""
+    row = content.get_published_solution(session, slug)
+    if row is None:
+        raise HTTPException(status_code=404, detail="Решение не найдено")
+    return {
+        "slug": row.slug,
+        "title": row.title,
+        "summary": row.summary,
+        "kind": row.kind,
+        "description_md": row.description_md,
+        "included": row.included,
+        "requirements_md": row.requirements_md,
+        "technologies": row.technologies,
+        "price_from": row.price_from,
+        "price_on_request": row.price_on_request,
+        "demo_url": row.demo_url,
+    }

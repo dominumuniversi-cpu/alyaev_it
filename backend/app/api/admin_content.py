@@ -125,6 +125,8 @@ def create_portfolio(
     row = Portfolio(slug=slug)
     session.add(row)
     _apply_portfolio(row, payload)
+    # flush даёт новый id до записи в журнал: иначе entity_id остаётся NULL.
+    session.flush()
     audit.record(
         session,
         actor_user_id=user.id,
@@ -245,6 +247,8 @@ def create_article(
     row = Article(slug=slug)
     session.add(row)
     _apply_article(row, payload)
+    # flush даёт новый id до записи в журнал: иначе entity_id остаётся NULL.
+    session.flush()
     audit.record(
         session,
         actor_user_id=user.id,

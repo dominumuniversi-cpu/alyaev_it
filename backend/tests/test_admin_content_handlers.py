@@ -21,6 +21,12 @@ class FakeSession:
     def add(self, obj):
         self.added.append(obj)
 
+    def flush(self):
+        """Обработчики вызывают flush, чтобы получить id до записи в журнал."""
+        for obj in self.added:
+            if hasattr(obj, "id") and obj.id is None:
+                obj.id = 1
+
     def commit(self):
         self.committed += 1
 

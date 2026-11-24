@@ -157,6 +157,35 @@ export type ArticleCard = {
 export type ArticleFull = ArticleCard & { body_md: string };
 
 /** Опубликованные кейсы. Пустой список — раздел скрываем, а не показываем заглушку. */
+/** Полное решение для страницы: с описанием, составом и требованиями. */
+export type SolutionFull = SolutionCard & {
+  description_md: string;
+  included: string[];
+  requirements_md: string;
+  demo_url: string | null;
+};
+
+/** Карточка решения из библиотеки готовых модулей (ТЗ 7.4). */
+export type SolutionCard = {
+  slug: string;
+  title: string;
+  summary: string;
+  kind: string;
+  technologies: string[];
+  price_from: number | null;
+  price_on_request: boolean;
+};
+
+/** Готовые решения для каталога и sitemap. Пустой список — раздел скрыт. */
+export async function fetchSolutions(): Promise<SolutionCard[]> {
+  return (await getJson<SolutionCard[]>("/api/v1/public/solutions")) ?? [];
+}
+
+/** Одно опубликованное решение; null — если черновик или удалено. */
+export async function fetchSolutionItem(slug: string): Promise<SolutionFull | null> {
+  return await getJson<SolutionFull>("/api/v1/public/solutions/" + encodeURIComponent(slug));
+}
+
 export async function fetchPortfolio(): Promise<PortfolioCard[]> {
   return (await getJson<PortfolioCard[]>("/api/v1/public/portfolio")) ?? [];
 }

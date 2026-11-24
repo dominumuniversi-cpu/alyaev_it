@@ -45,3 +45,41 @@ def test_sanitize_is_case_insensitive():
     """Password, PASSWORD и password — одно и то же поле."""
     assert _sanitize({"PASSWORD": "x"})["PASSWORD"] == "[скрыто]"
     assert _sanitize({"Access_Token": "y"})["Access_Token"] == "[скрыто]"
+
+
+class _FlushSession:
+    """Сессия, которая выдаёт id только после flush/commit — как настоящая БД."""
+
+    def __init__(self):
+        self.flushed = False
+        self.added = []
+
+    def add(self, obj):
+        # До flush база ещё не знает id — эмулируем именно это.
+        if not self.flushed and hasattr(obj, "id"):
+            obj.id = None
+        self.added.append(obj)
+
+    def flush(self):
+        self.flushed = True
+        for obj in self.added:
+            if hasattr(obj, "id") and obj.id is None:
+                obj.id = 42
+
+    def commit(self):
+        self.flush()
+
+
+def test_entity_id_filled_after_flush():
+    """Запись о создании должна ссылаться на объект, а не оставаться с NULL.
+
+    Без flush() до записи в журнал row.id ещё None: в журнале появляется
+    «создано решение» без указания, какое именно.
+    """
+    from app.db.models import Solution
+
+    session = _FlushSession()
+    row = Solution(slug="a", title="A", summary="s", kind="bot")
+    session.add(row)
+    session.flush()
+    assert row.id == 42, "flush обязан присвоить id"

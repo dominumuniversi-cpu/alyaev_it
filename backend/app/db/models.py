@@ -390,3 +390,46 @@ class SemanticQuery(Base, TimestampMixin):
     )
     cluster: Mapped[str | None] = mapped_column(String(64), nullable=True)
     notes: Mapped[str] = mapped_column(Text, default="", server_default="", nullable=False)
+
+class Solution(Base, TimestampMixin):
+    """Готовое решение из библиотеки (ТЗ 7.4).
+
+    Отличие от услуги: услуга — работа под заказ, решение — готовый модуль.
+    Стартовая цена означает «внедрение от», внешние расходы в неё не входят.
+    """
+
+    __tablename__ = "solutions"
+    __table_args__ = (
+        Index("ix_solutions_kind", "kind"),
+        Index("ix_solutions_status", "status"),
+    )
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    slug: Mapped[str] = mapped_column(String(160), nullable=False, unique=True)
+    title: Mapped[str] = mapped_column(String(200), nullable=False)
+    summary: Mapped[str] = mapped_column(String(320), nullable=False)
+    kind: Mapped[str] = mapped_column(String(32), nullable=False)
+    description_md: Mapped[str] = mapped_column(
+        Text, default="", server_default="", nullable=False
+    )
+    included: Mapped[list] = mapped_column(JSONB, default=list, server_default="[]", nullable=False)
+    requirements_md: Mapped[str] = mapped_column(
+        Text, default="", server_default="", nullable=False
+    )
+    technologies: Mapped[list] = mapped_column(
+        JSONB, default=list, server_default="[]", nullable=False
+    )
+    # NULL при price_on_request — «по запросу» и «бесплатно» это разные вещи.
+    price_from: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    price_on_request: Mapped[bool] = mapped_column(
+        Boolean, default=False, server_default="false", nullable=False
+    )
+    # Демо только реальное: NULL честнее нерабочей ссылки.
+    demo_url: Mapped[str | None] = mapped_column(String(255), nullable=True)
+    status: Mapped[str] = mapped_column(
+        String(16), default="draft", server_default="draft", nullable=False
+    )
+    sort_order: Mapped[int] = mapped_column(
+        Integer, default=0, server_default="0", nullable=False
+    )
+    deleted_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
