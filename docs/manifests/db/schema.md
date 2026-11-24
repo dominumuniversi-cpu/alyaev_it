@@ -24,8 +24,8 @@
 ### users
 | Колонка | Тип | Ограничения |
 |---|---|---|
-| id | bigserial | PK |
-| email | citext | UNIQUE NOT NULL |
+| id | serial | PK |
+| email | varchar | UNIQUE NOT NULL |
 | password_hash | text | NOT NULL (argon2id) |
 | display_name | varchar(120) | NOT NULL |
 | phone | varchar(32) | NULL |
@@ -34,12 +34,22 @@
 | last_login_at | timestamptz | NULL |
 | created_at / updated_at | timestamptz | NOT NULL |
 
+**Ловушка (проверено на живой базе):** расширения `citext` в базе НЕТ, колонка email —
+обычный `varchar`, и UNIQUE-индекс **регистрозависимый**. Вставка `DIMA@alyaev.local` рядом
+с `dima@alyaev.local` проходит успешно — получаются два разных пользователя.
+
+Поэтому: **любое сравнение или запись email обязаны приводить его к нижнему регистру в коде**
+(`.strip().lower()`), как это уже сделано в `api/auth.py`. Не полагаться на уникальность базы.
+Расширение `citext` не ставить — миграция ломает существующий уникальный индекс.
+
 ### roles / user_roles
-`roles(id, code unique, title)`; `user_roles(user_id, role_id, PK(user_id,role_id))`.
+`roles(id, code UNIQUE, title)`; `user_roles(user_id, role_id)` — составной PK.
 Коды: `admin`, `manager`, `editor`, `client`.
 
-### sessions (будущий кабинет)
-`sessions(id uuid pk, user_id fk, token_hash text unique, user_agent text, ip inet, expires_at timestamptz, revoked_at timestamptz NULL)`.
+### sessions
+`id varchar PK` (не uuid), `user_id fk`, `token_hash text`, `user_agent text`,
+`ip varchar` (не inet), `expires_at`, `revoked_at` NULL, `created_at`.
+Таблица уже работает, а не «на будущее»: вход администратора держится на ней.
 
 ## 2. Заявки (ядро продаж)
 
@@ -146,8 +156,24 @@ UNIQUE `(entity_type, entity_id)`, UNIQUE `path`.
 ### site_settings
 `id, key varchar(64) UNIQUE, value jsonb, updated_at`. Примеры ключей: `telegram_username`, `email`, `phone`, `social_links`, `metrika_id`.
 
-### media_assets
-`id, filename, mime varchar(100), size_bytes bigint, width, height, alt_text varchar(200), storage_path, created_at`.
+### uploaded_files
+Загруженные файлы. Манифест поведения — `docs/manifests/uploads.md`.
+
+| Колонка | Тип | Ограничения |
+|---|---|---|
+| id | integer | PK |
+| stored_name | varchar | UNIQUE NOT NULL — имя от нас, не от пользователя |
+| original_name | varchar | NULL — имя, как его видел пользователь |
+| content_type | varchar | NOT NULL — определён по сигнатуре файла, а не по расширению |
+| size_bytes | integer | NOT NULL |
+| kind | varchar | `image` / `document` |
+| checksum | varchar | NULL — для поиска дублей |
+| uploaded_by | integer | FK users.id |
+| deleted_at | timestamptz | NULL — мягкое удаление |
+| created_at / updated_at | timestamptz | NOT NULL |
+
+**Правило:** физический файл лежит не в базе, а в `/app/media` (хост: `E:\DockerData\alyaev-it\media`).
+Имя файла генерируем мы. Удаление — мягкое (`deleted_at`), публичная отдача отвечает 404 на удалённые.
 
 ## 7. Кабинет и проекты (Этап 3 — таблицы создаются сразу, используется позже)
 
@@ -211,7 +237,7 @@ publication:     draft → published → archived (обратно в draft до�
 Переходы валидируются сервером; изменение статуса создаёт запись в истории/событиях.
 
 
-## 12. Отзывы (reviews)
+## 11. Отзывы (reviews)
 
 > ТЗ раздел 4.4 и 8: отзывы публикуются **только с разрешения автора**. Пока подтверждённых нет —
 > раздел `/reviews/` не публикуется и не индексируется (ТЗ раздел 3).
@@ -240,7 +266,7 @@ publication:     draft → published → archived (обратно в draft до�
 3. Если опубликованных отзывов ноль — страница `/reviews/` отдаёт `notFound()` (404) и не попадает в sitemap.
 4. Не выдумывать рейтинги и звёзды в разметке: Schema.org `Review` добавляется только к реальным отзывам.
 
-## 13. Калькулятор (calculator_options, calculator_complexity)
+## 12. Калькулятор (calculator_options, calculator_complexity)
 
 > ТЗ 7.1: цены калькулятора настраиваются администратором, а не лежат в коде.
 
@@ -275,7 +301,7 @@ publication:     draft → published → archived (обратно в draft до�
 3. Цена считается на сервере (`GET /api/v1/public/calculator` отдаёт конфиг, расчёт — в общем модуле),
    а не в браузере: цифры в интерфейсе и в заявке обязаны совпадать.
 4. Изменение цен калькулятора не требует пересборки — только изменения в базе.
-## 11. Что НЕ делаем
+## 13. Что НЕ делаем
 
 - Не храним пароли в открытом виде и секреты в БД.
 - Не храним номера карт и паспортные данные.

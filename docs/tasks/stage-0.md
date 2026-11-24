@@ -33,15 +33,16 @@
 
 ## T0-06 Docker-стенд + nginx
 
-**В работе.**
+**Готово (проверено 24.11.2026).**
 
 - [x] Каталог данных `E:\DockerData\alyaev-it` (+ `.env`, `pgdata`, `backups`, `logs`)
 - [x] `alyaev-db` — postgres 17.12 (pgvector), healthy
 - [x] `alyaev-api` — FastAPI, `/api/health` = ok, healthy
 - [x] `alyaev-web` — Next.js 15.5.29 (пропатченный), порт 3000
 - [x] nginx: `stands/alyaev.conf`, `nginx -t` прошёл, reload выполнен
-- [ ] Проверка `https://192.168.8.49/alyaev/` = 200
-- [ ] Домен alyaev.it (ждёт DNS от заказчика)
+- [x] Проверка `https://192.168.8.49/alyaev` = 200 (без завершающего слэша — `/alyaev/` даёт 308, это нормально)
+- [x] `https://188.226.71.169/alyaev` = 200
+- [ ] Домен alyaev.it — **не подключаем по просьбе заказчика** (сайт публикуется по IP)
 
 ### Ловушки, проверенные на практике
 
@@ -53,6 +54,28 @@
 
 ## T0-07 Скрипты
 
-— деплой: `infra/scripts/deploy.ps1`  
-— бэкап: `infra/scripts/backup.ps1` (pg_dump, глубина 14 дней)  
-— восстановление: `infra/scripts/restore.ps1`
+| Скрипт | Что делает | Проверено |
+|---|---|---|
+| `infra/scripts/deploy.ps1` | сборка + перезапуск + ожидание ответа 200 | ✅ прогон `-NoBuild` |
+| `infra/scripts/backup.ps1` | `pg_dump`, глубина 14 дней | ✅ задача `AlyaevIT-Backup`, ежедневно 03:30 |
+| `infra/scripts/verify-backup.ps1` | проверка целостности дампа | ✅ |
+| `infra/scripts/restore.ps1` | восстановление из дампа | ⚠️ не прогонялся на боевой базе |
+
+```powershell
+# полная выкатка
+.\infra\scripts\deploy.ps1
+# только backend (правился Python)
+.\infra\scripts\deploy.ps1 -Service backend
+# перезапуск без пересборки (менялся только .env)
+.\infra\scripts\deploy.ps1 -NoBuild
+```
+
+### Ловушки (проверено на практике)
+
+6. **PS-скрипты сохранять в UTF-8 с BOM.** Без BOM PowerShell 5.1 читает кириллицу как ANSI
+   и падает на «Unexpected token» — при этом сам файл выглядит нормально.
+7. **Не вызывать docker через `cmd /c` с экранированием кавычек.** В PS 5.1 `\"` ломается на путях
+   с пробелами (`C:\Program Files\...`), и команда «не найдена». Вызывать через `&`,
+   временно ослабляя `$ErrorActionPreference` — docker пишет прогресс в stderr.
+8. `docker network inspect --format "{{range .Containers}}" ` через `cmd /c` не печатает ничего —
+   использовать batch-файл или `docker inspect` по контейнеру.
