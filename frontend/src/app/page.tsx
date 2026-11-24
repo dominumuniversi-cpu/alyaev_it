@@ -7,6 +7,7 @@ import { Hero } from "@/components/site/Hero";
 import { ServiceCard } from "@/components/site/ServiceCard";
 import { JsonLd, websiteSchema } from "@/components/seo/JsonLd";
 import { fetchServices } from "@/lib/api";
+import { LeadForm } from "@/components/site/LeadForm";
 import { canonicalUrl } from "@/lib/seo";
 
 const ADVANTAGES = [
@@ -43,6 +44,7 @@ export const metadata = {
 /** Собирает главную на сервере и берёт услуги из БД. */
 export default async function HomePage() {
   const services = await fetchServices();
+  const taskOptions = services.map((service) => ({ value: service.slug, label: service.title }));
 
   return (
     <>
@@ -121,15 +123,18 @@ export default async function HomePage() {
       </Section>
 
       <Section id="lead" title="Есть задача, которую можно автоматизировать?">
-        <div className="rounded-2xl border border-[color:var(--c-border)] bg-[color:var(--c-surface)] p-8">
-          <p className="max-w-2xl text-base leading-relaxed text-[color:var(--c-text-muted)]">
-            Опишите, что сейчас приходится делать вручную. Предложу подходящее решение и предварительно оценю стоимость.
-          </p>
-          <div className="mt-6">
-            <ButtonLink href="/contacts/#lead" size="lg">
-              Обсудить задачу
-            </ButtonLink>
+        <div className="grid gap-8 rounded-2xl border border-[color:var(--c-border)] bg-[color:var(--c-surface)] p-6 sm:p-8 lg:grid-cols-[1fr_1.1fr]">
+          <div>
+            <p className="text-base leading-relaxed text-[color:var(--c-text-muted)]">
+              Опишите, что сейчас приходится делать вручную. Предложу подходящее решение и предварительно оценю стоимость.
+            </p>
+            <ul className="mt-6 space-y-2 text-sm text-[color:var(--c-text-muted)]">
+              <li>— Отвечаю лично, без менеджеров-посредников.</li>
+              <li>— Сначала разбираем процесс, потом оцениваем работу.</li>
+              <li>— Не берусь за задачи, которые не принесут пользы.</li>
+            </ul>
           </div>
+          <LeadForm taskOptions={taskOptions} />
         </div>
       </Section>
     </>

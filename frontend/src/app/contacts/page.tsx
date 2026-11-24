@@ -1,9 +1,10 @@
-/** Контакты: способы связи и (позже) форма заявки. */
+/** Контакты: способы связи и форма заявки. */
 
 import type { Metadata } from "next";
 
+import { LeadForm } from "@/components/site/LeadForm";
 import { Section } from "@/components/ui/Section";
-import { fetchSettings } from "@/lib/api";
+import { fetchServices, fetchSettings } from "@/lib/api";
 import { canonicalUrl } from "@/lib/seo";
 
 export const metadata: Metadata = {
@@ -19,31 +20,38 @@ export const metadata: Metadata = {
   },
 };
 
-/** Способы связи из настроек БД. */
+/** Способы связи из настроек БД плюс форма заявки. */
 export default async function ContactsPage() {
-  const settings = await fetchSettings();
+  const [settings, services] = await Promise.all([fetchSettings(), fetchServices()]);
   const contacts = settings.contacts ?? {};
+  const taskOptions = services.map((service) => ({ value: service.slug, label: service.title }));
 
   return (
-    <Section
-      id="contacts"
-      title="Контакты"
-      subtitle="Опишите задачу — отвечу и предложу вариант решения."
-    >
-      <div id="lead" className="rounded-2xl border border-[color:var(--c-border)] bg-[color:var(--c-surface)] p-8">
-        <p className="text-base leading-relaxed text-[color:var(--c-text-muted)]">
-          Форма заявки появится на этом месте. Пока пишите напрямую в Telegram.
-        </p>
-        {contacts.telegram ? (
-          <p className="mt-4 text-base">
-            Telegram: <span className="text-[color:var(--c-gold)]">{contacts.telegram}</span>
+    <Section id="contacts" title="Контакты" subtitle="Опишите задачу — отвечу и предложу вариант решения.">
+      <div className="grid gap-8 lg:grid-cols-[1fr_1.2fr]">
+        <div className="rounded-2xl border border-[color:var(--c-border)] bg-[color:var(--c-surface)] p-6">
+          <h2 className="mb-3 text-base font-semibold">Как связаться напрямую</h2>
+          {contacts.telegram ? (
+            <p className="mt-2 text-base">
+              Telegram: <span className="text-[color:var(--c-gold)]">{contacts.telegram}</span>
+            </p>
+          ) : null}
+          {contacts.email ? (
+            <p className="mt-2 text-base">
+              E-mail: <span className="text-[color:var(--c-gold)]">{contacts.email}</span>
+            </p>
+          ) : null}
+          <p className="mt-6 text-sm leading-relaxed text-[color:var(--c-text-muted)]">
+            Если удобнее формой — заполните её справа. Поля со звёздочкой обязательны.
           </p>
-        ) : null}
-        {contacts.email ? (
-          <p className="mt-2 text-base">
-            E-mail: <span className="text-[color:var(--c-gold)]">{contacts.email}</span>
+          <p className="mt-4 text-sm leading-relaxed text-[color:var(--c-text-muted)]">
+            Данные из формы использую только чтобы ответить на вашу заявку.
           </p>
-        ) : null}
+        </div>
+        <div id="lead" className="rounded-2xl border border-[color:var(--c-border)] bg-[color:var(--c-surface)] p-6 sm:p-8">
+          <h2 className="mb-6 text-base font-semibold">Оставить заявку</h2>
+          <LeadForm taskOptions={taskOptions} />
+        </div>
       </div>
     </Section>
   );

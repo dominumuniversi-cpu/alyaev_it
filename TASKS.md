@@ -21,14 +21,14 @@ ID задач уникальны и не переиспользуются. Де�
 |---|---|---|---|
 | T1-01 | Каркас фронта: layout, тема, шрифты, навигация | [x] | docs/tasks/stage-1.md |
 | T1-02 | Компоненты дизайн-системы | [x] | docs/tasks/stage-1.md |
-| T1-03 | Главная страница (10 блоков ТЗ) | [~] | docs/tasks/stage-1.md |
-| T1-04 | Каталог услуг + 8 посадочных страниц | [~] | docs/tasks/stage-1.md |
-| T1-05 | Обо мне | [ ] | docs/tasks/stage-1.md |
-| T1-06 | Портфолио (демонстрационные проекты) | [ ] | docs/tasks/stage-1.md |
-| T1-07 | Контакты + форма заявки (API) | [ ] | docs/tasks/stage-1.md |
+| T1-03 | Главная страница (10 блоков ТЗ) | [x] | docs/tasks/stage-1.md |
+| T1-04 | Каталог услуг + 8 посадочных страниц | [x] | docs/tasks/stage-1.md |
+| T1-05 | Обо мне | [x] | docs/tasks/stage-1.md |
+| T1-06 | Портфолио (демонстрационные проекты) | [x] | docs/tasks/stage-1.md |
+| T1-07 | Контакты + форма заявки (API) | [x] | docs/tasks/stage-1.md |
 | T1-08 | Блог: лента и статья | [ ] | docs/tasks/stage-1.md |
-| T1-09 | Техническое SEO: robots, sitemap, canonical, JSON-LD, OG | [~] | docs/tasks/stage-1.md |
-| T1-10 | Политика конфиденциальности + согласие 152-ФЗ | [ ] | docs/tasks/stage-1.md |
+| T1-09 | Техническое SEO: robots, sitemap, canonical, JSON-LD, OG | [x] | docs/tasks/stage-1.md |
+| T1-10 | Политика конфиденциальности + согласие 152-ФЗ | [x] | docs/tasks/stage-1.md |
 | T1-11 | Страницы ошибок 404/500/410 | [~] | docs/tasks/stage-1.md |
 | T1-12 | Аналитика: Метрика + GA4 | [ ] | docs/tasks/stage-1.md |
 

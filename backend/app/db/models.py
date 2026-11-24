@@ -3,6 +3,7 @@
 Правило проекта: сначала правится манифест схемы, потом модель, потом миграция.
 """
 
+import uuid
 from datetime import datetime
 
 from sqlalchemy import (
@@ -115,3 +116,27 @@ class SeoMetadata(Base, TimestampMixin):
     og_description: Mapped[str] = mapped_column(String(320), default="", nullable=False)
     og_image: Mapped[str] = mapped_column(String(255), default="", nullable=False)
     schema_json: Mapped[dict] = mapped_column(JSONB, default=dict, nullable=False)
+
+class Lead(Base, TimestampMixin):
+    """Заявка с сайта. Манифест: docs/manifests/db/schema.md, раздел 2."""
+
+    __tablename__ = "leads"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    public_id: Mapped[str] = mapped_column(
+        String(36), unique=True, nullable=False, default=lambda: str(uuid.uuid4())
+    )
+    name: Mapped[str] = mapped_column(String(120), nullable=False)
+    contact_type: Mapped[str] = mapped_column(String(16), nullable=False)
+    contact_value: Mapped[str] = mapped_column(String(160), nullable=False)
+    task_type: Mapped[str | None] = mapped_column(String(64), nullable=True, index=True)
+    message: Mapped[str] = mapped_column(Text, nullable=False)
+    company_site: Mapped[str | None] = mapped_column(String(255), nullable=True)
+    source_page: Mapped[str | None] = mapped_column(String(255), nullable=True)
+    utm_json: Mapped[dict] = mapped_column(JSONB, default=dict, nullable=False)
+    status: Mapped[str] = mapped_column(String(24), default="new", nullable=False, index=True)
+    consent_version: Mapped[str] = mapped_column(String(16), nullable=False)
+    consent_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    ip_hash: Mapped[str | None] = mapped_column(Text, nullable=True)
+    user_agent: Mapped[str | None] = mapped_column(Text, nullable=True)
+    deleted_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
