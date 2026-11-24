@@ -41,6 +41,22 @@ def _lead_dict(lead: Lead) -> dict:
     }
 
 
+@router.get("/channel-status")
+def channel_status(_: User = Depends(require_permission(Permission.LEADS_READ))) -> dict:
+    """Настроены ли каналы уведомлений о заявках.
+
+    Зачем: молчаливо выключенное уведомление — худший вид отказа. Заявка приходит,
+    никто о ней не знает, и узнают о ней через неделю. Показываем состояние в админке,
+    чтобы это стало известно раньше, чем потеряется заявка.
+    """
+    from app.core.telegram import is_configured
+
+    return {
+        # Только факт настройки: ни токена, ни chat_id наружу не отдаём.
+        "telegram": is_configured(),
+    }
+
+
 @router.get("/attention")
 def attention_summary(
     session: DbSession = Depends(get_session),
