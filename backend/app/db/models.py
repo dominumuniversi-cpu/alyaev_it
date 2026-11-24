@@ -8,6 +8,7 @@ from datetime import datetime
 
 from sqlalchemy import (
     Boolean,
+    CheckConstraint,
     Column,
     DateTime,
     ForeignKey,
@@ -452,4 +453,22 @@ class ArticleService(Base):
     )
     service_id: Mapped[int] = mapped_column(
         ForeignKey("services.id", ondelete="CASCADE"), primary_key=True
+    )
+
+
+class ArticleArticle(Base):
+    """Связь статьи со статьёй (ТЗ 11.10 перелинковка, блок «Читайте также»).
+
+    Направленная: source_id — статья, где показывается блок, target_id — куда ведём.
+    Взаимность заводится двумя строками осознанно, а не автоматически.
+    """
+
+    __tablename__ = "article_articles"
+    __table_args__ = (CheckConstraint("source_id <> target_id", name="ck_article_articles_self"),)
+
+    source_id: Mapped[int] = mapped_column(
+        ForeignKey("articles.id", ondelete="CASCADE"), primary_key=True
+    )
+    target_id: Mapped[int] = mapped_column(
+        ForeignKey("articles.id", ondelete="CASCADE"), primary_key=True
     )

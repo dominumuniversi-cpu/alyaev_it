@@ -190,6 +190,15 @@ export async function fetchServicesForArticle(articleSlug: string): Promise<Serv
   );
 }
 
+/** Статьи для блока «Читайте также» (перелинковка статей, ТЗ 11.10). */
+export async function fetchRelatedArticles(articleSlug: string): Promise<ArticleCard[]> {
+  return (
+    (await getJson<ArticleCard[]>(
+      "/api/v1/public/articles-related/" + encodeURIComponent(articleSlug)
+    )) ?? []
+  );
+}
+
 /** Готовые решения, которые внедряются по этой услуге (перелинковка ТЗ 11.10). */
 export async function fetchSolutionsForService(serviceSlug: string): Promise<SolutionCard[]> {
   return (

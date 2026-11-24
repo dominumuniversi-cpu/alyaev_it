@@ -100,3 +100,21 @@ def test_article_service_link_cascades():
 
     for fk in ArticleService.__table__.foreign_keys:
         assert fk.ondelete == "CASCADE", f"{fk.parent.name} должен каскадно удаляться"
+
+
+def test_article_articles_has_self_check_constraint():
+    """Статья не может ссылаться на саму себя — иначе блок «Читайте также» покажет её же."""
+    from app.db.models import ArticleArticle
+
+    names = {c.name for c in ArticleArticle.__table__.constraints}
+    assert "ck_article_articles_self" in names
+
+
+def test_article_articles_both_fkeys_cascade():
+    """Удаление статьи не оставляет висящих связей ни с одной стороны."""
+    from app.db.models import ArticleArticle
+
+    fkeys = [c for c in ArticleArticle.__table__.constraints if c.__class__.__name__ == "ForeignKeyConstraint"]
+    assert len(fkeys) == 2
+    assert all(fk.ondelete == "CASCADE" for fk in fkeys)
+

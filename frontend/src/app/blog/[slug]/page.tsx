@@ -7,7 +7,7 @@ import { notFound } from "next/navigation";
 import { ButtonLink } from "@/components/ui/Button";
 import { Section } from "@/components/ui/Section";
 import { JsonLd } from "@/components/seo/JsonLd";
-import { fetchArticle, fetchServicesForArticle, formatPrice } from "@/lib/api";
+import { fetchArticle, fetchRelatedArticles, fetchServicesForArticle, formatPrice } from "@/lib/api";
 import { canonicalUrl } from "@/lib/seo";
 
 type Params = { slug: string };
@@ -133,6 +133,8 @@ export default async function ArticlePage({ params }: { params: Promise<Params> 
   if (!article) notFound();
   // Услуги по теме статьи: перелинковка ТЗ 11.10.
   const related = await fetchServicesForArticle(article.slug);
+  // «Читайте также»: перелинковка статей между собой (ТЗ 11.10).
+  const alsoRead = await fetchRelatedArticles(article.slug);
 
   return (
     <Section
@@ -157,6 +159,24 @@ export default async function ArticlePage({ params }: { params: Promise<Params> 
         }}
       />
       <article className="max-w-2xl">{renderBody(article.body_md)}</article>
+      {alsoRead.length > 0 ? (
+        <div className="mt-10">
+          <h2 className="mb-3 text-base font-semibold">Читайте также</h2>
+          <ul className="grid gap-3 sm:grid-cols-2">
+            {alsoRead.map((item) => (
+              <li key={item.slug}>
+                <Link
+                  href={"/blog/" + item.slug + "/"}
+                  className="flex h-full flex-col rounded-xl border border-[color:var(--c-border)] bg-[color:var(--c-surface)] p-4 transition-colors hover:border-[color:var(--c-gold)]"
+                >
+                  <span className="text-sm font-medium">{item.title}</span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ) : null}
+
       {related.length > 0 ? (
         <div className="mt-10">
           <h2 className="mb-3 text-base font-semibold">Услуги по теме статьи</h2>

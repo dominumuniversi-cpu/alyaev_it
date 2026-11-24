@@ -314,6 +314,20 @@ def services_by_article(article_slug: str, session: Session = Depends(get_sessio
     ]
 
 
+@router.get("/articles-related/{article_slug}")
+def articles_related(article_slug: str, session: Session = Depends(get_session)) -> list[dict]:
+    """Статьи для блока «Читайте также» — перелинковка статей (ТЗ 11.10)."""
+    rows = content.list_related_articles(session, article_slug)
+    return [
+        {
+            "slug": row.slug,
+            "title": row.title,
+            "excerpt": row.excerpt,
+        }
+        for row in rows
+    ]
+
+
 @router.get("/solutions-by-service/{service_slug}")
 def solutions_by_service(service_slug: str, session: Session = Depends(get_session)) -> list[dict]:
     """Готовые решения по услуге — для перелинковки страниц услуг."""

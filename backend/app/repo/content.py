@@ -5,9 +5,16 @@
 """
 
 from sqlalchemy import select
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, aliased
 
-from app.db.models import Article, ArticleService, Portfolio, Service, Solution
+from app.db.models import (
+    Article,
+    ArticleArticle,
+    ArticleService,
+    Portfolio,
+    Service,
+    Solution,
+)
 
 
 def list_published_portfolio(session: Session) -> list[Portfolio]:
@@ -98,6 +105,26 @@ def list_services_for_article(session: Session, article_slug: str) -> list[Servi
             Service.deleted_at.is_(None),
         )
         .order_by(Service.sort_order, Service.id)
+        .limit(3)
+    )
+    return list(session.scalars(stmt))
+
+
+def list_related_articles(session: Session, article_slug: str) -> list[Article]:
+    """Опубликованные статьи для блока «Читайте также» (ТЗ 11.10)."""
+    Source = aliased(Article)
+    stmt = (
+        select(Article)
+        .join(ArticleArticle, ArticleArticle.target_id == Article.id)
+        .join(Source, Source.id == ArticleArticle.source_id)
+        .where(
+            Source.slug == article_slug,
+            Source.status == "published",
+            Source.deleted_at.is_(None),
+            Article.status == "published",
+            Article.deleted_at.is_(None),
+        )
+        .order_by(Article.published_at.desc(), Article.id.desc())
         .limit(3)
     )
     return list(session.scalars(stmt))
