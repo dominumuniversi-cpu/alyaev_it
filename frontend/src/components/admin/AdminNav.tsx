@@ -7,6 +7,7 @@ type Section = { href: string; label: string };
 /** Разделы админки в порядке важности для администратора. */
 const SECTIONS: Section[] = [
   { href: "/admin/", label: "Заявки" },
+  { href: "/admin/clients/", label: "Клиенты" },
   { href: "/admin/services/", label: "Услуги и цены" },
   { href: "/admin/portfolio/", label: "Портфолио" },
   { href: "/admin/articles/", label: "Блог" },

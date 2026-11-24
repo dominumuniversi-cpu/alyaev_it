@@ -16,7 +16,7 @@ export default function Page() {
       <AdminNav current="/admin/audit/" />
       <h1 className="mb-1 text-2xl font-semibold">Журнал действий</h1>
       <p className="mb-6 text-sm text-[color:var(--c-text-muted)]">
-        Кто и что изменил в админке: услуги, статьи, кейсы, отзывы, SEO и семантическое ядро.
+        Кто и что изменил в админке: клиенты, проекты, услуги, статьи, кейсы, отзывы, SEO и семантическое ядро.
         Записи создаются автоматически и не редактируются.
       </p>
       <AuditLog />
