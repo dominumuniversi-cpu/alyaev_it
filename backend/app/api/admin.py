@@ -7,7 +7,7 @@ from pydantic import BaseModel, Field
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session as DbSession
 
-from app.api.deps import require_staff
+from app.core.permissions import Permission, require_permission
 from app.db.models import Lead, LeadEvent, User
 from app.db.session import get_session
 
@@ -45,7 +45,7 @@ def list_leads(
     status_filter: str | None = Query(default=None, alias="status"),
     limit: int = Query(default=50, ge=1, le=200),
     session: DbSession = Depends(get_session),
-    _: User = Depends(require_staff),
+    _: User = Depends(require_permission(Permission.LEADS_READ)),
 ) -> dict:
     """Список заявок с фильтром по статусу и количеством по статусам."""
     query = select(Lead).where(Lead.deleted_at.is_(None))
@@ -67,7 +67,7 @@ def change_status(
     public_id: str,
     payload: StatusPayload,
     session: DbSession = Depends(get_session),
-    user: User = Depends(require_staff),
+    user: User = Depends(require_permission(Permission.LEADS_WRITE)),
 ) -> dict:
     """Меняет статус заявки и пишет событие в историю."""
     if payload.status not in ALLOWED_STATUSES:

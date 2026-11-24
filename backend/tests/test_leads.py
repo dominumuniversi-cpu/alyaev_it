@@ -21,7 +21,7 @@ def _payload(**overrides):
 
 def test_short_message_rejected():
     """Сообщение короче 20 символов отклоняется (422)."""
-    response = client.post("/api/leads", json=_payload(message="коротко"))
+    response = client.post("/api/v1/leads", json=_payload(message="коротко"))
     assert response.status_code == 422
 
 
@@ -29,13 +29,13 @@ def test_missing_consent_version_rejected():
     """Без версии согласия заявка не принимается."""
     payload = _payload()
     payload.pop("consent_version")
-    response = client.post("/api/leads", json=payload)
+    response = client.post("/api/v1/leads", json=payload)
     assert response.status_code == 422
 
 
 def test_bad_site_url_rejected():
     """Ссылка на сайт без http(s) отклоняется."""
-    response = client.post("/api/leads", json=_payload(company_site="no-scheme.ru"))
+    response = client.post("/api/v1/leads", json=_payload(company_site="no-scheme.ru"))
     assert response.status_code == 422
 
 

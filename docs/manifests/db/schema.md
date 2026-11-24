@@ -193,6 +193,12 @@ UNIQUE `(entity_type, entity_id)`, UNIQUE `path`.
 
 **Правило:** проверка прав — только на сервере (FastAPI dependency). Скрытие элементов UI — не безопасность.
 
+**Реализация:** `backend/app/core/permissions.py` — матрица `ROLE_PERMISSIONS` и
+`require_permission()`. Эндпоинт объявляет право, а не проверяет роль россыпью `if`.
+Подробности и правила расширения — `docs/manifests/access-control.md` (единый источник).
+
+Чужой объект клиенту — **404, не 403**: иначе по коду ответа можно перебрать существующие id.
+
 ## 10. Жизненные циклы (state machine)
 
 ```

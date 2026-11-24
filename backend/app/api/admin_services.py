@@ -7,7 +7,7 @@ from pydantic import BaseModel, Field
 from sqlalchemy import select
 from sqlalchemy.orm import Session as DbSession
 
-from app.api.deps import require_staff
+from app.core.permissions import Permission, require_permission
 from app.db.models import AuditLog, Service, User
 from app.db.session import get_session
 
@@ -28,7 +28,7 @@ class ServiceUpdate(BaseModel):
 @router.get("")
 def list_services(
     session: DbSession = Depends(get_session),
-    _: User = Depends(require_staff),
+    _: User = Depends(require_permission(Permission.SERVICES_READ)),
 ) -> dict:
     """Все услуги включая черновики, по категориям."""
     rows = session.scalars(
@@ -56,7 +56,7 @@ def update_service(
     service_id: int,
     payload: ServiceUpdate,
     session: DbSession = Depends(get_session),
-    user: User = Depends(require_staff),
+    user: User = Depends(require_permission(Permission.SERVICES_WRITE)),
 ) -> dict:
     """Меняет цену, срок и публикацию услуги. Пишет событие в журнал действий."""
     service = session.get(Service, service_id)

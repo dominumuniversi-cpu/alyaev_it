@@ -44,15 +44,8 @@ def get_current_user(
     return user
 
 
-STAFF_ROLES = frozenset({"admin", "manager", "editor"})
-
-
-def require_staff(user: User = Depends(get_current_user)) -> User:
-    """Пускает в админку только персонал: админ, менеджер, редактор."""
-    if not (set(role.code for role in user.roles) & STAFF_ROLES):
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Недостаточно прав")
-    return user
-
+# Проверка прав по ролям вынесена в app/core/permissions.py: одна матрица вместо
+# россыпи проверок. Здесь остались только вход и «только администратор».
 
 def require_admin(user: User = Depends(get_current_user)) -> User:
     """Пускает только администратора."""
