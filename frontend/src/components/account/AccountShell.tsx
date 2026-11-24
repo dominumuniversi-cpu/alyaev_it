@@ -9,6 +9,8 @@
 
 import { useCallback, useEffect, useState } from "react";
 
+import { Button } from "@/components/ui/Button";
+
 const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH ?? "/alyaev";
 
 type Project = {
@@ -46,6 +48,37 @@ type ProjectDetail = Project & {
 type Profile = { display_name: string; company: string; email: string };
 
 /** Цена в рублях или «по договорённости», если ещё не согласована. */
+type ProjectDocument = {
+  id: number;
+  title: string;
+  category: string;
+  file_name: string;
+  size_bytes: number;
+  created_at: string | null;
+  download_url: string;
+};
+
+type ProjectMessage = {
+  id: number;
+  author_role: string;
+  body: string;
+  created_at: string | null;
+};
+
+/** Категории документов: те же коды, что в CHECK базы. */
+const DOC_CATEGORY_LABELS: Record<string, string> = {
+  tz: "ТЗ",
+  act: "Акт",
+  instruction: "Инструкция",
+  other: "Документ",
+};
+
+/** Размер файла по-человечески: 1024 байта неудобно читать. */
+function fileSize(bytes: number): string {
+  if (bytes < 1024) return bytes + " Б";
+  if (bytes < 1024 * 1024) return Math.round(bytes / 1024) + " КБ";
+  return (bytes / (1024 * 1024)).toFixed(1) + " МБ";
+}
 function money(value: number | null): string {
   if (value === null) return "по договорённости";
   return value.toLocaleString("ru-RU") + " ₽";
@@ -293,13 +326,155 @@ function ProjectCard({ project }: { project: ProjectDetail }) {
               </li>
             ))}
           </ol>
-        )}
-      </section>
+        )}      </section>
+
+      <DocumentsBlock projectId={project.id} />
+
+      <MessagesBlock projectId={project.id} />
     </div>
   );
 }
 
 /** Выход: гасит текущую сессию и возвращает на вход. */
+/** Документы проекта: список со ссылками на скачивание. */
+function DocumentsBlock({ projectId }: { projectId: number }) {
+  const [items, setItems] = useState<ProjectDocument[] | null>(null);
+  const [failed, setFailed] = useState(false);
+
+  useEffect(() => {
+    let alive = true;
+    fetch(BASE_PATH + "/api/v1/account/projects/" + projectId + "/documents", {
+      credentials: "include",
+      cache: "no-store",
+    })
+      .then((r) => (r.ok ? r.json() : Promise.reject(new Error("fail"))))
+      .then((data) => { if (alive) setItems(data.items ?? []); })
+      .catch(() => { if (alive) setFailed(true); });
+    return () => { alive = false; };
+  }, [projectId]);
+
+  return (
+    <section className="rounded-2xl border border-[color:var(--c-border)] bg-[color:var(--c-surface)] p-6">
+      <h3 className="mb-4 text-lg font-semibold">Документы</h3>
+      {failed ? (
+        <p className="text-sm text-[color:var(--c-text-muted)]">Не удалось загрузить документы.</p>
+      ) : items === null ? (
+        <p className="text-sm text-[color:var(--c-text-muted)]">Загрузка…</p>
+      ) : items.length === 0 ? (
+        <p className="text-sm text-[color:var(--c-text-muted)]">Документов пока нет.</p>
+      ) : (
+        <ul className="space-y-3">
+          {items.map((d) => (
+            <li key={d.id} className="flex flex-wrap items-center justify-between gap-2 border-b border-[color:var(--c-border)] pb-3 last:border-0 last:pb-0">
+              <a href={BASE_PATH + d.download_url} className="text-sm underline">
+                {d.title}
+              </a>
+              <span className="text-xs text-[color:var(--c-text-muted)]">
+                {DOC_CATEGORY_LABELS[d.category] ?? d.category} · {d.file_name} · {fileSize(d.size_bytes)}
+              </span>
+            </li>
+          ))}
+        </ul>
+      )}
+    </section>
+  );
+}
+
+/** Переписка по проекту: свои сообщения справа, ответы студии слева. */
+function MessagesBlock({ projectId }: { projectId: number }) {
+  const [items, setItems] = useState<ProjectMessage[] | null>(null);
+  const [text, setText] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [failed, setFailed] = useState<string | null>(null);
+
+  useEffect(() => {
+    let alive = true;
+    fetch(BASE_PATH + "/api/v1/account/projects/" + projectId + "/messages", {
+      credentials: "include",
+      cache: "no-store",
+    })
+      .then((r) => (r.ok ? r.json() : Promise.reject(new Error("fail"))))
+      .then((data) => { if (alive) setItems(data.items ?? []); })
+      .catch(() => { if (alive) setFailed("Не удалось загрузить переписку."); });
+    return () => { alive = false; };
+  }, [projectId]);
+
+  /** Отправка без перезагрузки: сообщение появляется сразу. */
+  async function send(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const body = text.trim();
+    if (!body) return;
+    setBusy(true);
+    setFailed(null);
+    try {
+      const res = await fetch(
+        BASE_PATH + "/api/v1/account/projects/" + projectId + "/messages?body=" + encodeURIComponent(body),
+        { method: "POST", credentials: "include" },
+      );
+      if (!res.ok) { setFailed("Не удалось отправить сообщение."); return; }
+      const data = await res.json();
+      setItems((prev) => [
+        ...(prev ?? []),
+        { id: data.id, author_role: "client", body, created_at: data.created_at },
+      ]);
+      setText("");
+    } catch {
+      setFailed("Сеть недоступна.");
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  return (
+    <section className="rounded-2xl border border-[color:var(--c-border)] bg-[color:var(--c-surface)] p-6">
+      <h3 className="mb-4 text-lg font-semibold">Переписка</h3>
+      {items === null ? (
+        <p className="text-sm text-[color:var(--c-text-muted)]">Загрузка…</p>
+      ) : items.length === 0 ? (
+        <p className="text-sm text-[color:var(--c-text-muted)]">Сообщений пока нет.</p>
+      ) : (
+        <ul className="mb-4 space-y-3">
+          {items.map((m) => (
+            <li
+              key={m.id}
+              className={m.author_role === "client" ? "flex justify-end" : "flex justify-start"}
+            >
+              <div
+                className={
+                  "max-w-[80%] rounded-xl px-3 py-2 text-sm " +
+                  (m.author_role === "client"
+                    ? "bg-[color:var(--c-bg)] border border-[color:var(--c-gold)]"
+                    : "bg-[color:var(--c-bg)] border border-[color:var(--c-border)]")
+                }
+              >
+                <p className="whitespace-pre-line">{m.body}</p>
+                <p className="mt-1 text-xs text-[color:var(--c-text-muted)]">
+                  {m.author_role === "client" ? "Вы" : "Студия"} · {date(m.created_at)}
+                </p>
+              </div>
+            </li>
+          ))}
+        </ul>
+      )}
+      <form onSubmit={send} className="flex flex-wrap items-end gap-3">
+        <label htmlFor="msg-body" className="sr-only">Сообщение</label>
+        <textarea
+          id="msg-body"
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+          rows={2}
+          maxLength={5000}
+          placeholder="Написать сообщение…"
+          className="min-w-[240px] flex-1 rounded-xl border border-[color:var(--c-border)] bg-[color:var(--c-bg)] p-3 text-sm"
+        />
+        <Button type="submit" disabled={busy || !text.trim()}>
+          {busy ? "Отправка…" : "Отправить"}
+        </Button>
+      </form>
+      {failed ? <p className="mt-2 text-sm text-[color:var(--c-danger)]">{failed}</p> : null}
+    </section>
+  );
+}
 function LogoutButton() {
   const [busy, setBusy] = useState(false);
 

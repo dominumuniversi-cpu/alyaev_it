@@ -8,12 +8,12 @@
 
 from datetime import UTC, datetime
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy import select
 from sqlalchemy.orm import Session as DbSession, selectinload
 
 from app.api.deps import get_current_user
-from app.db.models import Client, Project, User
+from app.db.models import Client, Document, Message, Project, UploadedFile, User
 from app.db.session import get_session
 
 router = APIRouter(prefix="/api/v1/account", tags=["account"])
@@ -54,6 +54,19 @@ def _current_client(session: DbSession, user: User) -> Client:
         )
     return client
 
+
+def _own_project(session: DbSession, client: Client, project_id: int) -> Project:
+    """Проект клиента или 404.
+
+    Одна функция на все вложенные ресурсы (задачи, документы, переписка):
+    проверка доступа не должна размножаться по маршрутам — там она расходится.
+    """
+    project = session.scalar(
+        select(Project).where(Project.id == project_id, Project.client_id == client.id)
+    )
+    if project is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Проект не найден")
+    return project
 
 def _project_brief(project: Project) -> dict:
     """Короткая карточка проекта для списка."""
@@ -146,3 +159,134 @@ def project_detail(
             for h in sorted(project.history, key=lambda x: x.created_at)
         ],
     }
+
+
+@router.get("/projects/{project_id}/documents")
+def project_documents(
+    project_id: int,
+    session: DbSession = Depends(get_session),
+    user: User = Depends(get_current_user),
+) -> dict:
+    """Документы проекта (ТЗ 9.1). Ссылки на скачивание — только для своих файлов."""
+    client = _current_client(session, user)
+    project = _own_project(session, client, project_id)
+    rows = session.execute(
+        select(Document, UploadedFile)
+        .join(UploadedFile, UploadedFile.id == Document.file_id)
+        .where(Document.project_id == project.id, Document.deleted_at.is_(None))
+        .order_by(Document.created_at.desc())
+    ).all()
+    items = [
+        {
+            "id": doc.id,
+            "title": doc.title,
+            "category": doc.category,
+            "file_name": file.original_name,
+            "size_bytes": file.size_bytes,
+            "created_at": _iso(doc.created_at),
+            "download_url": "/api/v1/account/projects/" + str(project.id) + "/documents/" + str(doc.id),
+        }
+        for doc, file in rows
+    ]
+    return {"items": items, "count": len(items)}
+
+
+@router.get("/projects/{project_id}/messages")
+def project_messages(
+    project_id: int,
+    session: DbSession = Depends(get_session),
+    user: User = Depends(get_current_user),
+) -> dict:
+    """Переписка по проекту в порядке отправки (ТЗ 9.1)."""
+    client = _current_client(session, user)
+    project = _own_project(session, client, project_id)
+    rows = session.scalars(
+        select(Message).where(Message.project_id == project.id).order_by(Message.id)
+    ).all()
+    items = [
+        {
+            "id": m.id,
+            "author_role": m.author_role,
+            "body": m.body,
+            "created_at": _iso(m.created_at),
+        }
+        for m in rows
+    ]
+    return {"items": items, "count": len(items)}
+
+
+@router.post("/projects/{project_id}/messages", status_code=status.HTTP_201_CREATED)
+def send_message(
+    project_id: int,
+    body: str = Query(min_length=1, max_length=5000),
+    session: DbSession = Depends(get_session),
+    user: User = Depends(get_current_user),
+) -> dict:
+    """Клиент пишет сообщение по своему проекту.
+
+    author_role пишется снимком: если роль пользователя потом сменится,
+    история переписки не должна переписаться задним числом.
+    """
+    client = _current_client(session, user)
+    project = _own_project(session, client, project_id)
+    text = body.strip()
+    if not text:
+        # Пробелы вместо текста — это пустое сообщение, а не сообщение пробелов.
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail="Сообщение не может быть пустым",
+        )
+    message = Message(
+        project_id=project.id,
+        author_user_id=user.id,
+        author_role="client",
+        body=text,
+    )
+    session.add(message)
+    session.commit()
+    session.refresh(message)
+    return {"id": message.id, "created_at": _iso(message.created_at)}
+
+
+@router.get("/projects/{project_id}/documents/{document_id}")
+def download_document(
+    project_id: int,
+    document_id: int,
+    session: DbSession = Depends(get_session),
+    user: User = Depends(get_current_user),
+):
+    """Отдаёт файл документа. Доступ — только через свой проект.
+
+    Документ ищется вместе с project_id: чужой получает 404 так же, как несуществующий.
+    Имя файла из базы, а не из запроса — иначе это path traversal.
+    """
+    from fastapi.responses import FileResponse
+
+    from app.api.admin_uploads import media_path
+
+    client = _current_client(session, user)
+    project = _own_project(session, client, project_id)
+    row = session.execute(
+        select(Document, UploadedFile)
+        .join(UploadedFile, UploadedFile.id == Document.file_id)
+        .where(
+            Document.id == document_id,
+            Document.project_id == project.id,
+            Document.deleted_at.is_(None),
+        )
+    ).first()
+    if row is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Документ не найден")
+    doc, file = row
+    # media_path сам не даст выйти за каталог хранения — одна защита на весь проект.
+    path = media_path(file.stored_name)
+    if not path.is_file():
+        # Файл пропал с диска: честная ошибка лучше пустого ответа.
+        raise HTTPException(
+            status_code=status.HTTP_410_GONE, detail="Файл документа недоступен"
+        )
+    return FileResponse(
+        path,
+        media_type=file.content_type,
+        filename=file.original_name,
+    )

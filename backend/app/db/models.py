@@ -356,6 +356,67 @@ class UploadedFile(Base, TimestampMixin):
     deleted_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
 
 
+class Document(Base, TimestampMixin):
+    """Документ проекта: связь файла с проектом (ТЗ 9.1, «Документы»).
+
+    Сам файл живёт в uploaded_files. Разделение важное: один файл может быть
+    привязан к нескольким проектам, а удаление документа не стирает файл с диска.
+    """
+
+    __tablename__ = "documents"
+    __table_args__ = (
+        CheckConstraint(
+            "category IN ('tz', 'act', 'instruction', 'other')",
+            name="ck_documents_category",
+        ),
+        Index("ix_documents_project", "project_id"),
+        # Один и тот же файл не должен висеть в проекте дважды.
+        UniqueConstraint("project_id", "file_id", name="uq_documents_project_file"),
+    )
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    project_id: Mapped[int] = mapped_column(
+        ForeignKey("projects.id", ondelete="CASCADE"), nullable=False
+    )
+    # RESTRICT: пока документ ссылается на файл, файл удалить нельзя.
+    # Иначе получим документ без файла — хуже, чем отсутствие документа.
+    file_id: Mapped[int] = mapped_column(
+        ForeignKey("uploaded_files.id", ondelete="RESTRICT"), nullable=False
+    )
+    title: Mapped[str] = mapped_column(String(200), nullable=False)
+    category: Mapped[str] = mapped_column(
+        String(32), default="other", server_default="other", nullable=False
+    )
+    uploaded_by: Mapped[int | None] = mapped_column(
+        ForeignKey("users.id", ondelete="SET NULL"), nullable=True
+    )
+    deleted_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+
+
+class Message(Base, TimestampMixin):
+    """Сообщение переписки по проекту (ТЗ 9.1, «Переписка»).
+
+    author_role — снимок роли на момент отправки, а не вычисление из текущей роли:
+    роли меняются, а история переписки не должна переписываться задним числом.
+    """
+
+    __tablename__ = "messages"
+    __table_args__ = (
+        CheckConstraint("author_role IN ('client', 'staff')", name="ck_messages_author_role"),
+        Index("ix_messages_project", "project_id"),
+    )
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    project_id: Mapped[int] = mapped_column(
+        ForeignKey("projects.id", ondelete="CASCADE"), nullable=False
+    )
+    author_user_id: Mapped[int | None] = mapped_column(
+        ForeignKey("users.id", ondelete="SET NULL"), nullable=True
+    )
+    author_role: Mapped[str] = mapped_column(String(16), nullable=False)
+    body: Mapped[str] = mapped_column(Text, nullable=False)
+    read_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+
 class SemanticQuery(Base, TimestampMixin):
     """Поисковый запрос семантического ядра (ТЗ 11.4).
 
