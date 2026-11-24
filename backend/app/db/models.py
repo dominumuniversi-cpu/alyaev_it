@@ -213,3 +213,16 @@ class LeadEvent(Base):
     payload: Mapped[dict] = mapped_column(JSONB, default=dict, nullable=False)
     actor_user_id: Mapped[int | None] = mapped_column(ForeignKey("users.id"), nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), nullable=False)
+
+class AuditLog(Base):
+    """Журнал действий: кто, что и когда изменил. Манифест схемы, п. 12.4."""
+
+    __tablename__ = "audit_log"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    actor_user_id: Mapped[int | None] = mapped_column(ForeignKey("users.id"), nullable=True, index=True)
+    action: Mapped[str] = mapped_column(String(64), nullable=False)
+    entity: Mapped[str] = mapped_column(String(32), nullable=False)
+    entity_id: Mapped[str | None] = mapped_column(String(64), nullable=True)
+    payload: Mapped[dict] = mapped_column(JSONB, default=dict, nullable=False)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), nullable=False, index=True)
