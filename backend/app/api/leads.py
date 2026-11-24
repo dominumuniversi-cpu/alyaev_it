@@ -54,6 +54,7 @@ def create_lead(
         company_site=payload.company_site,
         source_page=payload.source_page,
         utm_json=payload.utm,
+        brief_json=payload.brief,
         status="new",
         consent_version=payload.consent_version,
         consent_at=datetime.now(UTC),

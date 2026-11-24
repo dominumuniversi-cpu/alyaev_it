@@ -17,10 +17,21 @@ type Lead = {
   task_type: string | null;
   message: string;
   company_site: string | null;
+  brief: Record<string, string>;
   source_page: string | null;
   status: string;
   created_at: string | null;
 };
+
+/** Подписи вопросов брифа. Порядок фиксирован — читается как ответ, а не как дамп JSON. */
+const BRIEF_LABELS: [string, string][] = [
+  ["Сейчас", "current"],
+  ["Связать", "systems"],
+  ["Результат", "result"],
+  ["Сотрудников", "staff"],
+  ["ТЗ", "tech_task"],
+  ["Бюджет", "budget"],
+];
 
 const STATUS_LABELS: Record<string, string> = {
   new: "Новая",
@@ -149,6 +160,17 @@ export function LeadsTable() {
               {lead.company_site ? <span>Сайт: {lead.company_site}</span> : null}
               {lead.source_page ? <span>Источник: {lead.source_page}</span> : null}
             </div>
+            {/* Ответы брифа: клиент выбрал их сам — без них смысл брифа теряется. */}
+            {Object.keys(lead.brief ?? {}).length > 0 ? (
+              <dl className="mb-3 grid gap-1 text-xs text-[color:var(--c-text-muted)] sm:grid-cols-2">
+                {BRIEF_LABELS.filter(([, key]) => lead.brief[key]).map(([label, key]) => (
+                  <div key={key}>
+                    <dt className="inline">{label}: </dt>
+                    <dd className="inline text-[color:var(--c-text)]">{lead.brief[key]}</dd>
+                  </div>
+                ))}
+              </dl>
+            ) : null}
             <div className="flex flex-wrap gap-2">
               {["in_progress", "won", "lost", "spam"].map((next) => (
                 <Button

@@ -66,6 +66,7 @@
 | company_site | varchar(255) | NULL | |
 | source_page | varchar(255) | NULL | С какой страницы пришла |
 | utm_json | jsonb | NOT NULL default '{}' | UTM-метки |
+| brief_json | jsonb | NOT NULL default '{}' | Ответы онлайн-брифа (ТЗ 14): системы, интеграции, сотрудники, результат, ТЗ, бюджет |
 | status | varchar(24) | NOT NULL default 'new' — new / in_progress / qualified / proposal / won / lost / spam | |
 | consent_version | varchar(16) | NOT NULL | Версия согласия |
 | consent_at | timestamptz | NOT NULL | Момент согласия |
@@ -75,6 +76,11 @@
 | deleted_at | timestamptz | NULL | |
 
 Индексы: `(status, created_at desc)`, `lead_task_type`.
+
+**Почему бриф — JSON, а не колонки.** Вопросы брифа будут меняться по мере роста опыта,
+и каждая правка формы иначе означала бы миграцию. Набор ключей проверяется в коде
+(`app/api/leads.py`), неизвестные ключи отбрасываются — в базе не окажется мусора от
+подделанного запроса. Ключи фиксированные, поэтому фильтровать по ним через JSONB можно.
 
 ### lead_events
 `id, lead_id fk → leads(id) ON DELETE CASCADE, event varchar(32), payload jsonb, actor_user_id fk users NULL, created_at`.

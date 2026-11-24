@@ -10,6 +10,35 @@ import { Button } from "@/components/ui/Button";
 import { SelectField, TextAreaField, TextField } from "@/components/ui/Field";
 
 const CONSENT_VERSION = "1.0";
+
+/** Вопросы онлайн-брифа (ТЗ 14). Все необязательные: бриф помогает, но не мешает отправить.
+ *  Ключи совпадают с BRIEF_FIELDS на сервере — иначе ответ молча отбросится. */
+const BRIEF_QUESTIONS: { name: string; label: string; options: string[] }[] = [
+  {
+    name: "current",
+    label: "Что используется сейчас",
+    options: ["Excel и таблицы", "Сайт и почта", "CRM", "1С", "Другое", "Пока ничего"],
+  },
+  {
+    name: "systems",
+    label: "Какие системы нужно связать",
+    options: ["Не нужно", "CRM", "1С", "Telegram", "Google Sheets", "Сайт", "Другое"],
+  },
+  {
+    name: "result",
+    label: "Какой результат ожидается",
+    options: [
+      "Меньше ручной работы",
+      "Быстрее отвечать клиентам",
+      "Автоматические отчёты",
+      "Поиск по документам",
+      "Другое",
+    ],
+  },
+  { name: "staff", label: "Сколько сотрудников задействовано", options: ["1", "2–5", "6–20", "больше 20"] },
+  { name: "tech_task", label: "Есть ли техническое задание", options: ["Есть", "В работе", "Нет"] },
+  { name: "budget", label: "Бюджет", options: ["до 25 000 ₽", "25 000–50 000 ₽", "50 000–150 000 ₽", "больше 150 000 ₽", "Не определён"] },
+];
 const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH ?? "/alyaev";
 
 type Errors = Partial<Record<"name" | "contact" | "message" | "consent", string>>;
@@ -103,6 +132,11 @@ export function LeadForm({
               ? window.location.pathname + "?source=calculator"
               : window.location.pathname,
           utm,
+          // Пустые ответы не шлём: сервер их всё равно не сохранит.
+          brief: Object.fromEntries(
+            BRIEF_QUESTIONS.map((q) => [q.name, String(formData.get(q.name) ?? "")])
+              .filter(([, value]) => value),
+          ),
           consent_version: CONSENT_VERSION,
           website_check: String(formData.get("website_check") ?? ""),
         }),
@@ -195,6 +229,29 @@ export function LeadForm({
         type="url"
         disabled={sending}
       />
+
+      {/* Бриф по ТЗ 14: помогает ответить подготовленным. Ни одно поле не обязательно. */}
+      <details className="rounded-xl border border-[color:var(--c-border)] p-4">
+        <summary className="cursor-pointer text-sm font-medium">
+          Уточнить детали (необязательно) — ответ будет полезнее
+        </summary>
+        <div className="mt-4 space-y-4">
+          {BRIEF_QUESTIONS.map((q) => (
+            <SelectField
+              key={q.name}
+              id={q.name}
+              name={q.name}
+              label={q.label}
+              disabled={sending}
+              defaultValue=""
+              options={[
+                { value: "", label: "Не выбрано" },
+                ...q.options.map((option) => ({ value: option, label: option })),
+              ]}
+            />
+          ))}
+        </div>
+      </details>
 
       <div>
         <label className="flex items-start gap-3 text-sm text-[color:var(--c-text-muted)]">

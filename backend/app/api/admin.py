@@ -36,6 +36,7 @@ def _lead_dict(lead: Lead) -> dict:
         "source_page": lead.source_page,
         "status": lead.status,
         "utm": lead.utm_json,
+        "brief": lead.brief_json or {},
         "created_at": lead.created_at.isoformat() if lead.created_at else None,
     }
 

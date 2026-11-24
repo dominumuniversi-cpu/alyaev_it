@@ -140,6 +140,11 @@ class Lead(Base, TimestampMixin):
     company_site: Mapped[str | None] = mapped_column(String(255), nullable=True)
     source_page: Mapped[str | None] = mapped_column(String(255), nullable=True)
     utm_json: Mapped[dict] = mapped_column(JSONB, default=dict, nullable=False)
+    # Ответы онлайн-брифа (ТЗ 14): JSON, а не колонки — вопросы меняются чаще схемы.
+    # Набор ключей проверяется в app/api/leads.py, неизвестные отбрасываются.
+    brief_json: Mapped[dict] = mapped_column(
+        JSONB, default=dict, server_default="{}", nullable=False
+    )
     status: Mapped[str] = mapped_column(String(24), default="new", nullable=False, index=True)
     consent_version: Mapped[str] = mapped_column(String(16), nullable=False)
     consent_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
