@@ -31,6 +31,14 @@ export type Category = { slug: string; title: string; short_description: string 
 
 export type CategoryFull = Category & { services: ServiceCard[] };
 
+export type Review = {
+  author_name: string;
+  author_position: string | null;
+  text: string;
+  project_title: string | null;
+  published_at: string | null;
+};
+
 /** Публичный путь с учётом basePath. */
 export function withBase(path: string): string {
   return BASE_PATH + path;
@@ -64,6 +72,11 @@ export async function fetchCategory(slug: string): Promise<CategoryFull | null> 
 /** Полная карточка услуги или null. */
 export async function fetchService(slug: string): Promise<ServiceFull | null> {
   return getJson<ServiceFull>("/api/v1/public/services/" + encodeURIComponent(slug));
+}
+
+/** Отзывы с согласием автора. Пустой список, если таких нет. */
+export async function fetchReviews(): Promise<Review[]> {
+  return (await getJson<Review[]>("/api/v1/public/reviews")) ?? [];
 }
 
 /** Публичные настройки сайта. */

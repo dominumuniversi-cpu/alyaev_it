@@ -204,6 +204,35 @@ publication:     draft → published → archived (обратно в draft до�
 
 Переходы валидируются сервером; изменение статуса создаёт запись в истории/событиях.
 
+
+## 12. Отзывы (reviews)
+
+> ТЗ раздел 4.4 и 8: отзывы публикуются **только с разрешения автора**. Пока подтверждённых нет —
+> раздел `/reviews/` не публикуется и не индексируется (ТЗ раздел 3).
+
+| Поле | Тип | Правило |
+|---|---|---|
+| `id` | bigint pk | |
+| `public_id` | uuid unique | внешний идентификатор |
+| `author_name` | varchar(120) | имя или название компании |
+| `author_position` | varchar(120) null | должность, по желанию |
+| `text` | text | сам отзыв |
+| `project_title` | varchar(200) null | связанный проект |
+| `consent_given` | boolean not null default false | **разрешение на публикацию**; без него публикация запрещена |
+| `consent_at` | timestamptz null | когда получено согласие |
+| `consent_version` | varchar(16) null | версия текста согласия |
+| `status` | varchar(16) | `draft` / `published` / `hidden` |
+| `published_at` | timestamptz null | |
+| `sort_order` | int default 0 | |
+| `deleted_at` | timestamptz null | мягкое удаление |
+| `created_at`, `updated_at` | timestamptz | |
+
+**Правила:**
+
+1. Запись со `status = published` и `consent_given = false` — ошибка данных; сервер не считает её опубликованной.
+2. Публичная страница получает отзыв, только если `status = published`, `consent_given = true`, `deleted_at is null`.
+3. Если опубликованных отзывов ноль — страница `/reviews/` отдаёт `notFound()` (404) и не попадает в sitemap.
+4. Не выдумывать рейтинги и звёзды в разметке: Schema.org `Review` добавляется только к реальным отзывам.
 ## 11. Что НЕ делаем
 
 - Не храним пароли в открытом виде и секреты в БД.

@@ -6,7 +6,7 @@
 from sqlalchemy import select
 from sqlalchemy.orm import Session, selectinload
 
-from app.db.models import SeoMetadata, Service, ServiceCategory, SiteSetting
+from app.db.models import Review, SeoMetadata, Service, ServiceCategory, SiteSetting
 
 
 def list_categories(session: Session) -> list[ServiceCategory]:
@@ -63,3 +63,16 @@ def list_settings(session: Session) -> dict[str, dict]:
     """Все настройки сайта как словарь ключ → значение."""
     rows = session.scalars(select(SiteSetting)).all()
     return {row.key: row.value for row in rows}
+
+def list_public_reviews(session: Session) -> list[Review]:
+    """Отзывы, готовые к публикации: статус published, согласие есть, не удалены."""
+    stmt = (
+        select(Review)
+        .where(
+            Review.status == "published",
+            Review.consent_given.is_(True),
+            Review.deleted_at.is_(None),
+        )
+        .order_by(Review.sort_order, Review.published_at.desc().nullslast())
+    )
+    return list(session.scalars(stmt))

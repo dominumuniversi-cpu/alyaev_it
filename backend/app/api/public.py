@@ -116,6 +116,22 @@ def service_detail(slug: str, session: Session = Depends(get_session)) -> dict:
     return _service_full(service)
 
 
+@router.get("/reviews")
+def reviews(session: Session = Depends(get_session)) -> list[dict]:
+    """Опубликованные отзывы с согласием автора. Пустой список, если таких нет."""
+    rows = public_data.list_public_reviews(session)
+    return [
+        {
+            "author_name": row.author_name,
+            "author_position": row.author_position,
+            "text": row.text,
+            "project_title": row.project_title,
+            "published_at": row.published_at.isoformat() if row.published_at else None,
+        }
+        for row in rows
+    ]
+
+
 @router.get("/settings")
 def settings(session: Session = Depends(get_session)) -> dict[str, dict]:
     """Публичные настройки сайта (контакты и т.п.)."""
