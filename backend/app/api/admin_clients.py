@@ -30,10 +30,20 @@ from app.db.models import (
     User,
 )
 from app.db.session import get_session
+from app.services.notify import notify_client_owner
 
 router = APIRouter(prefix="/api/v1/admin", tags=["admin-clients"])
 
 PROJECT_STATUSES = ("new", "analysis", "dev", "testing", "done")
+
+# Подписи для уведомлений: клиенту «dev» ничего не говорит.
+PROJECT_STATUS_LABELS: dict[str, str] = {
+    "new": "Новый",
+    "analysis": "Анализ",
+    "dev": "Разработка",
+    "testing": "Тестирование",
+    "done": "Завершён",
+}
 TASK_STATUSES = ("todo", "in_progress", "done")
 
 # Набор символов для временного пароля. Убраны похожие 0/O и 1/l/I:
@@ -116,6 +126,16 @@ def _set_status(
         )
     )
     project.status = new_status
+    # Уведомляем клиента здесь, а не в маршруте: статус меняется только
+    # этим путём, значит ни одна смена не останется без уведомления.
+    notify_client_owner(
+        session,
+        project,
+        kind="status",
+        title="Статус проекта «" + project.title + "»: " + PROJECT_STATUS_LABELS.get(new_status, new_status),
+        body=comment,
+        exclude_user_id=actor.id if actor else None,
+    )
     if new_status == "done" and project.completed_at is None:
         project.completed_at = now
     if new_status != "done":
@@ -543,6 +563,16 @@ def reply_to_client(
         body=text,
     )
     session.add(message)
+    # Уведомление в той же транзакции, что и сообщение:
+    # либо есть оба, либо ни одного.
+    notify_client_owner(
+        session,
+        project,
+        kind="message",
+        title="Ответ по проекту «" + project.title + "»",
+        body=text[:200],
+        exclude_user_id=actor.id,
+    )
     audit.record(
         session,
         actor_user_id=actor.id,

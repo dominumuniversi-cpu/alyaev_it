@@ -417,6 +417,32 @@ class Message(Base, TimestampMixin):
     body: Mapped[str] = mapped_column(Text, nullable=False)
     read_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
 
+class Notification(Base, TimestampMixin):
+    """Уведомление пользователю (ТЗ 9.1, «Уведомления»).
+
+    Адресат — пользователь, а не клиент: уведомления получают и клиенты, и сотрудники.
+    Один человек может быть и тем, и другим, поэтому привязка именно к user_id.
+    """
+
+    __tablename__ = "notifications"
+    __table_args__ = (
+        CheckConstraint("kind IN ('message', 'status', 'document')", name="ck_notifications_kind"),
+        # Счётчик непрочитанных спрашивается на каждой странице — индекс по адресату.
+        Index("ix_notifications_user_read", "user_id", "read_at"),
+    )
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    user_id: Mapped[int] = mapped_column(
+        ForeignKey("users.id", ondelete="CASCADE"), nullable=False
+    )
+    kind: Mapped[str] = mapped_column(String(32), nullable=False)
+    project_id: Mapped[int | None] = mapped_column(
+        ForeignKey("projects.id", ondelete="CASCADE"), nullable=True
+    )
+    title: Mapped[str] = mapped_column(String(200), nullable=False)
+    body: Mapped[str] = mapped_column(Text, default="", server_default="", nullable=False)
+    read_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+
 class SemanticQuery(Base, TimestampMixin):
     """Поисковый запрос семантического ядра (ТЗ 11.4).
 

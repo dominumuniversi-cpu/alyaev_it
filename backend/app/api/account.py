@@ -9,11 +9,11 @@
 from datetime import UTC, datetime
 
 from fastapi import APIRouter, Depends, HTTPException, Query, status
-from sqlalchemy import select
+from sqlalchemy import func, select
 from sqlalchemy.orm import Session as DbSession, selectinload
 
 from app.api.deps import get_current_user
-from app.db.models import Client, Document, Message, Project, UploadedFile, User
+from app.db.models import Client, Document, Message, Notification, Project, UploadedFile, User
 from app.db.session import get_session
 
 router = APIRouter(prefix="/api/v1/account", tags=["account"])
@@ -290,3 +290,62 @@ def download_document(
         media_type=file.content_type,
         filename=file.original_name,
     )
+
+
+@router.get("/notifications")
+def list_notifications(
+    session: DbSession = Depends(get_session),
+    user: User = Depends(get_current_user),
+) -> dict:
+    """Уведомления пользователя: свежие сверху, плюс счётчик непрочитанных."""
+    rows = session.scalars(
+        select(Notification)
+        .where(Notification.user_id == user.id)
+        .order_by(Notification.id.desc())
+        .limit(50)
+    ).all()
+    unread = session.scalar(
+        select(func.count())
+        .select_from(Notification)
+        .where(Notification.user_id == user.id, Notification.read_at.is_(None))
+    )
+    return {
+        "items": [
+            {
+                "id": x.id,
+                "kind": x.kind,
+                "title": x.title,
+                "body": x.body,
+                "project_id": x.project_id,
+                "read": x.read_at is not None,
+                "created_at": _iso(x.created_at),
+            }
+            for x in rows
+        ],
+        "unread": unread or 0,
+    }
+
+
+@router.post("/notifications/{notification_id}/read")
+def mark_read(
+    notification_id: int,
+    session: DbSession = Depends(get_session),
+    user: User = Depends(get_current_user),
+) -> dict:
+    """Отмечает уведомление прочитанным.
+
+    Идемпотентно: повторный вызов не переписывает дату первого прочтения.
+    Чужое уведомление неотличимо от несуществующего — 404.
+    """
+    note = session.scalar(
+        select(Notification).where(
+            Notification.id == notification_id,
+            Notification.user_id == user.id,
+        )
+    )
+    if note is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Уведомление не найдено")
+    if note.read_at is None:
+        note.read_at = datetime.now(UTC)
+        session.commit()
+    return {"id": note.id, "read": True}

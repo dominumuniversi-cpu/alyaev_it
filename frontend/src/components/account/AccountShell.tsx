@@ -13,6 +13,16 @@ import { Button } from "@/components/ui/Button";
 
 const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH ?? "/alyaev";
 
+type AccountNotification = {
+  id: number;
+  kind: string;
+  title: string;
+  body: string;
+  project_id: number | null;
+  read: boolean;
+  created_at: string | null;
+};
+
 type Project = {
   id: number;
   title: string;
@@ -206,13 +216,103 @@ export function AccountShell({ mode, projectId }: { mode: "list" | "detail"; pro
         </div>
       </header>
 
-      {mode === "list" ? <ProjectList projects={projects} /> : null}
+      {mode === "list" ? (
+        <>
+          <NotificationsBlock />
+          <ProjectList projects={projects} />
+        </>
+      ) : null}
       {mode === "detail" && detail ? <ProjectCard project={detail} /> : null}
     </div>
   );
 }
 
 /** Список проектов или честная пустота вместо заглушки. */
+/** Уведомления кабинета: что случилось, пока клиент не заходил. */
+function NotificationsBlock() {
+  const [items, setItems] = useState<AccountNotification[] | null>(null);
+  const [unread, setUnread] = useState(0);
+  const [failed, setFailed] = useState(false);
+
+  useEffect(() => {
+    let alive = true;
+    fetch(BASE_PATH + "/api/v1/account/notifications", { credentials: "include", cache: "no-store" })
+      .then((r) => (r.ok ? r.json() : Promise.reject(new Error("fail"))))
+      .then((data) => {
+        if (!alive) return;
+        setItems(data.items ?? []);
+        setUnread(data.unread ?? 0);
+      })
+      .catch(() => { if (alive) setFailed(true); });
+    return () => { alive = false; };
+  }, []);
+
+  /** Отметка без перезагрузки: счётчик уменьшается сразу. */
+  async function markRead(id: number) {
+    try {
+      const res = await fetch(BASE_PATH + "/api/v1/account/notifications/" + id + "/read", {
+        method: "POST",
+        credentials: "include",
+      });
+      if (!res.ok) return;
+      setItems((prev) =>
+        (prev ?? []).map((n) => (n.id === id ? { ...n, read: true } : n)),
+      );
+      setUnread((prev) => Math.max(0, prev - 1));
+    } catch {
+      setFailed(true);
+    }
+  }
+
+  if (failed) return null;
+  if (items === null) return null;
+
+  return (
+    <section className="rounded-2xl border border-[color:var(--c-border)] bg-[color:var(--c-surface)] p-6">
+      <h2 className="mb-1 text-lg font-semibold">Уведомления</h2>
+      <p className="mb-4 text-sm text-[color:var(--c-text-muted)]">
+        {unread > 0 ? "Непрочитанных: " + unread : "Всё прочитано"}
+      </p>
+      {items.length === 0 ? (
+        <p className="text-sm text-[color:var(--c-text-muted)]">Уведомлений пока нет.</p>
+      ) : (
+        <ul className="space-y-3">
+          {items.map((n) => (
+            <li
+              key={n.id}
+              className={
+                "border-b border-[color:var(--c-border)] pb-3 last:border-0 last:pb-0" +
+                (n.read ? "" : " opacity-100")
+              }
+            >
+              <div className="flex flex-wrap items-start justify-between gap-2">
+                <div>
+                  <p className={"text-sm" + (n.read ? " text-[color:var(--c-text-muted)]" : "")}>
+                    {n.read ? "" : "● "}
+                    {n.title}
+                  </p>
+                  {n.body ? (
+                    <p className="mt-1 whitespace-pre-line text-xs text-[color:var(--c-text-muted)]">{n.body}</p>
+                  ) : null}
+                  <p className="mt-1 text-xs text-[color:var(--c-text-muted)]">{date(n.created_at)}</p>
+                </div>
+                {n.read ? null : (
+                  <button
+                    type="button"
+                    onClick={() => void markRead(n.id)}
+                    className="text-xs text-[#22B8E6] hover:underline"
+                  >
+                    Отметить прочитанным
+                  </button>
+                )}
+              </div>
+            </li>
+          ))}
+        </ul>
+      )}
+    </section>
+  );
+}
 function ProjectList({ projects }: { projects: Project[] }) {
   if (projects.length === 0) {
     return (
