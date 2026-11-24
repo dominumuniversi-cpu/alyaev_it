@@ -164,10 +164,10 @@ export function SeoEditor() {
               onChange={(e) => setPath(e.target.value)}
               className="w-full rounded-[10px] border border-[color:var(--c-border)] bg-[color:var(--c-surface-2)] px-3.5 py-2.5 text-sm"
             >
-              {["/", "/services/", "/portfolio/", "/blog/", "/about/", "/contacts/", "/calculator/", "/reviews/"].map((p) => (
+              {["/", "/services/", "/portfolio/", "/blog/", "/about/", "/contacts/", "/calculator/", "/diagnostics/", "/reviews/"].map((p) => (
                 <option key={p} value={p}>{p}</option>
               ))}
-              {pages.filter((p) => !["/", "/services/", "/portfolio/", "/blog/", "/about/", "/contacts/", "/calculator/", "/reviews/"].includes(p.path)).map((p) => (
+              {pages.filter((p) => !["/", "/services/", "/portfolio/", "/blog/", "/about/", "/contacts/", "/calculator/", "/diagnostics/", "/reviews/"].includes(p.path)).map((p) => (
                 <option key={p.path} value={p.path}>{p.path}</option>
               ))}
             </select>

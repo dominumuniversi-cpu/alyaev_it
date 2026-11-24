@@ -12,6 +12,7 @@ const NAV = [
   { href: "/about/", label: "Обо мне" },
   { href: "/blog/", label: "Блог" },
   { href: "/calculator/", label: "Калькулятор" },
+  { href: "/diagnostics/", label: "Разбор процесса" },
   { href: "/contacts/", label: "Контакты" },
 ];
 

@@ -8,7 +8,18 @@ import { siteBase } from "@/lib/seo";
 const BASE_PATH = process.env.BASE_PATH ?? "/alyaev";
 const SITE = siteBase();
 
-const STATIC_PATHS = ["/", "/services/", "/contacts/", "/about/", "/portfolio/", "/blog/", "/privacy/", "/personal-data-consent/"];
+const STATIC_PATHS = [
+  "/",
+  "/services/",
+  "/contacts/",
+  "/about/",
+  "/portfolio/",
+  "/blog/",
+  "/calculator/",
+  "/diagnostics/",
+  "/privacy/",
+  "/personal-data-consent/",
+];
 
 /** Карта сайта: статические страницы плюс опубликованные услуги. */
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
