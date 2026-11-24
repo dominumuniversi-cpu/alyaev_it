@@ -233,3 +233,81 @@ def test_set_status_helper_is_the_only_writer(env):
     assert len(rows) == 1
     assert rows[0].status_to == "testing"
     assert rows[0].actor_user_id is None
+
+
+def test_task_status_done_sets_completed_at(env):
+    """Закрытая задача получает дату выполнения, открытая — теряет её."""
+    Session_, ids = env
+    c = _client(env)
+    created = c.post(
+        "/api/v1/admin/projects/" + str(ids["project"]) + "/tasks",
+        json={"title": "Закрыть задачу"},
+    ).json()
+    url = "/api/v1/admin/projects/" + str(ids["project"]) + "/tasks/" + str(created["id"])
+
+    assert c.patch(url, json={"status": "done"}).status_code == 200
+    db = Session_()
+    task = db.get(ProjectTask, created["id"])
+    assert task.status == "done"
+    assert task.completed_at is not None
+    db.close()
+
+    assert c.patch(url, json={"status": "in_progress"}).status_code == 200
+    db = Session_()
+    task = db.get(ProjectTask, created["id"])
+    assert task.completed_at is None
+    db.close()
+
+
+def test_task_of_foreign_project_is_404(env):
+    """Задача другого проекта не находится: 404, а не «нельзя менять»."""
+    Session_, ids = env
+    db = Session_()
+    other = Project(client_id=ids["client"], title="Другой", status="new")
+    db.add(other)
+    db.flush()
+    foreign = ProjectTask(project_id=other.id, title="Чужая", status="todo")
+    db.add(foreign)
+    db.commit()
+    other_id, task_id = other.id, foreign.id
+    db.close()
+
+    c = _client(env)
+    r = c.patch(
+        "/api/v1/admin/projects/" + str(ids["project"]) + "/tasks/" + str(task_id),
+        json={"status": "done"},
+    )
+    assert r.status_code == 404
+
+
+def test_task_same_status_not_logged(env):
+    """Повтор статуса задачи не пишет запись в журнал."""
+    Session_, ids = env
+    c = _client(env)
+    created = c.post(
+        "/api/v1/admin/projects/" + str(ids["project"]) + "/tasks",
+        json={"title": "Без повторов"},
+    ).json()
+    url = "/api/v1/admin/projects/" + str(ids["project"]) + "/tasks/" + str(created["id"])
+    c.patch(url, json={"status": "done"})
+    c.patch(url, json={"status": "done"})
+
+    db = Session_()
+    rows = [a for a in db.scalars(select(AuditLog)).all() if a.action == "project.task_status"]
+    db.close()
+    assert len(rows) == 1
+
+
+def test_task_invalid_status_is_422(env):
+    """Недопустимый статус задачи — 422, а не 500 из CHECK базы."""
+    Session_, ids = env
+    c = _client(env)
+    created = c.post(
+        "/api/v1/admin/projects/" + str(ids["project"]) + "/tasks",
+        json={"title": "Статус"},
+    ).json()
+    r = c.patch(
+        "/api/v1/admin/projects/" + str(ids["project"]) + "/tasks/" + str(created["id"]),
+        json={"status": "wrong"},
+    )
+    assert r.status_code == 422

@@ -74,6 +74,12 @@ class TaskPayload(BaseModel):
     due_at: datetime | None = None
 
 
+class TaskStatusPayload(BaseModel):
+    """Смена статуса задачи."""
+
+    status: str = Field(max_length=16)
+
+
 def _generate_password(length: int = 12) -> str:
     """Временный пароль из безопасного алфавита.
 
@@ -374,6 +380,71 @@ def change_project_status(
     session.commit()
     return {"id": project.id, "status": project.status}
 
+
+@router.patch("/projects/{project_id}/tasks/{task_id}")
+def change_task_status(
+    project_id: int,
+    task_id: int,
+    payload: TaskStatusPayload,
+    session: DbSession = Depends(get_session),
+    actor: User = Depends(require_permission(Permission.PROJECTS_ALL)),
+) -> dict:
+    """Закрывает или возвращает в работу задачу проекта.
+
+    Задача ищется вместе с project_id: так чужая задача получает 404,
+    а не «нельзя менять» — не подтверждаем её существование.
+    """
+    if payload.status not in TASK_STATUSES:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail="Недопустимый статус задачи: " + payload.status,
+        )
+    task = session.scalar(
+        select(ProjectTask).where(ProjectTask.id == task_id, ProjectTask.project_id == project_id)
+    )
+    if task is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Задача не найдена")
+    if task.status == payload.status:
+        # Повтор того же статуса — не событие; журнал не засоряем.
+        return {"id": task.id, "status": task.status}
+    task.status = payload.status
+    # Дата выполнения ставится и снимается вместе со статусом:
+    # закрытая задача без даты бесполезна, открытая с датой — врёт.
+    task.completed_at = datetime.now(UTC) if payload.status == "done" else None
+    audit.record(
+        session,
+        actor_user_id=actor.id,
+        action="project.task_status",
+        entity="project",
+        entity_id=project_id,
+        payload={"task_id": task.id, "status": payload.status},
+    )
+    session.commit()
+    return {"id": task.id, "status": task.status}
+
+
+@router.get("/projects/{project_id}/tasks")
+def list_tasks(
+    project_id: int,
+    session: DbSession = Depends(get_session),
+    _: User = Depends(require_permission(Permission.PROJECTS_ALL)),
+) -> dict:
+    """Задачи проекта в порядке создания."""
+    tasks = session.scalars(
+        select(ProjectTask).where(ProjectTask.project_id == project_id).order_by(ProjectTask.id)
+    ).all()
+    return {
+        "items": [
+            {
+                "id": x.id,
+                "title": x.title,
+                "status": x.status,
+                "completed_at": x.completed_at.isoformat() if x.completed_at else None,
+            }
+            for x in tasks
+        ],
+        "count": len(tasks),
+    }
 
 @router.post("/projects/{project_id}/tasks", status_code=status.HTTP_201_CREATED)
 def create_task(
