@@ -5,7 +5,7 @@ from datetime import UTC, datetime, timedelta
 
 from fastapi import APIRouter, Depends, HTTPException, Request, Response, status
 from pydantic import BaseModel, Field
-from sqlalchemy import select
+from sqlalchemy import select, update
 from sqlalchemy.orm import Session as DbSession
 
 from app.api.deps import SESSION_COOKIE, _client_ip, get_current_user
@@ -100,6 +100,62 @@ def logout(
     response.delete_cookie(SESSION_COOKIE, path="/")
     return {"status": "ok"}
 
+
+@router.post("/logout-all")
+def logout_all(
+    response: Response,
+    session: DbSession = Depends(get_session),
+    user: User = Depends(get_current_user),
+) -> dict[str, int]:
+    """Завершает ВСЕ сессии пользователя (ТЗ 9.4, «выход со всех устройств»).
+
+    Нужен, когда пароль мог утечь: смена пароля бесполезна, пока живы старые
+    cookie. Здесь одним действием гасим все токены, включая текущий.
+    """
+    now = datetime.now(UTC)
+    result = session.execute(
+        update(Session)
+        .where(Session.user_id == user.id, Session.revoked_at.is_(None))
+        .values(revoked_at=now)
+    )
+    session.commit()
+    response.delete_cookie(SESSION_COOKIE, path="/")
+    return {"revoked": result.rowcount or 0}
+
+
+@router.get("/sessions")
+def list_sessions(
+    request: Request,
+    session: DbSession = Depends(get_session),
+    user: User = Depends(get_current_user),
+) -> dict:
+    """Активные устройства (ТЗ 9.4). Токен не отдаём никогда — только метаданные."""
+    current = request.cookies.get(SESSION_COOKIE)
+    current_hash = hash_token(current) if current else None
+    now = datetime.now(UTC)
+    rows = session.scalars(
+        select(Session)
+        .where(
+            Session.user_id == user.id,
+            Session.revoked_at.is_(None),
+            Session.expires_at > now,
+        )
+        .order_by(Session.created_at.desc())
+    ).all()
+    return {
+        "items": [
+            {
+                "id": r.id,
+                # Помечаем текущую сессию: клиенту нужно знать, какую он НЕ разлогинит.
+                "current": r.token_hash == current_hash,
+                "user_agent": r.user_agent or "",
+                "created_at": r.created_at.isoformat(),
+                "expires_at": r.expires_at.isoformat(),
+            }
+            for r in rows
+        ],
+        "count": len(rows),
+    }
 
 @router.get("/me")
 def me(user: User = Depends(get_current_user)) -> dict:
