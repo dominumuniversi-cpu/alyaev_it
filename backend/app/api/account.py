@@ -8,11 +8,13 @@
 
 from datetime import UTC, datetime
 
-from fastapi import APIRouter, Depends, HTTPException, Query, status
+from fastapi import APIRouter, Depends, File, Form, HTTPException, Query, UploadFile, status
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session as DbSession, selectinload
 
+from app.api.admin_uploads import MEDIA_ROOT, media_path
 from app.api.deps import get_current_user
+from app.core.uploads import DOCUMENT_MAX, UploadRejected, check_upload
 from app.db.models import Client, Document, Message, Notification, Project, UploadedFile, User
 from app.db.session import get_session
 
@@ -27,6 +29,9 @@ STATUS_LABELS: dict[str, str] = {
     "testing": "Тестирование",
     "done": "Завершён",
 }
+
+# Категории документов: те же, что в ограничении таблицы documents (ck_documents_category).
+DOCUMENT_CATEGORIES = ("tz", "act", "instruction", "other")
 
 TASK_STATUS_LABELS: dict[str, str] = {
     "todo": "Ожидает",
@@ -349,3 +354,61 @@ def mark_read(
         note.read_at = datetime.now(UTC)
         session.commit()
     return {"id": note.id, "read": True}
+
+
+@router.post("/projects/{project_id}/documents", status_code=status.HTTP_201_CREATED)
+async def upload_project_document(
+    project_id: int,
+    file: UploadFile = File(...),
+    title: str = Form(""),
+    category: str = Form("other"),
+    session: DbSession = Depends(get_session),
+    user: User = Depends(get_current_user),
+) -> dict:
+    """Загрузка документа клиентом (ТЗ 9.1, «Документы»).
+
+    Клиент грузит только в СВОЙ проект: проверка идёт на сервере через _own_project.
+    Право CONTENT_WRITE здесь не подходит -- оно административное, поэтому чужой
+    проект отсекается владением, а не ролью.
+    """
+    client = _current_client(session, user)
+    project = _own_project(session, client, project_id)
+
+    if category not in DOCUMENT_CATEGORIES:
+        raise HTTPException(422, "Недопустимая категория документа")
+
+    # Размер ограничиваем до чтения в память, как в админской загрузке.
+    content = await file.read(DOCUMENT_MAX + 1)
+    try:
+        checked = check_upload(file.filename or "", content)
+    except UploadRejected as exc:
+        raise HTTPException(422, str(exc)) from exc
+
+    MEDIA_ROOT.mkdir(parents=True, exist_ok=True)
+    target = media_path(checked.stored_name)
+    target.write_bytes(content)
+
+    uploaded = UploadedFile(
+        stored_name=checked.stored_name,
+        original_name=(file.filename or "file")[:255],
+        content_type=checked.content_type,
+        size_bytes=checked.size,
+        kind=checked.kind,
+        checksum=checked.checksum,
+        uploaded_by=user.id,
+    )
+    session.add(uploaded)
+    session.flush()
+
+    doc = Document(
+        project_id=project.id,
+        file_id=uploaded.id,
+        title=(title.strip() or uploaded.original_name)[:200],
+        category=category,
+        uploaded_by=user.id,
+    )
+    session.add(doc)
+    session.commit()
+    session.refresh(doc)
+
+    return {"id": doc.id, "title": doc.title, "category": doc.category}

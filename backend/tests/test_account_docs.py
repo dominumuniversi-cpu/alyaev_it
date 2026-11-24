@@ -206,3 +206,65 @@ def test_download_missing_file_is_410(env):
     )
     # Файла на диске нет (в тесте его никто не создавал) — честная ошибка.
     assert r.status_code == 410
+
+
+PDF_HEAD = b"%PDF-1.4\n"
+
+
+def test_client_uploads_document_to_own_project(env):
+    """Клиент может приложить документ в свой проект (ТЗ 9.1, «Документы»)."""
+    c = _client(env)
+    r = c.post(
+        "/api/v1/account/projects/" + str(env[1]["my_project"]) + "/documents",
+        files={"file": ("Смета.pdf", PDF_HEAD + b"body", "application/pdf")},
+        data={"title": "Смета", "category": "act"},
+    )
+    assert r.status_code == 201
+    assert r.json()["title"] == "Смета"
+
+    # Документ действительно появился в проекте, а не только в ответе.
+    listed = c.get(
+        "/api/v1/account/projects/" + str(env[1]["my_project"]) + "/documents"
+    ).json()
+    titles = [d["title"] for d in listed["items"]]
+    assert "Смета" in titles
+
+
+def test_upload_to_foreign_project_is_404(env):
+    """Загрузка в чужой проект отбивается: иначе клиент подсунет файл соседу."""
+    c = _client(env)
+    db = env[0]()
+    before = len(db.scalars(select(Document)).all())
+    db.close()
+
+    r = c.post(
+        "/api/v1/account/projects/" + str(env[1]["other_project"]) + "/documents",
+        files={"file": ("Чужое.pdf", PDF_HEAD + b"body", "application/pdf")},
+    )
+    assert r.status_code == 404
+
+    db = env[0]()
+    after = len(db.scalars(select(Document)).all())
+    db.close()
+    assert after == before
+
+
+def test_upload_forbidden_type_is_422(env):
+    """Тип файла вне белого списка не принимается (ТЗ 12.5)."""
+    c = _client(env)
+    r = c.post(
+        "/api/v1/account/projects/" + str(env[1]["my_project"]) + "/documents",
+        files={"file": ("script.exe", b"MZ\x90\x00", "application/octet-stream")},
+    )
+    assert r.status_code == 422
+
+
+def test_upload_bad_category_is_422(env):
+    """Категория вне ck_documents_category не принимается."""
+    c = _client(env)
+    r = c.post(
+        "/api/v1/account/projects/" + str(env[1]["my_project"]) + "/documents",
+        files={"file": ("Акт.pdf", PDF_HEAD + b"body", "application/pdf")},
+        data={"category": "выдумка"},
+    )
+    assert r.status_code == 422

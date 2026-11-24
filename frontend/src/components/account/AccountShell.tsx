@@ -435,23 +435,53 @@ function ProjectCard({ project }: { project: ProjectDetail }) {
   );
 }
 
-/** Выход: гасит текущую сессию и возвращает на вход. */
-/** Документы проекта: список со ссылками на скачивание. */
+/** Документы проекта: список, скачивание и загрузка клиентом. */
 function DocumentsBlock({ projectId }: { projectId: number }) {
   const [items, setItems] = useState<ProjectDocument[] | null>(null);
   const [failed, setFailed] = useState(false);
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState("");
 
-  useEffect(() => {
-    let alive = true;
-    fetch(BASE_PATH + "/api/v1/account/projects/" + projectId + "/documents", {
+  /** Догружает список: после загрузки файла, без перезагрузки страницы. */
+  const reload = useCallback(() => {
+    return fetch(BASE_PATH + "/api/v1/account/projects/" + projectId + "/documents", {
       credentials: "include",
       cache: "no-store",
     })
       .then((r) => (r.ok ? r.json() : Promise.reject(new Error("fail"))))
-      .then((data) => { if (alive) setItems(data.items ?? []); })
+      .then((data) => setItems(data.items ?? []));
+  }, [projectId]);
+
+  /** Отправляет файл на сервер и обновляет список. */
+  const upload = async (form: HTMLFormElement) => {
+    setBusy(true);
+    setError("");
+    try {
+      const res = await fetch(BASE_PATH + "/api/v1/account/projects/" + projectId + "/documents", {
+        method: "POST",
+        credentials: "include",
+        body: new FormData(form),
+      });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        setError(typeof data.detail === "string" ? data.detail : "Не удалось загрузить файл.");
+        return;
+      }
+      form.reset();
+      await reload();
+    } catch {
+      setError("Не удалось загрузить файл. Проверьте связь.");
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  useEffect(() => {
+    let alive = true;
+    reload()
       .catch(() => { if (alive) setFailed(true); });
     return () => { alive = false; };
-  }, [projectId]);
+  }, [reload]);
 
   return (
     <section className="rounded-2xl border border-[color:var(--c-border)] bg-[color:var(--c-surface)] p-6">
@@ -476,6 +506,44 @@ function DocumentsBlock({ projectId }: { projectId: number }) {
           ))}
         </ul>
       )}
+
+      <form
+        className="mt-5 space-y-3 border-t border-[color:var(--c-border)] pt-5"
+        onSubmit={(e) => {
+          e.preventDefault();
+          void upload(e.currentTarget);
+        }}
+      >
+        <p className="text-sm font-medium">Прикрепить документ</p>
+        <div className="grid gap-3 sm:grid-cols-[1fr_180px_auto]">
+          <input
+            type="file"
+            name="file"
+            required
+            accept=".pdf,.docx,.xlsx,.zip"
+            className="text-sm text-[color:var(--c-text-muted)] file:mr-3 file:rounded-lg file:border-0 file:bg-[color:var(--c-border)] file:px-3 file:py-2 file:text-sm file:text-[color:var(--c-text)]"
+          />
+          <select
+            name="category"
+            defaultValue="other"
+            className="rounded-lg border border-[color:var(--c-border)] bg-[color:var(--c-bg)] px-3 py-2 text-sm text-[color:var(--c-text)]"
+          >
+            <option value="tz">ТЗ</option>
+            <option value="act">Акт</option>
+            <option value="instruction">Инструкция</option>
+            <option value="other">Другое</option>
+          </select>
+          <Button type="submit" disabled={busy}>
+            {busy ? "Загрузка…" : "Загрузить"}
+          </Button>
+        </div>
+        <p className="text-xs text-[color:var(--c-text-muted)]">
+          PDF, DOCX, XLSX, ZIP до 20 МБ.
+        </p>
+        {error ? (
+          <p className="text-sm text-[color:var(--c-danger)]">{error}</p>
+        ) : null}
+      </form>
     </section>
   );
 }
