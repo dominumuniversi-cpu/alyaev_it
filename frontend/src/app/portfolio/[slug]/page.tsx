@@ -54,6 +54,7 @@ export default async function PortfolioItemPage({ params }: { params: Promise<Pa
 
   return (
     <Section
+      headingLevel={1}
       id="case"
       breadcrumbs={[
         { label: "Главная", href: "/" },

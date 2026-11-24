@@ -30,7 +30,9 @@ export default async function ContactsPage() {
   for (const service of services) serviceTitles[service.slug] = service.title;
 
   return (
-    <Section id="contacts"
+    <Section
+      headingLevel={1}
+      id="contacts"
       breadcrumbs={[{ label: "Главная", href: "/" }, { label: "Контакты" }]} title="Контакты" subtitle="Опишите задачу — отвечу и предложу вариант решения.">
       <div className="grid gap-8 lg:grid-cols-[1fr_1.2fr]">
         <div className="rounded-2xl border border-[color:var(--c-border)] bg-[color:var(--c-surface)] p-6">

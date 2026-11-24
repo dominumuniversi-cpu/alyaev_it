@@ -32,7 +32,9 @@ export default async function Page() {
   const articles = await fetchArticles();
 
   return (
-    <Section id="page"
+    <Section
+      headingLevel={1}
+      id="page"
       breadcrumbs={[{ label: "Главная", href: "/" }, { label: "Блог" }]} title={"Статьи и разборы"}>
       {articles.length === 0 ? (
         <p className="max-w-2xl text-base leading-relaxed text-[color:var(--c-text-muted)]">

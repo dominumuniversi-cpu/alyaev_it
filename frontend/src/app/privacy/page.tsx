@@ -14,7 +14,9 @@ export const metadata: Metadata = {
 /** Политика: цели, состав данных, хранение, права субъекта. */
 export default function PrivacyPage() {
   return (
-    <Section id="privacy" title="Политика обработки персональных данных">
+    <Section
+      headingLevel={1}
+      id="privacy" title="Политика обработки персональных данных">
       <div className="max-w-3xl space-y-6 text-base leading-relaxed text-[color:var(--c-text-muted)]">
         <div>
           <h2 className="mb-2 text-lg font-semibold text-[color:var(--c-text)]">1. Общие положения</h2>

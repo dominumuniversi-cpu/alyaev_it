@@ -23,6 +23,7 @@ export default async function CalculatorPage() {
 
   return (
     <Section
+      headingLevel={1}
       id="calculator"
       breadcrumbs={[{ label: "Главная", href: "/" }, { label: "Калькулятор" }]}
       title="Предварительная оценка"

@@ -60,6 +60,7 @@ export default async function ArticlePage({ params }: { params: Promise<Params> 
 
   return (
     <Section
+      headingLevel={1}
       id="article"
       breadcrumbs={[
         { label: "Главная", href: "/" },

@@ -81,7 +81,9 @@ export default async function PortfolioPage() {
   const items: PortfolioCard[] = fromDb.length > 0 ? fromDb : FALLBACK_PROJECTS;
 
   return (
-    <Section id="portfolio"
+    <Section
+      headingLevel={1}
+      id="portfolio"
       breadcrumbs={[{ label: "Главная", href: "/" }, { label: "Портфолио" }]} title="Проекты и решения" subtitle="Демонстрационные проекты: как устроено решение и какие технологии использованы. Коммерческих внедрений с показателями здесь пока нет — процентные улучшения не придумываю.">
       <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
         {items.map((project) => (

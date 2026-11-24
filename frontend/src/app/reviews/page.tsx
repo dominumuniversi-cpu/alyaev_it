@@ -27,7 +27,9 @@ export default async function ReviewsPage() {
   if (reviews.length === 0) notFound();
 
   return (
-    <Section id="reviews" title="Отзывы клиентов" subtitle="Публикуются с согласия автора и с указанием проекта.">
+    <Section
+      headingLevel={1}
+      id="reviews" title="Отзывы клиентов" subtitle="Публикуются с согласия автора и с указанием проекта.">
       <div className="grid gap-4 md:grid-cols-2">
         {reviews.map((review) => (
           <figure

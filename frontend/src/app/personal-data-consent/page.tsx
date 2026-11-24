@@ -15,7 +15,9 @@ export const metadata: Metadata = {
 /** Текст согласия: то, с чем соглашается человек, отправляя заявку. */
 export default function ConsentPage() {
   return (
-    <Section id="consent" title="Согласие на обработку персональных данных">
+    <Section
+      headingLevel={1}
+      id="consent" title="Согласие на обработку персональных данных">
       <div className="max-w-3xl space-y-5 text-base leading-relaxed text-[color:var(--c-text-muted)]">
         <p>
           Отправляя форму заявки на этом сайте, я даю согласие на обработку моих персональных данных

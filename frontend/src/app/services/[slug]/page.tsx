@@ -67,6 +67,7 @@ function CategoryPage({ category }: { category: CategoryFull }) {
   return (
     <>
       <Section
+        headingLevel={1}
         id="category"
         breadcrumbs={[
           { label: "Главная", href: "/" },
@@ -140,6 +141,7 @@ export default async function ServicePage({ params }: Params) {
       })}
     />
     <Section
+      headingLevel={1}
       id="service"
       breadcrumbs={[
         { label: "Главная", href: "/" },
