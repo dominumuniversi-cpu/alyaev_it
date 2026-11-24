@@ -14,9 +14,14 @@ ENV NEXT_TELEMETRY_DISABLED=1
 ARG NEXT_PUBLIC_YM_ID=""
 ARG NEXT_PUBLIC_GA_ID=""
 ARG BASE_PATH=/alyaev
+# SITE_URL тоже нужен на сборке: robots.txt и sitemap.xml — статические маршруты,
+# Next генерирует их один раз при build. Без аргумента в образ вшивается
+# http://localhost, и поисковик видит мёртвый Host и Sitemap.
+ARG SITE_URL=https://188.226.71.169
 ENV NEXT_PUBLIC_YM_ID=${NEXT_PUBLIC_YM_ID}
 ENV NEXT_PUBLIC_GA_ID=${NEXT_PUBLIC_GA_ID}
 ENV BASE_PATH=${BASE_PATH}
+ENV SITE_URL=${SITE_URL}
 RUN npm run build
 
 FROM node:22-alpine AS runner

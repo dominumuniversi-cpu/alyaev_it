@@ -7,6 +7,7 @@ const SECTIONS = [
   { href: "/portfolio/", label: "Портфолио" },
   { href: "/about/", label: "Обо мне" },
   { href: "/blog/", label: "Блог" },
+  { href: "/calculator/", label: "Калькулятор" },
   { href: "/contacts/", label: "Контакты" },
 ];
 

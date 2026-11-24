@@ -1,6 +1,7 @@
 /** Портфолио: демонстрационные проекты с честным статусом. */
 
 import type { Metadata } from "next";
+import Link from "next/link";
 
 import { Badge } from "@/components/ui/Badge";
 import type { PortfolioCard } from "@/lib/api";
@@ -87,18 +88,27 @@ export default async function PortfolioPage() {
       breadcrumbs={[{ label: "Главная", href: "/" }, { label: "Портфолио" }]} title="Проекты и решения" subtitle="Демонстрационные проекты: как устроено решение и какие технологии использованы. Коммерческих внедрений с показателями здесь пока нет — процентные улучшения не придумываю.">
       <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
         {items.map((project) => (
-          <article key={project.title} className="flex h-full flex-col rounded-2xl border border-[color:var(--c-border)] bg-[color:var(--c-surface)] p-6">
+          <article key={project.slug} className="flex h-full flex-col rounded-2xl border border-[color:var(--c-border)] bg-[color:var(--c-surface)] p-6">
             <div className="mb-4 flex items-center justify-between gap-3">
               <Badge variant="status">{PORTFOLIO_STATUS_LABELS[project.status] ?? project.status}</Badge>
             </div>
-            <h2 className="mb-3 text-lg font-semibold leading-snug">{project.title}</h2>
+            <h2 className="mb-3 text-lg font-semibold leading-snug">
+              <Link href={"/portfolio/" + project.slug + "/"} className="text-[color:var(--c-text)] no-underline hover:text-[color:var(--c-gold)]">
+                {project.title}
+              </Link>
+            </h2>
             <p className="mb-4 text-sm leading-relaxed text-[color:var(--c-text-muted)]">
               {project.summary}
             </p>
-            <div className="mt-auto flex flex-wrap gap-2">
+            <div className="flex flex-wrap gap-2">
               {project.technologies.map((tech) => (
                 <Badge key={tech} variant="tech">{tech}</Badge>
               ))}
+            </div>
+            <div className="mt-auto pt-4">
+              <Link href={"/portfolio/" + project.slug + "/"} className="text-sm font-medium text-[color:var(--c-cyan)] no-underline hover:underline">
+                Как устроено решение →
+              </Link>
             </div>
           </article>
         ))}

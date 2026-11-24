@@ -43,6 +43,10 @@ services:
         NEXT_PUBLIC_YM_ID: ${NEXT_PUBLIC_YM_ID:-}
         NEXT_PUBLIC_GA_ID: ${NEXT_PUBLIC_GA_ID:-}
         BASE_PATH: ${FRONTEND_BASE_PATH:-/alyaev}
+        # SITE_URL попадает в сборку: robots.txt и sitemap — статические маршруты,
+        # они генерятся на build, а не на каждый запрос. Без этого аргумента
+        # в образ вшивается http://localhost, и поисковик получает мёртвый адрес.
+        SITE_URL: ${SITE_URL:-https://188.226.71.169}
     container_name: alyaev-web
     restart: unless-stopped
     environment:
