@@ -4,12 +4,19 @@ import type { Metadata } from "next";
 
 import { Section } from "@/components/ui/Section";
 import { fetchSettings } from "@/lib/api";
+import { canonicalUrl } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: "Контакты",
   description:
     "Связаться по задаче автоматизации: Telegram или e-mail. Отвечу на вопросы и предложу решение.",
-  alternates: { canonical: "/contacts/" },
+  alternates: { canonical: canonicalUrl("/contacts/") },
+  openGraph: {
+    title: "Контакты — Дмитрий Аляев",
+    description: "Связаться по задаче автоматизации: Telegram или e-mail.",
+    url: canonicalUrl("/contacts/"),
+    type: "website",
+  },
 };
 
 /** Способы связи из настроек БД. */

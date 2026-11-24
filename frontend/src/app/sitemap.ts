@@ -13,13 +13,13 @@ const STATIC_PATHS = ["/", "/services/", "/contacts/", "/about/", "/portfolio/",
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const services = await fetchServices();
   const staticRoutes = STATIC_PATHS.map((path) => ({
-    url: SITE + path,
+    url: SITE + (path === "/" ? "" : path.replace(/\/$/, "")),
     lastModified: new Date(),
     changeFrequency: (path === "/" ? "weekly" : "monthly") as "weekly" | "monthly",
     priority: path === "/" ? 1 : 0.7,
   }));
   const serviceRoutes = services.map((service) => ({
-    url: SITE + "/services/" + service.slug + "/",
+    url: SITE + "/services/" + service.slug,
     lastModified: new Date(),
     changeFrequency: "monthly" as const,
     priority: 0.8,

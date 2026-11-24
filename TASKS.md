@@ -27,9 +27,9 @@ ID задач уникальны и не переиспользуются. Де�
 | T1-06 | Портфолио (демонстрационные проекты) | [ ] | docs/tasks/stage-1.md |
 | T1-07 | Контакты + форма заявки (API) | [ ] | docs/tasks/stage-1.md |
 | T1-08 | Блог: лента и статья | [ ] | docs/tasks/stage-1.md |
-| T1-09 | Техническое SEO: robots, sitemap, canonical, JSON-LD, OG | [ ] | docs/tasks/stage-1.md |
+| T1-09 | Техническое SEO: robots, sitemap, canonical, JSON-LD, OG | [~] | docs/tasks/stage-1.md |
 | T1-10 | Политика конфиденциальности + согласие 152-ФЗ | [ ] | docs/tasks/stage-1.md |
-| T1-11 | Страницы ошибок 404/500/410 | [ ] | docs/tasks/stage-1.md |
+| T1-11 | Страницы ошибок 404/500/410 | [~] | docs/tasks/stage-1.md |
 | T1-12 | Аналитика: Метрика + GA4 | [ ] | docs/tasks/stage-1.md |
 
 ## Этап 2 — Админ-панель

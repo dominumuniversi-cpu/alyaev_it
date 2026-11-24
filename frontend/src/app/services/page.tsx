@@ -5,12 +5,20 @@ import type { Metadata } from "next";
 import { ServiceCard } from "@/components/site/ServiceCard";
 import { Section } from "@/components/ui/Section";
 import { fetchServices } from "@/lib/api";
+import { canonicalUrl } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: "Услуги и цены",
   description:
     "Каталог услуг по автоматизации бизнеса: Telegram-боты, AI-ассистенты, парсеры, интеграции, сайты. Цены и сроки указаны для стартовой оценки.",
-  alternates: { canonical: "/services/" },
+  alternates: { canonical: canonicalUrl("/services/") },
+  openGraph: {
+    title: "Услуги и цены — Дмитрий Аляев",
+    description:
+      "Каталог услуг по автоматизации бизнеса: Telegram-боты, AI-ассистенты, парсеры, интеграции, сайты.",
+    url: canonicalUrl("/services/"),
+    type: "website",
+  },
 };
 
 /** Все услуги, сгруппированные по категориям. */

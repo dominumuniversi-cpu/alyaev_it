@@ -8,6 +8,14 @@ export const metadata: Metadata = {
   description: 'Разрабатываю и внедряю решения для автоматизации бизнеса: Telegram-боты, AI-ассистенты, интеграции, сайты.',
   metadataBase: new URL(process.env.SITE_URL || 'https://alyaev.it'),
   robots: { index: true, follow: true },
+  openGraph: {
+    type: "website",
+    locale: "ru_RU",
+    siteName: "Дмитрий Аляев",
+    title: "Дмитрий Аляев — автоматизация бизнеса и AI-разработка",
+    description:
+      "Разрабатываю и внедряю решения для автоматизации бизнеса: Telegram-боты, AI-ассистенты, интеграции, сайты.",
+  },
 };
 
 /** Корневой layout: общая оболочка всех страниц. */

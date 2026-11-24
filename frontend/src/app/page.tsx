@@ -7,6 +7,7 @@ import { Hero } from "@/components/site/Hero";
 import { ServiceCard } from "@/components/site/ServiceCard";
 import { JsonLd, websiteSchema } from "@/components/seo/JsonLd";
 import { fetchServices } from "@/lib/api";
+import { canonicalUrl } from "@/lib/seo";
 
 const ADVANTAGES = [
   { title: "Понимание бизнес-процессов", text: "Сначала разбираю процесс, потом предлагаю решение — не наоборот." },
@@ -34,6 +35,10 @@ const SCENARIO = [
   { title: "Ответственные получают уведомление", text: "Telegram или рабочая система." },
   { title: "Руководитель видит результат", text: "Статистика, отчётность и контроль." },
 ];
+
+export const metadata = {
+  alternates: { canonical: canonicalUrl("/") },
+};
 
 /** Собирает главную на сервере и берёт услуги из БД. */
 export default async function HomePage() {

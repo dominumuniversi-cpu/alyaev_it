@@ -8,6 +8,7 @@ import { ButtonLink } from "@/components/ui/Button";
 import { Section } from "@/components/ui/Section";
 import { JsonLd, serviceSchema } from "@/components/seo/JsonLd";
 import { fetchService, formatPrice } from "@/lib/api";
+import { canonicalUrl } from "@/lib/seo";
 
 type Params = { params: Promise<{ slug: string }> };
 
@@ -19,7 +20,13 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   return {
     title: service.title,
     description: service.short_description,
-    alternates: { canonical: "/services/" + service.slug },
+    alternates: { canonical: canonicalUrl("/services/" + service.slug) },
+    openGraph: {
+      title: service.title,
+      description: service.short_description,
+      url: canonicalUrl("/services/" + service.slug),
+      type: "website",
+    },
   };
 };
 

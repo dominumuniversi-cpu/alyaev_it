@@ -40,7 +40,7 @@ export function serviceSchema(input: {
       "@type": "Offer",
       priceCurrency: "RUB",
       price: input.priceFrom,
-      description: "Ста́ртовая цена, итоговая определяется после анализа задачи",
+      description: "Стартовая цена, итоговая определяется после анализа задачи",
     };
   }
   return base;
