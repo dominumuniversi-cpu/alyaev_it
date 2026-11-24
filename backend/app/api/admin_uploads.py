@@ -11,6 +11,7 @@ from fastapi.responses import FileResponse
 from sqlalchemy import select
 from sqlalchemy.orm import Session as DbSession
 
+from app.core import audit
 from app.core.permissions import Permission, require_permission
 from app.core.uploads import DOCUMENT_MAX, UploadRejected, check_upload
 from app.db.models import UploadedFile, User
@@ -57,6 +58,14 @@ async def upload_file(
         uploaded_by=user.id,
     )
     session.add(row)
+    audit.record(
+        session,
+        actor_user_id=user.id,
+        action="upload.create",
+        entity="upload",
+        entity_id=row.id,
+        payload={"name": checked.stored_name},
+    )
     session.commit()
     return {
         "id": row.id,
@@ -96,7 +105,7 @@ def list_files(
 def delete_file(
     file_id: int,
     session: DbSession = Depends(get_session),
-    _: User = Depends(require_permission(Permission.CONTENT_WRITE)),
+    user: User = Depends(require_permission(Permission.CONTENT_WRITE)),
 ) -> dict:
     """Soft-delete: запись скрывается, файл на диске остаётся до ручной чистки."""
     from datetime import UTC, datetime
@@ -105,5 +114,12 @@ def delete_file(
     if row is None or row.deleted_at is not None:
         raise HTTPException(404, "Файл не найден")
     row.deleted_at = datetime.now(UTC)
+    audit.record(
+        session,
+        actor_user_id=user.id,
+        action="upload.delete",
+        entity="upload",
+        entity_id=file_id,
+    )
     session.commit()
     return {"id": file_id, "deleted": True}

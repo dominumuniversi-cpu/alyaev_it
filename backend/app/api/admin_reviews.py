@@ -11,6 +11,7 @@ from pydantic import BaseModel, Field
 from sqlalchemy import select
 from sqlalchemy.orm import Session as DbSession
 
+from app.core import audit
 from app.core.permissions import Permission, require_permission
 from app.db.models import Review, User
 from app.db.session import get_session
@@ -104,7 +105,7 @@ def list_reviews(
 def create_review(
     payload: ReviewPayload,
     session: DbSession = Depends(get_session),
-    _: User = Depends(require_permission(Permission.CONTENT_WRITE)),
+    user: User = Depends(require_permission(Permission.CONTENT_WRITE)),
 ) -> dict:
     """Создаёт отзыв. Даты согласия и публикации проставляются сами."""
     row = Review(
@@ -115,6 +116,14 @@ def create_review(
     )
     session.add(row)
     _apply(row, payload)
+    audit.record(
+        session,
+        actor_user_id=user.id,
+        action="review.create",
+        entity="review",
+        entity_id=row.id,
+        payload={"author": row.author_name, "rating": row.rating},
+    )
     session.commit()
     session.refresh(row)
     return _review_dict(row)
@@ -125,13 +134,21 @@ def update_review(
     review_id: int,
     payload: ReviewPayload,
     session: DbSession = Depends(get_session),
-    _: User = Depends(require_permission(Permission.CONTENT_WRITE)),
+    user: User = Depends(require_permission(Permission.CONTENT_WRITE)),
 ) -> dict:
     """Полная замена полей отзыва с пересчётом дат."""
     row = session.get(Review, review_id)
     if row is None or row.deleted_at is not None:
         raise HTTPException(404, "Отзыв не найден")
     _apply(row, payload)
+    audit.record(
+        session,
+        actor_user_id=user.id,
+        action="review.update",
+        entity="review",
+        entity_id=review_id,
+        payload={"changes": payload.model_dump(exclude_unset=True)},
+    )
     session.commit()
     session.refresh(row)
     return _review_dict(row)
@@ -141,7 +158,7 @@ def update_review(
 def delete_review(
     review_id: int,
     session: DbSession = Depends(get_session),
-    _: User = Depends(require_permission(Permission.CONTENT_WRITE)),
+    user: User = Depends(require_permission(Permission.CONTENT_WRITE)),
 ) -> dict:
     """Мягкое удаление: запись остаётся в базе, с сайта исчезает."""
     row = session.get(Review, review_id)
@@ -150,5 +167,12 @@ def delete_review(
     row.deleted_at = datetime.now(UTC)
     row.status = "archived"
     row.published_at = None
+    audit.record(
+        session,
+        actor_user_id=user.id,
+        action="review.delete",
+        entity="review",
+        entity_id=review_id,
+    )
     session.commit()
     return {"id": review_id, "deleted": True}

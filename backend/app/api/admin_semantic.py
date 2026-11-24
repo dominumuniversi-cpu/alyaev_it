@@ -11,6 +11,7 @@ from pydantic import BaseModel, Field
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session as DbSession
 
+from app.core import audit
 from app.core.permissions import Permission, require_permission
 from app.db.models import SemanticQuery, User
 from app.db.session import get_session
@@ -161,7 +162,7 @@ def summary(
 def create_query(
     payload: QueryPayload,
     session: DbSession = Depends(get_session),
-    _: User = Depends(require_permission(Permission.CONTENT_WRITE)),
+    user: User = Depends(require_permission(Permission.CONTENT_WRITE)),
 ) -> dict:
     """Добавляет запрос в ядро."""
     _validate_group(payload.group_slug)
@@ -193,6 +194,14 @@ def create_query(
         notes=payload.notes.strip(),
     )
     session.add(row)
+    audit.record(
+        session,
+        actor_user_id=user.id,
+        action="semantic.create",
+        entity="semantic_query",
+        entity_id=row.id,
+        payload={"query": row.query, "target": row.target_path},
+    )
     session.commit()
     session.refresh(row)
     return {"item": _row_dict(row)}
@@ -203,7 +212,7 @@ def update_query(
     query_id: int,
     payload: QueryPayload,
     session: DbSession = Depends(get_session),
-    _: User = Depends(require_permission(Permission.CONTENT_WRITE)),
+    user: User = Depends(require_permission(Permission.CONTENT_WRITE)),
 ) -> dict:
     """Правит запрос целиком: частотность, страницу, приоритет, заметки."""
     _validate_group(payload.group_slug)
@@ -236,6 +245,14 @@ def update_query(
     row.region = payload.region
     row.cluster = payload.cluster
     row.notes = payload.notes.strip()
+    audit.record(
+        session,
+        actor_user_id=user.id,
+        action="semantic.update",
+        entity="semantic_query",
+        entity_id=query_id,
+        payload={"changes": payload.model_dump(exclude_unset=True)},
+    )
     session.commit()
     session.refresh(row)
     return {"item": _row_dict(row)}
@@ -246,7 +263,7 @@ def set_position(
     query_id: int,
     payload: PositionPayload,
     session: DbSession = Depends(get_session),
-    _: User = Depends(require_permission(Permission.CONTENT_WRITE)),
+    user: User = Depends(require_permission(Permission.CONTENT_WRITE)),
 ) -> dict:
     """Фиксирует позицию и дату проверки. Пустая позиция = «выпал из выдачи»."""
     row = session.get(SemanticQuery, query_id)
@@ -254,6 +271,14 @@ def set_position(
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Запрос не найден")
     row.position = payload.position
     row.position_checked_at = datetime.now(timezone.utc)
+    audit.record(
+        session,
+        actor_user_id=user.id,
+        action="semantic.position",
+        entity="semantic_query",
+        entity_id=query_id,
+        payload={"position": payload.position},
+    )
     session.commit()
     session.refresh(row)
     return {"item": _row_dict(row)}
@@ -263,12 +288,19 @@ def set_position(
 def delete_query(
     query_id: int,
     session: DbSession = Depends(get_session),
-    _: User = Depends(require_permission(Permission.CONTENT_WRITE)),
+    user: User = Depends(require_permission(Permission.CONTENT_WRITE)),
 ) -> dict:
     """Удаляет запрос. Ядро — рабочий список, история в нём не нужна."""
     row = session.get(SemanticQuery, query_id)
     if row is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Запрос не найден")
     session.delete(row)
+    audit.record(
+        session,
+        actor_user_id=user.id,
+        action="semantic.delete",
+        entity="semantic_query",
+        entity_id=query_id,
+    )
     session.commit()
     return {"deleted": True}

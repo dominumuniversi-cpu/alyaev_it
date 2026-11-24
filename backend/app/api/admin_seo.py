@@ -9,6 +9,7 @@ from pydantic import BaseModel, Field
 from sqlalchemy import select
 from sqlalchemy.orm import Session as DbSession
 
+from app.core import audit
 from app.core.permissions import Permission, require_permission
 from app.db.models import SeoMetadata, User
 from app.db.session import get_session
@@ -120,7 +121,7 @@ def save_seo(
     path: str,
     payload: SeoPayload,
     session: DbSession = Depends(get_session),
-    _: User = Depends(require_permission(Permission.CONTENT_WRITE)),
+    user: User = Depends(require_permission(Permission.CONTENT_WRITE)),
 ) -> dict:
     """Создаёт или обновляет SEO-запись. Ошибки блокируют сохранение."""
     normalized = _normalize_path(path)
@@ -168,6 +169,14 @@ def save_seo(
     row.og_description = payload.og_description.strip()
     row.og_image = payload.og_image.strip()
 
+    audit.record(
+        session,
+        actor_user_id=user.id,
+        action="seo.save",
+        entity="seo",
+        entity_id=normalized,
+        payload={"path": normalized, "title": payload.title},
+    )
     session.commit()
     return {
         "path": row.path,

@@ -7,8 +7,9 @@ from pydantic import BaseModel, Field
 from sqlalchemy import select
 from sqlalchemy.orm import Session as DbSession
 
+from app.core import audit
 from app.core.permissions import Permission, require_permission
-from app.db.models import AuditLog, Service, User
+from app.db.models import Service, User
 from app.db.session import get_session
 
 router = APIRouter(prefix="/api/v1/admin/services", tags=["admin-services"])
@@ -86,15 +87,13 @@ def update_service(
     if payload.status is not None:
         service.status = payload.status
 
-    session.add(
-        AuditLog(
-            actor_user_id=user.id,
-            action="service.update",
-            entity="service",
-            entity_id=str(service.id),
-            payload={"changes": payload.model_dump(exclude_none=True)},
-            created_at=datetime.now(UTC),
-        )
+    audit.record(
+        session,
+        actor_user_id=user.id,
+        action="service.update",
+        entity="service",
+        entity_id=service.id,
+        payload={"changes": payload.model_dump(exclude_none=True)},
     )
     session.commit()
     return {

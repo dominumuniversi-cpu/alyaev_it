@@ -13,6 +13,7 @@ const SECTIONS: Section[] = [
   { href: "/admin/reviews/", label: "Отзывы" },
   { href: "/admin/semantic/", label: "Семантика" },
   { href: "/admin/seo/", label: "SEO" },
+  { href: "/admin/audit/", label: "Журнал" },
 ];
 
 /** Горизонтальное меню разделов. Текущий раздел выделен. */

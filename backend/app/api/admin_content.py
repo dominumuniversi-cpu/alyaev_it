@@ -13,6 +13,7 @@ from pydantic import BaseModel, Field
 from sqlalchemy import select
 from sqlalchemy.orm import Session as DbSession
 
+from app.core import audit
 from app.core.permissions import Permission, require_permission
 from app.db.models import Article, Portfolio, User
 from app.db.session import get_session
@@ -107,7 +108,7 @@ def list_portfolio(
 def create_portfolio(
     payload: PortfolioPayload,
     session: DbSession = Depends(get_session),
-    _: User = Depends(require_permission(Permission.CONTENT_WRITE)),
+    user: User = Depends(require_permission(Permission.CONTENT_WRITE)),
 ) -> dict:
     """Создаёт кейс. Статус обязан быть одним из трёх."""
     if payload.status not in PORTFOLIO_STATUSES:
@@ -118,6 +119,14 @@ def create_portfolio(
     row = Portfolio(slug=slug)
     session.add(row)
     _apply_portfolio(row, payload)
+    audit.record(
+        session,
+        actor_user_id=user.id,
+        action="portfolio.create",
+        entity="portfolio",
+        entity_id=row.id,
+        payload={"slug": row.slug, "title": row.title, "published": row.published},
+    )
     session.commit()
     return _portfolio_dict(row)
 
@@ -139,7 +148,7 @@ def update_portfolio(
     item_id: int,
     payload: PortfolioPayload,
     session: DbSession = Depends(get_session),
-    _: User = Depends(require_permission(Permission.CONTENT_WRITE)),
+    user: User = Depends(require_permission(Permission.CONTENT_WRITE)),
 ) -> dict:
     """Правка кейса. Смена слага проверяется на занятость."""
     row = session.get(Portfolio, item_id)
@@ -153,6 +162,14 @@ def update_portfolio(
         raise HTTPException(422, f"Слаг {slug} уже занят")
     row.slug = slug
     _apply_portfolio(row, payload)
+    audit.record(
+        session,
+        actor_user_id=user.id,
+        action="portfolio.update",
+        entity="portfolio",
+        entity_id=item_id,
+        payload={"changes": payload.model_dump(exclude_unset=True)},
+    )
     session.commit()
     return _portfolio_dict(row)
 
@@ -161,7 +178,7 @@ def update_portfolio(
 def delete_portfolio(
     item_id: int,
     session: DbSession = Depends(get_session),
-    _: User = Depends(require_permission(Permission.CONTENT_WRITE)),
+    user: User = Depends(require_permission(Permission.CONTENT_WRITE)),
 ) -> dict:
     """Soft-delete: запись остаётся в базе, с сайта исчезает."""
     row = session.get(Portfolio, item_id)
@@ -169,6 +186,13 @@ def delete_portfolio(
         raise HTTPException(404, "Кейс не найден")
     row.deleted_at = datetime.now(UTC)
     row.published = False
+    audit.record(
+        session,
+        actor_user_id=user.id,
+        action="portfolio.delete",
+        entity="portfolio",
+        entity_id=item_id,
+    )
     session.commit()
     return {"id": item_id, "deleted": True}
 
@@ -204,7 +228,7 @@ def _apply_article(row: Article, payload: ArticlePayload) -> None:
 def create_article(
     payload: ArticlePayload,
     session: DbSession = Depends(get_session),
-    _: User = Depends(require_permission(Permission.CONTENT_WRITE)),
+    user: User = Depends(require_permission(Permission.CONTENT_WRITE)),
 ) -> dict:
     """Создаёт статью. Статус обязан быть draft, published или archived."""
     if payload.status not in ARTICLE_STATUSES:
@@ -215,6 +239,14 @@ def create_article(
     row = Article(slug=slug)
     session.add(row)
     _apply_article(row, payload)
+    audit.record(
+        session,
+        actor_user_id=user.id,
+        action="article.create",
+        entity="article",
+        entity_id=row.id,
+        payload={"slug": row.slug, "title": row.title, "published": row.published},
+    )
     session.commit()
     return _article_dict(row)
 
@@ -224,7 +256,7 @@ def update_article(
     item_id: int,
     payload: ArticlePayload,
     session: DbSession = Depends(get_session),
-    _: User = Depends(require_permission(Permission.CONTENT_WRITE)),
+    user: User = Depends(require_permission(Permission.CONTENT_WRITE)),
 ) -> dict:
     """Правка статьи. Дата первой публикации сохраняется."""
     row = session.get(Article, item_id)
@@ -238,6 +270,14 @@ def update_article(
         raise HTTPException(422, f"Слаг {slug} уже занят")
     row.slug = slug
     _apply_article(row, payload)
+    audit.record(
+        session,
+        actor_user_id=user.id,
+        action="article.update",
+        entity="article",
+        entity_id=item_id,
+        payload={"changes": payload.model_dump(exclude_unset=True)},
+    )
     session.commit()
     return _article_dict(row)
 
@@ -246,7 +286,7 @@ def update_article(
 def delete_article(
     item_id: int,
     session: DbSession = Depends(get_session),
-    _: User = Depends(require_permission(Permission.CONTENT_WRITE)),
+    user: User = Depends(require_permission(Permission.CONTENT_WRITE)),
 ) -> dict:
     """Soft-delete статьи: запись остаётся, с сайта исчезает."""
     row = session.get(Article, item_id)
@@ -254,5 +294,12 @@ def delete_article(
         raise HTTPException(404, "Статья не найдена")
     row.deleted_at = datetime.now(UTC)
     row.status = "archived"
+    audit.record(
+        session,
+        actor_user_id=user.id,
+        action="article.delete",
+        entity="article",
+        entity_id=item_id,
+    )
     session.commit()
     return {"id": item_id, "deleted": True}
