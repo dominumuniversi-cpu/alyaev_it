@@ -7,9 +7,14 @@ import { SITE_NAME, SITE_OG_LOCALE } from "@/lib/locale";
 const SITE_URL = (process.env.SITE_URL ?? "http://localhost").replace(/\/$/, "");
 const BASE_PATH = process.env.BASE_PATH ?? "/alyaev";
 
-/** Канонический адрес страницы: адрес сайта + basePath + путь со слэшем. */
+/** Канонический адрес страницы: адрес сайта + basePath + путь без слэша на конце.
+ *
+ *  Слэш на конце не ставим: сайт работает с trailingSlash: false, и адрес
+ *  со слэшем отвечает 308-редиректом. Канонический адрес, ведущий на редирект,
+ *  заставляет поисковика идти лишним шагом на каждой странице.
+ */
 export function canonicalUrl(path: string): string {
-  const clean = path === "/" ? "/" : path.replace(/\/+$/, "") + "/";
+  const clean = path === "/" ? "" : "/" + path.replace(/^\/+|\/+$/g, "");
   return SITE_URL + BASE_PATH + clean;
 }
 
