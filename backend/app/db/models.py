@@ -472,3 +472,126 @@ class ArticleArticle(Base):
     target_id: Mapped[int] = mapped_column(
         ForeignKey("articles.id", ondelete="CASCADE"), primary_key=True
     )
+
+
+class Client(Base, TimestampMixin):
+    """Клиент личного кабинета (ТЗ 9.1).
+
+    Связь с users необязательна: карточку заводят по заявке раньше, чем у клиента
+    появится учётная запись. NULL в user_id — «клиент есть, входа ещё нет».
+    """
+
+    __tablename__ = "clients"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    user_id: Mapped[int | None] = mapped_column(
+        ForeignKey("users.id", ondelete="SET NULL"), index=True, nullable=True
+    )
+    display_name: Mapped[str] = mapped_column(String(200), nullable=False)
+    company: Mapped[str] = mapped_column(String(200), default="", server_default="", nullable=False)
+    # Контакты в свободной форме: телефон, telegram, почта — у разных клиентов разный набор.
+    contact_json: Mapped[dict] = mapped_column(
+        JSONB, default=dict, server_default="{}", nullable=False
+    )
+
+    projects: Mapped[list["Project"]] = relationship(back_populates="client")
+
+
+class Project(Base, TimestampMixin):
+    """Проект клиента: работа с этапами и ценой (ТЗ 9.1, статусы по ТЗ 9.3).
+
+    Статус меняется только через сервис смены статуса: он же пишет запись в
+    project_status_history. Прямая правка колонки оставит историю без события.
+    """
+
+    __tablename__ = "projects"
+    __table_args__ = (
+        CheckConstraint(
+            "status IN ('new', 'analysis', 'dev', 'testing', 'done')",
+            name="ck_projects_status",
+        ),
+        CheckConstraint("price_rub IS NULL OR price_rub >= 0", name="ck_projects_price"),
+        Index("ix_projects_status", "status"),
+    )
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    client_id: Mapped[int] = mapped_column(
+        ForeignKey("clients.id", ondelete="CASCADE"), index=True, nullable=False
+    )
+    title: Mapped[str] = mapped_column(String(200), nullable=False)
+    description: Mapped[str] = mapped_column(Text, default="", server_default="", nullable=False)
+    status: Mapped[str] = mapped_column(
+        String(24), default="new", server_default="new", nullable=False
+    )
+    # Цена проекта может быть не согласована — тогда NULL, а не ноль.
+    price_rub: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    started_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    due_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    completed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+
+    client: Mapped["Client"] = relationship(back_populates="projects")
+    tasks: Mapped[list["ProjectTask"]] = relationship(
+        back_populates="project", cascade="all, delete-orphan"
+    )
+    history: Mapped[list["ProjectStatusHistory"]] = relationship(
+        back_populates="project", cascade="all, delete-orphan"
+    )
+
+
+class ProjectTask(Base, TimestampMixin):
+    """Задача внутри проекта (ТЗ 9.1, «Задачи»).
+
+    Статус задачи не равен статусу проекта: проект может быть в разработке,
+    а конкретная задача уже закрыта.
+    """
+
+    __tablename__ = "project_tasks"
+    __table_args__ = (
+        CheckConstraint(
+            "status IN ('todo', 'in_progress', 'done')",
+            name="ck_project_tasks_status",
+        ),
+        Index("ix_project_tasks_project", "project_id"),
+    )
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    project_id: Mapped[int] = mapped_column(
+        ForeignKey("projects.id", ondelete="CASCADE"), nullable=False
+    )
+    title: Mapped[str] = mapped_column(String(200), nullable=False)
+    description: Mapped[str] = mapped_column(Text, default="", server_default="", nullable=False)
+    status: Mapped[str] = mapped_column(
+        String(16), default="todo", server_default="todo", nullable=False
+    )
+    due_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    completed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+
+    project: Mapped["Project"] = relationship(back_populates="tasks")
+
+
+class ProjectStatusHistory(Base):
+    """История смены статуса проекта (ТЗ 9.1, «История»).
+
+    Пишется только сервисом смены статуса, вручную не редактируется.
+    status_from = NULL означает первый статус при создании проекта.
+    """
+
+    __tablename__ = "project_status_history"
+    __table_args__ = (Index("ix_project_status_history_project", "project_id"),)
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    project_id: Mapped[int] = mapped_column(
+        ForeignKey("projects.id", ondelete="CASCADE"), nullable=False
+    )
+    status_from: Mapped[str | None] = mapped_column(String(24), nullable=True)
+    status_to: Mapped[str] = mapped_column(String(24), nullable=False)
+    comment: Mapped[str] = mapped_column(Text, default="", server_default="", nullable=False)
+    actor_user_id: Mapped[int | None] = mapped_column(
+        ForeignKey("users.id", ondelete="SET NULL"), nullable=True
+    )
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), nullable=False
+    )
+
+    project: Mapped["Project"] = relationship(back_populates="history")
+

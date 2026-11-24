@@ -177,17 +177,42 @@ UNIQUE `(entity_type, entity_id)`, UNIQUE `path`.
 
 ## 7. Кабинет и проекты (Этап 3 — таблицы создаются сразу, используется позже)
 
+**Созданы миграцией `e61ebf32d35e`** (24.11.2026). До неё таблиц не было. Сверяться с этим разделом,
+а не с ТЗ 12.4: там перечень сущностей, здесь фактическая схема.
+
 ### clients
-`id, user_id fk users NULL, display_name, company, contact_json jsonb, created_at`.
+`id, user_id fk users NULL, display_name, company, contact_json jsonb, created_at, updated_at`.
+
+- `user_id NULL` — нормальный случай: карточку заводят по заявке раньше, чем у клиента появляется вход.
+- `contact_json` — свободная форма: у одного телефон, у другого Telegram и почта.
 
 ### projects
-`id, client_id fk clients, title, description, status varchar(24) (new/analysis/dev/testing/done), price_rub bigint, started_at, due_at, completed_at, created_at, updated_at`.
+`id, client_id fk clients, title, description, status varchar(24), price_rub int, started_at, due_at, completed_at, created_at, updated_at`.
+
+- `ck_projects_status`: `status IN (new, analysis, dev, testing, done)` — проверено попыткой вставить «wrong».
+- `ck_projects_price`: `price_rub IS NULL OR price_rub >= 0`. NULL — цена ещё не согласована, это не ноль.
+- Статус меняется **только через сервис**, он же пишет историю. Прямой UPDATE оставит историю без события.
 
 ### project_tasks
-`id, project_id fk, title, description, status, due_at, completed_at, created_at, updated_at`.
+`id, project_id fk, title, description, status varchar(16), due_at, completed_at, created_at, updated_at`.
+
+- `ck_project_tasks_status`: `status IN (todo, in_progress, done)`.
+- Статус задачи не равен статусу проекта: проект в `dev`, а задача может быть `done`.
 
 ### project_status_history
 `id, project_id fk, status_from varchar(24), status_to varchar(24), comment text, actor_user_id fk users, created_at`.
+
+- `status_from NULL` — первый статус при создании проекта.
+- Пишется только сервисом смены статуса, вручную не редактируется.
+
+### Изоляция клиента (ТЗ 9.3)
+
+Клиент видит **только свои** проекты. Отбор идёт в SQL (`WHERE client_id = <свой>`),
+а не скрытием строк в интерфейсе. Чужой проект отвечает **404, а не 403** — иначе
+перебором можно узнать, какие проекты существуют.
+
+Проверено тестом `tests/test_account.py`: при удалении условия `client_id` из запроса
+тест падает (`test_foreign_project_answers_404_not_403`). Значит, тест ловит именно эту дыру.
 
 ### documents
 `id, owner_client_id fk clients NULL, owner_user_id fk users NULL, project_id fk projects NULL, title, storage_path, mime, size_bytes, created_at, deleted_at`.
