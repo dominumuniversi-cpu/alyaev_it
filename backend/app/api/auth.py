@@ -9,6 +9,7 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session as DbSession
 
 from app.api.deps import SESSION_COOKIE, _client_ip, get_current_user
+from app.core import throttle
 from app.core.security import generate_session_token, hash_password, hash_token, needs_rehash, verify_password
 from app.db.models import Session, User
 from app.db.session import get_session
@@ -34,10 +35,21 @@ def login(
 ) -> dict[str, str]:
     """Проверяет пароль и выставляет cookie сессии."""
     email = payload.email.strip().lower()
+    client_ip = _client_ip(request)
+
+    # Перебор дорог: после порога отвечаем 429 и пароль не проверяем вообще.
+    # Ответ нейтрален — существование почты не подтверждаем (манифест access-control.md).
+    if throttle.is_blocked(email, client_ip):
+        raise HTTPException(
+            status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+            detail="Слишком много неверных попыток. Попробуйте через 15 минут.",
+        )
+
     user = session.scalar(select(User).where(User.email == email))
 
     # Одинаковый ответ на неверную почту и неверный пароль: не подсказываем, что есть.
     if user is None or not verify_password(user.password_hash, payload.password):
+        throttle.register_failure(email, client_ip)
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Неверная почта или пароль")
     if user.status != "active":
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Учётная запись заблокирована")
@@ -57,6 +69,8 @@ def login(
     )
     user.last_login_at = datetime.now(UTC)
     session.commit()
+    # Успешный вход стирает счётчик почты: вспомнивший пароль не ждёт (манифест).
+    throttle.reset(email)
 
     response.set_cookie(
         SESSION_COOKIE,
