@@ -2,7 +2,8 @@
 
 import { ButtonLink } from "@/components/ui/Button";
 
-const DIRECTIONS = ["Telegram-боты", "AI-ассистенты", "CRM", "API", "Парсеры", "Сайты"];
+// Только то, чего нет в лиде выше: Telegram-боты и AI-ассистенты там уже названы.
+const DIRECTIONS = ["CRM", "API", "1С", "Сайты", "Автоматизация"];
 const POINTS = [
   "Проекты под ключ",
   "Индивидуальная оценка задач",
@@ -36,7 +37,11 @@ export function Hero() {
             Цифровые решения, которые убирают ручную работу
           </h1>
           <p className="mt-5 max-w-xl text-base leading-relaxed text-[color:var(--c-text-muted)] sm:text-lg">
-            Менеджер переносит заявки руками, отчёты собираются три часа, ночью клиентам никто не отвечает. Эти задачи можно передать программе — и заняться тем, что действительно требует вас.
+            Автоматизирую рабочие процессы бизнеса: создаю Telegram-ботов, подключаю сервисы,
+            разрабатываю AI-ассистентов и инструменты для обработки данных.
+            <span className="mt-3 block text-[color:var(--c-text)]">
+              Подбираю решения под ваши задачи, чтобы упростить работу и сократить ручные действия.
+            </span>
           </p>
           <p className="mt-5 text-sm text-[color:var(--c-text-muted)]">{DIRECTIONS.join(" · ")}</p>
           <div className="mt-8 flex flex-wrap gap-3">
