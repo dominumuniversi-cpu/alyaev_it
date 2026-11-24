@@ -1,37 +1,23 @@
-/** Публичная страница раздела. */
+/** Страница входа в админку. Индексация закрыта. */
 
 import type { Metadata } from "next";
 
-import { ButtonLink } from "@/components/ui/Button";
-import { Section } from "@/components/ui/Section";
-import { canonicalUrl } from "@/lib/seo";
+import { LoginForm } from "@/components/admin/LoginForm";
 
 export const metadata: Metadata = {
-  title: "Вход для клиентов",
-  description: "Личный кабинет откроется после запуска первого этапа. Учётные записи создаются после старта проекта.",
-  alternates: { canonical: canonicalUrl("/login/") },
-  openGraph: {
-    title: "Вход для клиентов — Дмитрий Аляев",
-    description: "Личный кабинет откроется после запуска первого этапа. Учётные записи создаются после старта проекта.",
-    url: canonicalUrl("/login/"),
-    type: "website",
-  },
-  robots: { index: false, follow: true },
+  title: "Вход",
+  robots: { index: false, follow: false },
 };
 
-/** Раздел без ложных обещаний и пустых блоков. */
-export default function Page() {
+/** Единственная точка входа в панель управления. */
+export default function LoginPage() {
   return (
-    <Section id="page" title={"Вход в личный кабинет"}>
-      <p className="max-w-2xl text-base leading-relaxed text-[color:var(--c-text-muted)]">
-        {"Личный кабинет откроется после запуска первого этапа. Учётные записи создаются после старта проекта."}
-      </p>
-      <div className="mt-8 flex flex-wrap gap-3">
-        <ButtonLink href="/contacts/#lead">Обсудить задачу</ButtonLink>
-        <ButtonLink href="/services/" variant="secondary">
-          Услуги и цены
-        </ButtonLink>
+    <main className="mx-auto flex min-h-[70vh] w-full max-w-md items-center px-4 py-16">
+      <div className="w-full rounded-2xl border border-[color:var(--c-border)] bg-[color:var(--c-surface)] p-8">
+        <h1 className="mb-1 text-xl font-semibold">Вход в панель</h1>
+        <p className="mb-6 text-sm text-[color:var(--c-text-muted)]">Доступ только для сотрудников.</p>
+        <LoginForm />
       </div>
-    </Section>
+    </main>
   );
 }
