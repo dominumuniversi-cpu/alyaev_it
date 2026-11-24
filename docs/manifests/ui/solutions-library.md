@@ -3,8 +3,9 @@
 **ТЗ 7.4.** Каталог готовых модулей: боты, AI-ассистенты, парсеры, отчёты,
 интеграционные модули, скрипты обработки данных.
 **Схема БД:** `db/schema.md` п. 12.2 (`solutions`).
-**Файлы:** `frontend/src/app/solutions/page.tsx`, `backend/app/api/public.py`,
-`backend/app/api/admin_solutions.py`.
+**Файлы:** `frontend/src/app/solutions/page.tsx`, `frontend/src/app/solutions/[slug]/page.tsx`,
+`backend/app/api/public.py`, `backend/app/api/admin_solutions.py`,
+`backend/app/repo/content.py`.
 
 ## Чем решение отличается от услуги
 
