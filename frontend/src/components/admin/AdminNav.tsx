@@ -11,6 +11,7 @@ const SECTIONS: Section[] = [
   { href: "/admin/portfolio/", label: "Портфолио" },
   { href: "/admin/articles/", label: "Блог" },
   { href: "/admin/reviews/", label: "Отзывы" },
+  { href: "/admin/semantic/", label: "Семантика" },
   { href: "/admin/seo/", label: "SEO" },
 ];
 

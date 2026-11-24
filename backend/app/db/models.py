@@ -14,8 +14,10 @@ from sqlalchemy import (
     Index,
     Integer,
     Numeric,
+    SmallInteger,
     String,
     Table,
+    UniqueConstraint,
     Text,
     func,
 )
@@ -351,3 +353,40 @@ class UploadedFile(Base, TimestampMixin):
     )
     # Soft-delete: файл с диска не стираем сразу — его могут ещё запрашивать.
     deleted_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+
+
+class SemanticQuery(Base, TimestampMixin):
+    """Поисковый запрос семантического ядра (ТЗ 11.4).
+
+    Одна страница закрывает группу запросов: target_path — обязательный, иначе запрос
+    ни к чему не привязан и работать с ним нельзя.
+    """
+
+    __tablename__ = "semantic_queries"
+    __table_args__ = (
+        UniqueConstraint("query", "region", name="uq_semantic_query_region"),
+        Index("ix_semantic_queries_group", "group_slug"),
+        Index("ix_semantic_queries_target", "target_path"),
+        Index("ix_semantic_queries_priority", "priority"),
+    )
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    query: Mapped[str] = mapped_column(String(200), nullable=False)
+    group_slug: Mapped[str] = mapped_column(String(32), nullable=False)
+    # NULL — «не измеряли», а не «ноль». Разница важна при сортировке и в отчётах.
+    frequency: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    frequency_source: Mapped[str | None] = mapped_column(String(32), nullable=True)
+    difficulty: Mapped[int | None] = mapped_column(SmallInteger, nullable=True)
+    region: Mapped[str] = mapped_column(
+        String(32), default="ru", server_default="ru", nullable=False
+    )
+    target_path: Mapped[str] = mapped_column(String(255), nullable=False)
+    priority: Mapped[str] = mapped_column(
+        String(16), default="medium", server_default="medium", nullable=False
+    )
+    position: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    position_checked_at: Mapped[datetime | None] = mapped_column(
+        DateTime(timezone=True), nullable=True
+    )
+    cluster: Mapped[str | None] = mapped_column(String(64), nullable=True)
+    notes: Mapped[str] = mapped_column(Text, default="", server_default="", nullable=False)
