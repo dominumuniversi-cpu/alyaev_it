@@ -35,6 +35,7 @@ export default async function ServicesPage() {
   return (
     <Section
       id="services"
+      breadcrumbs={[{ label: "Главная", href: "/" }, { label: "Услуги" }]}
       title="Услуги и цены"
       subtitle="Цены стартовые: итоговая стоимость определяется после анализа задачи и согласования ТЗ."
     >

@@ -27,7 +27,8 @@ export default async function ContactsPage() {
   const taskOptions = services.map((service) => ({ value: service.slug, label: service.title }));
 
   return (
-    <Section id="contacts" title="Контакты" subtitle="Опишите задачу — отвечу и предложу вариант решения.">
+    <Section id="contacts"
+      breadcrumbs={[{ label: "Главная", href: "/" }, { label: "Контакты" }]} title="Контакты" subtitle="Опишите задачу — отвечу и предложу вариант решения.">
       <div className="grid gap-8 lg:grid-cols-[1fr_1.2fr]">
         <div className="rounded-2xl border border-[color:var(--c-border)] bg-[color:var(--c-surface)] p-6">
           <h2 className="mb-3 text-base font-semibold">Как связаться напрямую</h2>

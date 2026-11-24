@@ -1,5 +1,7 @@
 /** Контейнер секции. Манифест: docs/manifests/ui/section.md */
 
+import { Breadcrumbs, type Crumb } from "@/components/ui/Breadcrumbs";
+
 /** Секция с заголовком H2 и вложенным контентом. */
 export function Section({
   id,
@@ -7,12 +9,15 @@ export function Section({
   subtitle,
   children,
   surface = false,
+  breadcrumbs,
 }: {
   id: string;
   title?: string;
   subtitle?: string;
   children: React.ReactNode;
   surface?: boolean;
+  /** Крошки для страниц второго уровня и глубже (манифест breadcrumbs.md). */
+  breadcrumbs?: Crumb[];
 }) {
   return (
     <section
@@ -22,6 +27,7 @@ export function Section({
       style={{ paddingBlock: "var(--space-section)" }}
     >
       <div className="mx-auto w-full max-w-[1200px] px-4 sm:px-6 lg:px-8">
+        {breadcrumbs ? <Breadcrumbs items={breadcrumbs} /> : null}
         {title ? (
           <header className="mb-10 max-w-3xl">
             <h2

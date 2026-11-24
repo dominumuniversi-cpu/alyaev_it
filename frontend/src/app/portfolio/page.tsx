@@ -69,7 +69,8 @@ const PROJECTS = [
 /** Список кейсов: проблема, решение, стек, статус. */
 export default function PortfolioPage() {
   return (
-    <Section id="portfolio" title="Проекты и решения" subtitle="Демонстрационные проекты: как устроено решение и какие технологии использованы. Коммерческих внедрений с показателями здесь пока нет — процентные улучшения не придумываю.">
+    <Section id="portfolio"
+      breadcrumbs={[{ label: "Главная", href: "/" }, { label: "Портфолио" }]} title="Проекты и решения" subtitle="Демонстрационные проекты: как устроено решение и какие технологии использованы. Коммерческих внедрений с показателями здесь пока нет — процентные улучшения не придумываю.">
       <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
         {PROJECTS.map((project) => (
           <article key={project.title} className="flex h-full flex-col rounded-2xl border border-[color:var(--c-border)] bg-[color:var(--c-surface)] p-6">

@@ -47,7 +47,8 @@ export default function AboutPage() {
           knowsAbout: ["автоматизация бизнеса", "Telegram-боты", "AI-ассистенты", "API-интеграции", "Python", "SQL"],
         }}
       />
-      <Section id="about" title="Обо мне и опыте">
+      <Section id="about"
+      breadcrumbs={[{ label: "Главная", href: "/" }, { label: "Обо мне" }]} title="Обо мне и опыте">
         <div className="grid gap-8 lg:grid-cols-[1.1fr_.9fr]">
           <div>
             <p className="text-base leading-relaxed text-[color:var(--c-text)]">

@@ -62,6 +62,11 @@ function CategoryPage({ category }: { category: CategoryFull }) {
     <>
       <Section
         id="category"
+        breadcrumbs={[
+          { label: "Главная", href: "/" },
+          { label: "Услуги", href: "/services/" },
+          { label: category.title },
+        ]}
         title={category.title}
         subtitle={category.short_description}
       >
@@ -128,7 +133,16 @@ export default async function ServicePage({ params }: Params) {
         priceFrom: service.price_on_request ? null : service.price_from,
       })}
     />
-    <Section id="service" title={service.title} subtitle={service.short_description}>
+    <Section
+      id="service"
+      breadcrumbs={[
+        { label: "Главная", href: "/" },
+        { label: "Услуги", href: "/services/" },
+        { label: service.title },
+      ]}
+      title={service.title}
+      subtitle={service.short_description}
+    >
       <div className="mb-8 flex flex-wrap gap-2">
         <Badge variant="price">{formatPrice(service)}</Badge>
         {service.duration_text ? <Badge variant="muted">Срок: {service.duration_text}</Badge> : null}

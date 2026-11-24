@@ -22,7 +22,8 @@ export const metadata: Metadata = {
 /** Раздел без ложных обещаний и пустых блоков. */
 export default function Page() {
   return (
-    <Section id="page" title={"Статьи и разборы"}>
+    <Section id="page"
+      breadcrumbs={[{ label: "Главная", href: "/" }, { label: "Блог" }]} title={"Статьи и разборы"}>
       <p className="max-w-2xl text-base leading-relaxed text-[color:var(--c-text-muted)]">
         {"Готовлю материалы о практической автоматизации: разборы сценариев, ограничения технологий и стоимость решений. Следите за обновлениями."}
       </p>
