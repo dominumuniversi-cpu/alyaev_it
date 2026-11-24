@@ -1,8 +1,13 @@
 """Публичный API сайта: каталог услуг, настройки, SEO."""
 
+from pathlib import Path
+
 from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi.responses import FileResponse
+from sqlalchemy import select
 from sqlalchemy.orm import Session
 
+from app.db.models import UploadedFile
 from app.db.session import get_session
 from app.repo import content, public_data
 
@@ -150,6 +155,29 @@ def calculator(session: Session = Depends(get_session)) -> dict:
             for row in config["complexity"]
         ],
     }
+
+
+@router.get("/files/{stored_name}")
+def get_file(stored_name: str, session: Session = Depends(get_session)) -> FileResponse:
+    """Отдаёт загруженный файл по имени на диске.
+
+    Удалённый файл не отдаём, даже если он ещё лежит на диске.
+    Имя принимаем только в виде <hex>.<ext> — никаких слэшей и «..».
+    """
+    if "/" in stored_name or "\\" in stored_name or ".." in stored_name:
+        raise HTTPException(404, "Файл не найден")
+    row = session.scalar(
+        select(UploadedFile).where(
+            UploadedFile.stored_name == stored_name, UploadedFile.deleted_at.is_(None)
+        )
+    )
+    if row is None:
+        raise HTTPException(404, "Файл не найден")
+    root = Path("/app/media").resolve()
+    target = (root / stored_name).resolve()
+    if not target.is_file():
+        raise HTTPException(404, "Файл не найден")
+    return FileResponse(target, media_type=row.content_type, filename=row.original_name)
 
 
 @router.get("/portfolio")

@@ -328,3 +328,26 @@ class Article(Base, TimestampMixin):
         Integer, default=0, server_default="0", nullable=False
     )
     deleted_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+
+
+class UploadedFile(Base, TimestampMixin):
+    """Загруженный файл. Манифест: docs/manifests/uploads.md."""
+
+    __tablename__ = "uploaded_files"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    # Имя на диске генерируем сами: имя из запроса — это path traversal.
+    stored_name: Mapped[str] = mapped_column(String(80), unique=True, nullable=False, index=True)
+    # Исходное имя только для показа человеку, никогда не используется как путь.
+    original_name: Mapped[str] = mapped_column(String(255), nullable=False)
+    content_type: Mapped[str] = mapped_column(String(100), nullable=False)
+    size_bytes: Mapped[int] = mapped_column(Integer, nullable=False)
+    kind: Mapped[str] = mapped_column(
+        String(16), default="document", server_default="document", nullable=False
+    )
+    checksum: Mapped[str] = mapped_column(String(64), nullable=False)
+    uploaded_by: Mapped[int | None] = mapped_column(
+        ForeignKey("users.id", ondelete="SET NULL"), nullable=True
+    )
+    # Soft-delete: файл с диска не стираем сразу — его могут ещё запрашивать.
+    deleted_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
