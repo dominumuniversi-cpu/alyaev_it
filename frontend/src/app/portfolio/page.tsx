@@ -32,6 +32,7 @@ const FALLBACK_PROJECTS: PortfolioCard[] = [
       "Клиенты задают одни и те же вопросы, менеджер отвечает вручную. Бот отвечает по материалам компании и передаёт сложные вопросы живому менеджеру.",
     technologies: ["Telegram Bot API", "Python", "LLM"],
     status: "demo",
+    updated_at: null,
   },
   {
     slug: "ai-document-search",
@@ -40,6 +41,7 @@ const FALLBACK_PROJECTS: PortfolioCard[] = [
       "Нужную информацию в регламентах и инструкциях долго искать вручную. Поиск по смыслу с ответом и ссылкой на конкретный документ и страницу.",
     technologies: ["RAG", "Python", "PostgreSQL", "LLM"],
     status: "demo",
+    updated_at: null,
   },
   {
     slug: "lead-automation",
@@ -48,6 +50,7 @@ const FALLBACK_PROJECTS: PortfolioCard[] = [
       "Заявки с сайта приходят на почту и теряются среди других писем. Заявка сразу попадает в базу, в Telegram руководителю и в таблицу или CRM.",
     technologies: ["FastAPI", "PostgreSQL", "Telegram Bot API"],
     status: "demo",
+    updated_at: null,
   },
   {
     slug: "data-parser",
@@ -56,6 +59,7 @@ const FALLBACK_PROJECTS: PortfolioCard[] = [
       "Нужно регулярно собирать данные с сайтов, а вручную это долго и с ошибками. Сбор по расписанию, очистка, дедупликация и выгрузка в удобном формате.",
     technologies: ["Python", "PostgreSQL"],
     status: "demo",
+    updated_at: null,
   },
   {
     slug: "1c-integration",
@@ -64,6 +68,7 @@ const FALLBACK_PROJECTS: PortfolioCard[] = [
       "Данные между сайтом и 1С переносятся вручную. Обмен заказами и справочниками через API с логированием ошибок и повторными попытками.",
     technologies: ["1С", "REST API", "Python"],
     status: "demo",
+    updated_at: null,
   },
   {
     slug: "ai-digest",
@@ -72,6 +77,7 @@ const FALLBACK_PROJECTS: PortfolioCard[] = [
       "Просматривать новости и отчёты по теме вручную занимает время каждый день. Ежедневная автоматическая сводка с ключевыми пунктами в Telegram.",
     technologies: ["Python", "LLM", "Telegram Bot API"],
     status: "demo",
+    updated_at: null,
   },
 ];
 

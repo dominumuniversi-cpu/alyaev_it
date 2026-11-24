@@ -27,6 +27,8 @@ def _service_card(service) -> dict:
         "examples": service.examples,
         "category_slug": service.category.slug if service.category else None,
         "category_title": service.category.title if service.category else None,
+        # Дата правки уходит в sitemap lastModified: карта не должна врать поисковику.
+        "updated_at": service.updated_at.isoformat() if service.updated_at else None,
     }
 
 
@@ -193,6 +195,7 @@ def portfolio(session: Session = Depends(get_session)) -> list[dict]:
             "solution_md": row.solution_md,
             "technologies": row.technologies,
             "status": row.status,
+            "updated_at": row.updated_at.isoformat() if row.updated_at else None,
         }
         for row in rows
     ]
@@ -292,6 +295,7 @@ def solutions(session: Session = Depends(get_session)) -> list[dict]:
             "technologies": row.technologies,
             "price_from": row.price_from,
             "price_on_request": row.price_on_request,
+            "updated_at": row.updated_at.isoformat() if row.updated_at else None,
         }
         for row in rows
     ]

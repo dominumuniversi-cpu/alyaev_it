@@ -14,6 +14,7 @@ export type ServiceCard = {
   examples: string[];
   category_slug: string | null;
   category_title: string | null;
+  updated_at: string | null;
 };
 
 export type ServiceFull = ServiceCard & {
@@ -140,6 +141,7 @@ export type PortfolioCard = {
   summary: string;
   technologies: string[];
   status: PortfolioStatus;
+  updated_at: string | null;
 };
 
 export type PortfolioFull = PortfolioCard & {
@@ -174,6 +176,7 @@ export type SolutionCard = {
   technologies: string[];
   price_from: number | null;
   price_on_request: boolean;
+  updated_at: string | null;
 };
 
 /** Готовые решения для каталога и sitemap. Пустой список — раздел скрыт. */
