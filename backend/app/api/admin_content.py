@@ -9,7 +9,7 @@ import re
 from datetime import UTC, datetime
 
 from fastapi import APIRouter, Depends, HTTPException, status
-from pydantic import BaseModel, Field
+from pydantic import ConfigDict, BaseModel, Field
 from sqlalchemy import select
 from sqlalchemy.orm import Session as DbSession
 
@@ -39,6 +39,9 @@ def _check_slug(slug: str) -> str:
 
 class PortfolioPayload(BaseModel):
     """Тело создания/правки кейса."""
+    # Лишние поля — ошибка, а не повод молча подставить значения по умолчанию.
+    # Клиент, приславший "body" вместо "body_md", получил бы 200 и пустую статью.
+    model_config = ConfigDict(extra="forbid")
 
     slug: str = Field(min_length=1, max_length=160)
     title: str = Field(min_length=1, max_length=200)
@@ -53,6 +56,9 @@ class PortfolioPayload(BaseModel):
 
 class ArticlePayload(BaseModel):
     """Тело создания/правки статьи."""
+    # Лишние поля — ошибка, а не повод молча подставить значения по умолчанию.
+    # Клиент, приславший "body" вместо "body_md", получил бы 200 и пустую статью.
+    model_config = ConfigDict(extra="forbid")
 
     slug: str = Field(min_length=1, max_length=160)
     title: str = Field(min_length=1, max_length=200)
@@ -245,7 +251,7 @@ def create_article(
         action="article.create",
         entity="article",
         entity_id=row.id,
-        payload={"slug": row.slug, "title": row.title, "published": row.published},
+        payload={"slug": row.slug, "title": row.title, "status": row.status},
     )
     session.commit()
     return _article_dict(row)

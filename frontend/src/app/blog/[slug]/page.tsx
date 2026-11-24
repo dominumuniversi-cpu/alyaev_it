@@ -33,7 +33,7 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
   };
 }
 
-/** Абзацы из markdown: заголовки ## и обычный текст. Полноценный парсер здесь не нужен. */
+/** Абзацы из markdown: заголовки ##, таблицы, списки и обычный текст. */
 function renderBody(md: string) {
   const blocks = md.split(/\n{2,}/).map((b) => b.trim()).filter(Boolean);
   return blocks.map((block, index) => {
@@ -44,12 +44,70 @@ function renderBody(md: string) {
         </h2>
       );
     }
+
+    // Таблица: первая строка — заголовки, вторая — разделитель |---|, дальше строки.
+    const lines = block.split("\n").filter(Boolean);
+    if (lines.length >= 2 && lines[0].startsWith("|") && /\|\s*-{2,}/.test(lines[1])) {
+      const cells = (line: string) =>
+        line.split("|").slice(1, -1).map((c) => c.trim());
+      const head = cells(lines[0]);
+      const rows = lines.slice(2).map(cells);
+      return (
+        <div key={index} className="mb-6 overflow-x-auto">
+          <table className="w-full border-collapse text-sm">
+            <thead>
+              <tr className="border-b border-[color:var(--c-border)] text-left">
+                {head.map((h) => (
+                  <th key={h} className="py-2 pr-4 font-medium">{h}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {rows.map((row) => (
+                <tr key={row.join("-")} className="border-b border-[color:var(--c-border)]">
+                  {row.map((cell, i) => (
+                    <td key={i} className="py-2 pr-4">{cell}</td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      );
+    }
+
+    // Список: все строки начинаются с - или *.
+    if (lines.every((l) => /^[-*]\s/.test(l))) {
+      return (
+        <ul key={index} className="mb-4 list-disc space-y-2 pl-6 text-[color:var(--c-text-muted)]">
+          {lines.map((l) => (
+            <li key={l}>{renderInline(l.replace(/^[-*]\s+/, ""))}</li>
+          ))}
+        </ul>
+      );
+    }
+
+    // Жирный текст **...** внутри абзаца иначе выводился бы звёздочками.
     return (
       <p key={index} className="mb-4 text-base leading-relaxed text-[color:var(--c-text-muted)]">
-        {block}
+        {renderInline(block)}
       </p>
     );
   });
+}
+
+/** Разбор **жирного** внутри строки на куски React. */
+function renderInline(text: string) {
+  const parts = text.split(/(\*\*[^*]+\*\*)/g);
+  return parts.map((part, i) =>
+    part.startsWith("**") && part.endsWith("**") ? (
+      <strong key={i} className="font-semibold text-[color:var(--c-text)]">
+        {part.slice(2, -2)}
+      </strong>
+    ) : (
+      part
+    )
+  );
 }
 
 /** Статья целиком. Черновик и удалённая отдают 404 — как и обещает публичный API. */
