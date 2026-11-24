@@ -129,3 +129,56 @@ export async function fetchSeo(path: string): Promise<PageSeo | null> {
   // Пустой объект — записи нет, это норма: вызывающий возьмёт автоматические значения.
   return data && data.path ? data : null;
 }
+
+
+/** Статус кейса: демонстрация, собственная разработка или коммерческое внедрение. */
+export type PortfolioStatus = "demo" | "own" | "commercial";
+
+export type PortfolioCard = {
+  slug: string;
+  title: string;
+  summary: string;
+  technologies: string[];
+  status: PortfolioStatus;
+};
+
+export type PortfolioFull = PortfolioCard & {
+  problem_md: string;
+  solution_md: string;
+};
+
+export type ArticleCard = {
+  slug: string;
+  title: string;
+  excerpt: string;
+  published_at: string | null;
+};
+
+export type ArticleFull = ArticleCard & { body_md: string };
+
+/** Опубликованные кейсы. Пустой список — раздел скрываем, а не показываем заглушку. */
+export async function fetchPortfolio(): Promise<PortfolioCard[]> {
+  return (await getJson<PortfolioCard[]>("/api/v1/public/portfolio")) ?? [];
+}
+
+/** Один опубликованный кейс; null — если черновик или удалён. */
+export async function fetchPortfolioItem(slug: string): Promise<PortfolioFull | null> {
+  return await getJson<PortfolioFull>("/api/v1/public/portfolio/" + encodeURIComponent(slug));
+}
+
+/** Опубликованные статьи без текста — для ленты блога. */
+export async function fetchArticles(): Promise<ArticleCard[]> {
+  return (await getJson<ArticleCard[]>("/api/v1/public/articles")) ?? [];
+}
+
+/** Одна опубликованная статья; null — если черновик или удалена. */
+export async function fetchArticle(slug: string): Promise<ArticleFull | null> {
+  return await getJson<ArticleFull>("/api/v1/public/articles/" + encodeURIComponent(slug));
+}
+
+/** Подпись статуса кейса на сайте. Демонстрация не выдаётся за внедрение. */
+export const PORTFOLIO_STATUS_LABELS: Record<PortfolioStatus, string> = {
+  demo: "Демонстрационный проект",
+  own: "Собственная разработка",
+  commercial: "Коммерческое внедрение",
+};
