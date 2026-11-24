@@ -181,6 +181,15 @@ export async function fetchSolutions(): Promise<SolutionCard[]> {
   return (await getJson<SolutionCard[]>("/api/v1/public/solutions")) ?? [];
 }
 
+/** Услуги, привязанные к статье (перелинковка ТЗ 11.10). */
+export async function fetchServicesForArticle(articleSlug: string): Promise<ServiceCard[]> {
+  return (
+    (await getJson<ServiceCard[]>(
+      "/api/v1/public/services-by-article/" + encodeURIComponent(articleSlug)
+    )) ?? []
+  );
+}
+
 /** Готовые решения, которые внедряются по этой услуге (перелинковка ТЗ 11.10). */
 export async function fetchSolutionsForService(serviceSlug: string): Promise<SolutionCard[]> {
   return (

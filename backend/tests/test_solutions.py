@@ -82,3 +82,21 @@ def test_service_slug_empty_means_no_link():
     row = Solution(slug="a", title="A", summary="s", kind="bot")
     _apply(row, _payload(service_slug=""))
     assert row.service_slug is None
+
+
+def test_article_service_link_is_unique_pair():
+    """Пара «статья — услуга» уникальна: повторная связь не должна дублироваться."""
+    from app.db.models import ArticleService
+
+    cols = {c.name for c in ArticleService.__table__.columns}
+    assert cols == {"article_id", "service_id"}
+    pk = [c.name for c in ArticleService.__table__.primary_key.columns]
+    assert sorted(pk) == ["article_id", "service_id"]
+
+
+def test_article_service_link_cascades():
+    """Удаление статьи или услуги убирает связь — висячих пар быть не должно."""
+    from app.db.models import ArticleService
+
+    for fk in ArticleService.__table__.foreign_keys:
+        assert fk.ondelete == "CASCADE", f"{fk.parent.name} должен каскадно удаляться"

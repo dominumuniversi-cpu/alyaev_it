@@ -1,12 +1,13 @@
 /** Одна статья блога: SSR по слагу. ТЗ 11.6 Schema.org Article, 11.5 canonical. */
 
 import type { Metadata } from "next";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { ButtonLink } from "@/components/ui/Button";
 import { Section } from "@/components/ui/Section";
 import { JsonLd } from "@/components/seo/JsonLd";
-import { fetchArticle } from "@/lib/api";
+import { fetchArticle, fetchServicesForArticle, formatPrice } from "@/lib/api";
 import { canonicalUrl } from "@/lib/seo";
 
 type Params = { slug: string };
@@ -115,6 +116,8 @@ export default async function ArticlePage({ params }: { params: Promise<Params> 
   const { slug } = await params;
   const article = await fetchArticle(slug);
   if (!article) notFound();
+  // Услуги по теме статьи: перелинковка ТЗ 11.10.
+  const related = await fetchServicesForArticle(article.slug);
 
   return (
     <Section
@@ -139,6 +142,28 @@ export default async function ArticlePage({ params }: { params: Promise<Params> 
         }}
       />
       <article className="max-w-2xl">{renderBody(article.body_md)}</article>
+      {related.length > 0 ? (
+        <div className="mt-10">
+          <h2 className="mb-3 text-base font-semibold">Услуги по теме статьи</h2>
+          <ul className="grid gap-3 sm:grid-cols-2">
+            {related.map((item) => (
+              <li key={item.slug}>
+                <Link
+                  href={"/services/" + item.slug + "/"}
+                  className="flex h-full flex-col rounded-xl border border-[color:var(--c-border)] bg-[color:var(--c-surface)] p-4 transition-colors hover:border-[color:var(--c-gold)]"
+                >
+                  <span className="text-sm font-medium">{item.title}</span>
+                  <span className="mt-1 text-xs leading-relaxed text-[color:var(--c-text-muted)]">
+                    {item.short_description}
+                  </span>
+                  <span className="mt-2 text-xs text-[color:var(--c-gold)]">{formatPrice(item)}</span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ) : null}
+
       <div className="mt-10 rounded-2xl border border-[color:var(--c-border)] bg-[color:var(--c-surface)] p-6">
         <p className="text-sm text-[color:var(--c-text-muted)]">
           Если в вашем бизнесе есть похожая задача — обсудим, что именно стоит автоматизировать.

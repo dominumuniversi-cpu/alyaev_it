@@ -436,3 +436,20 @@ class Solution(Base, TimestampMixin):
         Integer, default=0, server_default="0", nullable=False
     )
     deleted_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+
+
+class ArticleService(Base):
+    """Связь статьи с услугой (ТЗ 11.10 перелинковка).
+
+    Отдельная таблица, а не JSON-поле: пара должна быть уникальной и умирать
+    вместе с любой из сторон.
+    """
+
+    __tablename__ = "article_services"
+
+    article_id: Mapped[int] = mapped_column(
+        ForeignKey("articles.id", ondelete="CASCADE"), primary_key=True
+    )
+    service_id: Mapped[int] = mapped_column(
+        ForeignKey("services.id", ondelete="CASCADE"), primary_key=True
+    )

@@ -7,7 +7,7 @@
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-from app.db.models import Article, Portfolio, Solution
+from app.db.models import Article, ArticleService, Portfolio, Service, Solution
 
 
 def list_published_portfolio(session: Session) -> list[Portfolio]:
@@ -80,5 +80,24 @@ def list_solutions_by_service(session: Session, service_slug: str) -> list[Solut
             Solution.deleted_at.is_(None),
         )
         .order_by(Solution.sort_order, Solution.id)
+    )
+    return list(session.scalars(stmt))
+
+
+def list_services_for_article(session: Session, article_slug: str) -> list[Service]:
+    """Опубликованные услуги, привязанные к статье (перелинковка)."""
+    stmt = (
+        select(Service)
+        .join(ArticleService, ArticleService.service_id == Service.id)
+        .join(Article, Article.id == ArticleService.article_id)
+        .where(
+            Article.slug == article_slug,
+            Article.status == "published",
+            Article.deleted_at.is_(None),
+            Service.status == "published",
+            Service.deleted_at.is_(None),
+        )
+        .order_by(Service.sort_order, Service.id)
+        .limit(3)
     )
     return list(session.scalars(stmt))
