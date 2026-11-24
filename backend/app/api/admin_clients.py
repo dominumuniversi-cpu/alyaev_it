@@ -21,6 +21,7 @@ from app.core.permissions import Permission, require_permission
 from app.core.security import hash_password
 from app.db.models import (
     Client,
+    Message,
     Project,
     ProjectStatusHistory,
     ProjectTask,
@@ -478,3 +479,78 @@ def create_task(
     session.refresh(task)
     return {"id": task.id, "title": task.title}
 
+
+
+@router.get("/projects/{project_id}/messages")
+def project_messages(
+    project_id: int,
+    session: DbSession = Depends(get_session),
+    _: User = Depends(require_permission(Permission.PROJECTS_ALL)),
+) -> dict:
+    """Переписка проекта для сотрудника — та же, что видит клиент."""
+    project = session.get(Project, project_id)
+    if project is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Проект не найден")
+    rows = session.scalars(
+        select(Message).where(Message.project_id == project_id).order_by(Message.id)
+    ).all()
+    return {
+        "items": [
+            {
+                "id": m.id,
+                "author_role": m.author_role,
+                "body": m.body,
+                "created_at": m.created_at.isoformat() if m.created_at else None,
+            }
+            for m in rows
+        ],
+        "count": len(rows),
+    }
+
+
+class ReplyPayload(BaseModel):
+    """Ответ студии в переписке."""
+
+    body: str = Field(min_length=1, max_length=5000)
+
+
+@router.post("/projects/{project_id}/messages", status_code=status.HTTP_201_CREATED)
+def reply_to_client(
+    project_id: int,
+    payload: ReplyPayload,
+    session: DbSession = Depends(get_session),
+    actor: User = Depends(require_permission(Permission.PROJECTS_ALL)),
+) -> dict:
+    """Сотрудник отвечает клиенту в переписке проекта.
+
+    author_role="staff" — снимок, как и у сообщений клиента:
+    история не должна меняться задним числом при смене ролей.
+    """
+    project = session.get(Project, project_id)
+    if project is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Проект не найден")
+    text = payload.body.strip()
+    if not text:
+        # Пробелы вместо ответа — пустой ответ, а не ответ пробелов.
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail="Сообщение не может быть пустым",
+        )
+    message = Message(
+        project_id=project.id,
+        author_user_id=actor.id,
+        author_role="staff",
+        body=text,
+    )
+    session.add(message)
+    audit.record(
+        session,
+        actor_user_id=actor.id,
+        action="project.reply",
+        entity="project",
+        entity_id=project.id,
+        payload={"length": len(text)},
+    )
+    session.commit()
+    session.refresh(message)
+    return {"id": message.id, "created_at": message.created_at.isoformat() if message.created_at else None}

@@ -16,6 +16,13 @@ const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH ?? "/alyaev";
 
 type Client = { id: number; display_name: string };
 
+type ProjectMessage = {
+  id: number;
+  author_role: string;
+  body: string;
+  created_at: string | null;
+};
+
 type Task = {
   id: number;
   title: string;
@@ -61,6 +68,89 @@ function money(value: number | null): string {
 }
 
 /** Экран проектов: список, форма создания, смена статуса. */
+/** Переписка по проекту: сотрудник видит вопрос и отвечает. */
+function ProjectChat({ projectId }: { projectId: number }) {
+  const [items, setItems] = useState<ProjectMessage[] | null>(null);
+  const [text, setText] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [failed, setFailed] = useState<string | null>(null);
+
+  useEffect(() => {
+    let alive = true;
+    fetch(BASE_PATH + "/api/v1/admin/projects/" + projectId + "/messages", {
+      credentials: "include",
+      cache: "no-store",
+    })
+      .then((r) => (r.ok ? r.json() : Promise.reject(new Error("fail"))))
+      .then((data) => { if (alive) setItems(data.items ?? []); })
+      .catch(() => { if (alive) setFailed("Не удалось загрузить переписку."); });
+    return () => { alive = false; };
+  }, [projectId]);
+
+  /** Ответ уходит без перезагрузки: новое сообщение появляется сразу. */
+  async function send(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const body = text.trim();
+    if (!body) return;
+    setBusy(true);
+    setFailed(null);
+    try {
+      const res = await fetch(BASE_PATH + "/api/v1/admin/projects/" + projectId + "/messages", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ body }),
+      });
+      if (!res.ok) { setFailed("Не удалось отправить ответ."); return; }
+      const data = await res.json();
+      setItems((prev) => [
+        ...(prev ?? []),
+        { id: data.id, author_role: "staff", body, created_at: data.created_at },
+      ]);
+      setText("");
+    } catch {
+      setFailed("Сеть недоступна.");
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  return (
+    <div className="mt-4 space-y-3 border-t border-[color:var(--c-border)] pt-4">
+      {items === null ? (
+        <p className="text-sm text-[color:var(--c-text-muted)]">Загрузка…</p>
+      ) : items.length === 0 ? (
+        <p className="text-sm text-[color:var(--c-text-muted)]">Сообщений пока нет.</p>
+      ) : (
+        <ul className="space-y-2">
+          {items.map((m) => (
+            <li key={m.id} className="rounded-xl border border-[color:var(--c-border)] p-3">
+              <p className="text-xs text-[color:var(--c-text-muted)]">
+                {m.author_role === "client" ? "Клиент" : "Студия"}
+              </p>
+              <p className="mt-1 whitespace-pre-line text-sm">{m.body}</p>
+            </li>
+          ))}
+        </ul>
+      )}
+      <form onSubmit={send} className="flex flex-wrap items-end gap-3">
+        <div className="min-w-[240px] flex-1">
+          <TextField
+            id={"reply-" + projectId}
+            name="reply"
+            label="Ответ клиенту"
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+          />
+        </div>
+        <Button type="submit" disabled={busy || !text.trim()}>
+          {busy ? "Отправка…" : "Ответить"}
+        </Button>
+      </form>
+      {failed ? <p className="text-sm text-[color:var(--c-text-muted)]">{failed}</p> : null}
+    </div>
+  );
+}
 export function ProjectsAdmin() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [clients, setClients] = useState<Client[]>([]);
@@ -70,6 +160,8 @@ export function ProjectsAdmin() {
   const [taskFor, setTaskFor] = useState<number | null>(null);
   // Задачи грузятся лениво: они нужны не для каждого проекта сразу.
   const [tasks, setTasks] = useState<Record<number, Task[]>>({});
+  // Переписка грузится по запросу, как и задачи: не нужна сразу для всех проектов.
+  const [chatFor, setChatFor] = useState<number | null>(null);
 
   /** Загружает проекты и клиентов: клиенты нужны для выбора в форме. */
   const load = useCallback(async () => {
@@ -291,6 +383,13 @@ export function ProjectsAdmin() {
                 <Button type="button" variant="secondary" onClick={() => void toggleTasks(p.id)}>
                   {taskFor === p.id ? "Скрыть задачи" : "Задачи"}
                 </Button>
+                <Button
+                  type="button"
+                  variant="secondary"
+                  onClick={() => setChatFor(chatFor === p.id ? null : p.id)}
+                >
+                  {chatFor === p.id ? "Скрыть переписку" : "Переписка"}
+                </Button>
               </div>
               {taskFor === p.id ? (
                 <div className="mt-4 space-y-3 border-t border-[color:var(--c-border)] pt-4">
@@ -331,6 +430,7 @@ export function ProjectsAdmin() {
                   </form>
                 </div>
               ) : null}
+              {chatFor === p.id ? <ProjectChat projectId={p.id} /> : null}
             </li>
           ))}
         </ul>

@@ -40,6 +40,7 @@ ACTION_LABELS: dict[str, str] = {
     "project.status": "Изменён статус проекта",
     "project.task_create": "Добавлена задача проекта",
     "project.task_status": "Изменён статус задачи",
+    "project.reply": "Ответ клиенту",
     "semantic.delete": "Удалён запрос из ядра",
     "solution.create": "Создано решение",
     "solution.update": "Изменено решение",

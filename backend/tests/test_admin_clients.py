@@ -18,6 +18,7 @@ from sqlalchemy.pool import StaticPool
 from app.api.deps import get_current_user
 from app.api.admin_clients import _set_status
 from app.db.models import (
+    Message,
     AuditLog,
     Base,
     Client,
@@ -48,6 +49,7 @@ def env():
         Project.__table__,
         ProjectTask.__table__,
         ProjectStatusHistory.__table__,
+        Message.__table__,
         # audit_log обязателен: изменяющие роуты пишут журнал в той же транзакции.
         AuditLog.__table__,
     ]
@@ -311,3 +313,57 @@ def test_task_invalid_status_is_422(env):
         json={"status": "wrong"},
     )
     assert r.status_code == 422
+
+
+def test_staff_reply_is_marked_as_staff(env):
+    """Ответ сотрудника получает роль staff и виден в переписке проекта."""
+    Session_, ids = env
+    c = _client(env)
+    r = c.post(
+        "/api/v1/admin/projects/" + str(ids["project"]) + "/messages",
+        json={"body": "Отвечаю по срокам"},
+    )
+    assert r.status_code == 201
+
+    db = Session_()
+    sent = db.scalar(select(Message).where(Message.body == "Отвечаю по срокам"))
+    db.close()
+    assert sent is not None
+    assert sent.author_role == "staff"
+
+    listed = c.get("/api/v1/admin/projects/" + str(ids["project"]) + "/messages").json()
+    assert listed["count"] == 1
+    assert listed["items"][0]["author_role"] == "staff"
+
+
+def test_staff_reply_is_logged(env):
+    """Ответ клиенту попадает в журнал (ТЗ 12.5)."""
+    Session_, ids = env
+    c = _client(env)
+    c.post(
+        "/api/v1/admin/projects/" + str(ids["project"]) + "/messages",
+        json={"body": "В журнал"},
+    )
+    db = Session_()
+    rows = [a for a in db.scalars(select(AuditLog)).all() if a.action == "project.reply"]
+    db.close()
+    assert len(rows) == 1
+
+
+def test_empty_staff_reply_is_422(env):
+    """Пробелы вместо ответа — 422, а не пустое сообщение в переписке."""
+    Session_, ids = env
+    c = _client(env)
+    r = c.post(
+        "/api/v1/admin/projects/" + str(ids["project"]) + "/messages",
+        json={"body": "   "},
+    )
+    assert r.status_code == 422
+
+
+def test_reply_to_missing_project_is_404(env):
+    """Ответ в несуществующий проект — 404."""
+    Session_, ids = env
+    c = _client(env)
+    r = c.post("/api/v1/admin/projects/999999/messages", json={"body": "Куда-то"})
+    assert r.status_code == 404
