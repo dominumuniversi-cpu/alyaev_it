@@ -9,6 +9,14 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1
+# NEXT_PUBLIC_* вшиваются в бандл на этапе сборки, а не читаются в рантайме.
+# Поэтому они передаются сюда аргументами, иначе счётчик молчит при заданном ID.
+ARG NEXT_PUBLIC_YM_ID=""
+ARG NEXT_PUBLIC_GA_ID=""
+ARG BASE_PATH=/alyaev
+ENV NEXT_PUBLIC_YM_ID=${NEXT_PUBLIC_YM_ID}
+ENV NEXT_PUBLIC_GA_ID=${NEXT_PUBLIC_GA_ID}
+ENV BASE_PATH=${BASE_PATH}
 RUN npm run build
 
 FROM node:22-alpine AS runner

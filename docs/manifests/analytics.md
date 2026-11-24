@@ -46,3 +46,26 @@
 
 `GPTBot`, `ClaudeBot`, `PerplexityBot` — полезно разрешать: такие ответы приводят
 посетителей, которые уже знают, чего хотят. Разрешаем то же, что и обычным роботам.
+
+## Важно: переменные вшиваются при сборке
+
+`NEXT_PUBLIC_*` попадают в бандл **на этапе сборки образа**, а не читаются в рантайме.
+Прописать ID в `E:\DockerData\alyaev-it\.env` недостаточно — нужна **пересборка** frontend:
+
+```powershell
+cd E:\!Develop\sites\MY\repo\infra
+docker-compose --env-file E:\DockerData\alyaev-it\.env up -d --build --force-recreate --no-deps frontend
+```
+
+### Как проверить, что счётчик действительно вшит
+
+**Не искать в HTML страницы.** `Script` со стратегией `afterInteractive` вставляет
+тег в браузере — в серверном HTML его нет и быть не должно. Проверять в бандле:
+
+```
+docker exec proxy curl -s -k "https://.../alyaev/contacts" | grep -o 'chunks/[^"]*'
+# затем в каждом чанке: grep mc.yandex.ru
+```
+
+Искать надо **по всем** чанкам страницы: код компонента попадает не в тот чанк,
+где его ждёшь, а в один из общих.
