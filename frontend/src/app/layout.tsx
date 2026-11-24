@@ -6,7 +6,7 @@ import { siteBase } from '@/lib/seo';
 
 export const metadata: Metadata = {
   title: { default: 'Автоматизация бизнеса и AI-разработка — Дмитрий Аляев', template: '%s — Дмитрий Аляев' },
-  description: 'Разрабатываю и внедряю решения для автоматизации бизнеса: Telegram-боты, AI-ассистенты, интеграции, сайты.',
+  description: 'Автоматизация рутины для бизнеса: заявки из Telegram и сайта в одном месте, отчёты без ручного сбора. Telegram-боты, AI-консультанты, интеграции, сайты.',
   metadataBase: new URL(siteBase()),
   robots: { index: true, follow: true },
   openGraph: {
@@ -15,7 +15,7 @@ export const metadata: Metadata = {
     siteName: "Дмитрий Аляев",
     title: "Дмитрий Аляев — автоматизация бизнеса и AI-разработка",
     description:
-      "Разрабатываю и внедряю решения для автоматизации бизнеса: Telegram-боты, AI-ассистенты, интеграции, сайты.",
+      "Автоматизация рутины для бизнеса: заявки из Telegram и сайта в одном месте, отчёты без ручного сбора. Telegram-боты, AI-консультанты, интеграции, сайты.",
   },
 };
 

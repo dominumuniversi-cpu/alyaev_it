@@ -36,7 +36,7 @@ export function Hero() {
             Цифровые решения, которые убирают ручную работу
           </h1>
           <p className="mt-5 max-w-xl text-base leading-relaxed text-[color:var(--c-text-muted)] sm:text-lg">
-            Разрабатываю и внедряю автоматизацию: от Telegram-ботов и интеграций до AI-ассистентов и обработки данных. Решение под ваш процесс, а не набор программ.
+            Менеджер переносит заявки руками, отчёты собираются три часа, ночью клиентам никто не отвечает. Эти задачи можно передать программе — и заняться тем, что действительно требует вас.
           </p>
           <p className="mt-5 text-sm text-[color:var(--c-text-muted)]">{DIRECTIONS.join(" · ")}</p>
           <div className="mt-8 flex flex-wrap gap-3">
