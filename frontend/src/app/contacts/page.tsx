@@ -5,20 +5,20 @@ import type { Metadata } from "next";
 import { LeadForm } from "@/components/site/LeadForm";
 import { Section } from "@/components/ui/Section";
 import { fetchServices, fetchSettings } from "@/lib/api";
-import { canonicalUrl } from "@/lib/seo";
+import { canonicalUrl, openGraph } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: "Контакты",
   description:
     "Связаться по задаче автоматизации: Telegram или e-mail. Отвечу на вопросы и предложу решение.",
   alternates: { canonical: canonicalUrl("/contacts/") },
-  openGraph: {
+  openGraph: openGraph({
     title: "Контакты — Дмитрий Аляев",
     description: "Связаться по задаче автоматизации: Telegram или e-mail.",
-    url: canonicalUrl("/contacts/"),
+    path: "/contacts/",
     type: "website",
-  },
-};
+  }),
+}
 
 /** Способы связи из настроек БД плюс форма заявки. */
 export default async function ContactsPage() {

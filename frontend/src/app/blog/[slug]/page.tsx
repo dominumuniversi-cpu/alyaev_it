@@ -8,7 +8,7 @@ import { ButtonLink } from "@/components/ui/Button";
 import { Section } from "@/components/ui/Section";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { fetchArticle, fetchRelatedArticles, fetchServicesForArticle, formatPrice } from "@/lib/api";
-import { canonicalUrl } from "@/lib/seo";
+import { canonicalUrl, openGraph } from "@/lib/seo";
 
 type Params = { slug: string };
 
@@ -24,13 +24,13 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
     title: article.title,
     description: article.excerpt || undefined,
     alternates: { canonical: url },
-    openGraph: {
+    openGraph: openGraph({
       title: article.title + " — Дмитрий Аляев",
       description: article.excerpt || undefined,
-      url,
+      path: "/blog/" + article.slug + "/",
       type: "article",
-      publishedTime: article.published_at ?? undefined,
-    },
+      extra: { publishedTime: article.published_at ?? undefined },
+    }),
   };
 }
 

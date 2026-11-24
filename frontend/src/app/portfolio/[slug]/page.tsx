@@ -8,7 +8,7 @@ import { ButtonLink } from "@/components/ui/Button";
 import { Section } from "@/components/ui/Section";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { fetchPortfolioItem, PORTFOLIO_STATUS_LABELS } from "@/lib/api";
-import { canonicalUrl } from "@/lib/seo";
+import { canonicalUrl, openGraph } from "@/lib/seo";
 
 type Params = { slug: string };
 
@@ -24,7 +24,7 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
     title: item.title,
     description: item.summary,
     alternates: { canonical: url },
-    openGraph: { title: item.title + " — Дмитрий Аляев", description: item.summary, url, type: "article" },
+    openGraph: openGraph({ title: item.title + " — Дмитрий Аляев", description: item.summary, path: "/portfolio/" + item.slug + "/", type: "article" }),
   };
 }
 

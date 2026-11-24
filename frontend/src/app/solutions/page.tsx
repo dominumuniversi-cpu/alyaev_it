@@ -6,20 +6,20 @@ import Link from "next/link";
 import { Badge } from "@/components/ui/Badge";
 import { Section } from "@/components/ui/Section";
 import { fetchSolutions } from "@/lib/api";
-import { canonicalUrl } from "@/lib/seo";
+import { canonicalUrl, openGraph } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: "Готовые решения",
   description:
     "Готовые модули автоматизации: Telegram-боты, AI-ассистенты, парсеры, отчёты, интеграции. Внедрение быстрее, чем разработка с нуля.",
   alternates: { canonical: canonicalUrl("/solutions/") },
-  openGraph: {
+  openGraph: openGraph({
     title: "Готовые решения — Дмитрий Аляев",
     description: "Готовые модули автоматизации бизнеса: боты, AI-ассистенты, парсеры, интеграции.",
-    url: canonicalUrl("/solutions/"),
+    path: "/solutions/",
     type: "website",
-  },
-};
+  }),
+}
 
 type SolutionCard = {
   slug: string;

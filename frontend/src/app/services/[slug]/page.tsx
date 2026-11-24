@@ -9,7 +9,7 @@ import { ButtonLink } from "@/components/ui/Button";
 import { Section } from "@/components/ui/Section";
 import { faqSchema, JsonLd, serviceSchema } from "@/components/seo/JsonLd";
 import { type CategoryFull, fetchCategory, fetchSeo, fetchService, fetchSolutionsForService, formatPrice } from "@/lib/api";
-import { canonicalUrl, siteBase } from "@/lib/seo";
+import { canonicalUrl, siteBase, openGraph } from "@/lib/seo";
 
 type Params = { params: Promise<{ slug: string }> };
 
@@ -37,12 +37,12 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
     robots: seo
       ? { index: seo.robots_index, follow: seo.robots_follow }
       : undefined,
-    openGraph: {
+    openGraph: openGraph({
       title: seo?.og_title || title,
       description: seo?.og_description || description,
-      url,
+      path,
       type: "website",
-    },
+    }),
   };
 };
 

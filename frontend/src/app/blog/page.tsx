@@ -6,18 +6,18 @@ import Link from "next/link";
 import { ButtonLink } from "@/components/ui/Button";
 import { Section } from "@/components/ui/Section";
 import { fetchArticles } from "@/lib/api";
-import { canonicalUrl } from "@/lib/seo";
+import { canonicalUrl, openGraph } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: "Блог",
   description: "Готовлю материалы о практической автоматизации: разборы сценариев, ограничения технологий и стоимость решений. Следите за обновлениями.",
   alternates: { canonical: canonicalUrl("/blog/") },
-  openGraph: {
+  openGraph: openGraph({
     title: "Блог — Дмитрий Аляев",
     description: "Готовлю материалы о практической автоматизации: разборы сценариев, ограничения технологий и стоимость решений. Следите за обновлениями.",
-    url: canonicalUrl("/blog/"),
+    path: "/blog/",
     type: "website",
-  },
+  }),
   robots: { index: false, follow: true },
 };
 

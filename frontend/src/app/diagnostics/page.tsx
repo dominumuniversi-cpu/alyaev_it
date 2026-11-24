@@ -5,20 +5,20 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Badge } from "@/components/ui/Badge";
 import { Section } from "@/components/ui/Section";
-import { canonicalUrl } from "@/lib/seo";
+import { canonicalUrl, openGraph } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: "Бесплатный разбор бизнес-процесса",
   description:
     "Разберу один процесс: где теряется время, что можно автоматизировать и с чего начать. Честная оценка сложности без обязательств.",
   alternates: { canonical: canonicalUrl("/diagnostics/") },
-  openGraph: {
+  openGraph: openGraph({
     title: "Бесплатный разбор бизнес-процесса — Дмитрий Аляев",
     description: "Разберу один процесс: где теряется время, что можно автоматизировать и с чего начать.",
-    url: canonicalUrl("/diagnostics/"),
+    path: "/diagnostics/",
     type: "website",
-  },
-};
+  }),
+}
 
 const OUTCOMES = [
   { title: "Разбираем один процесс", text: "Берём конкретный процесс, а не весь бизнес — иначе разбор растянется на месяц." },

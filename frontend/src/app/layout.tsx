@@ -3,6 +3,7 @@ import './globals.css';
 
 import { SiteChrome } from '@/components/layout/SiteChrome';
 import { Analytics } from '@/components/site/Analytics';
+import { SITE_LANG, SITE_OG_LOCALE } from '@/lib/locale';
 import { siteBase } from '@/lib/seo';
 
 export const metadata: Metadata = {
@@ -12,7 +13,7 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
   openGraph: {
     type: "website",
-    locale: "ru_RU",
+    locale: SITE_OG_LOCALE,
     siteName: "Дмитрий Аляев",
     title: "Дмитрий Аляев — автоматизация бизнеса и AI-разработка",
     description:
@@ -23,7 +24,7 @@ export const metadata: Metadata = {
 /** Корневой layout: общая оболочка всех страниц. */
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="ru">
+    <html lang={SITE_LANG}>
       <body>
         <SiteChrome>{children}</SiteChrome>
         <Analytics />

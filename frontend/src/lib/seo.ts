@@ -2,6 +2,8 @@
 
 // Адрес сайта берётся из окружения. Пока домена нет, это адрес стенда,
 // поэтому сайт не публикует ссылок на несуществующий домен.
+import { SITE_NAME, SITE_OG_LOCALE } from "@/lib/locale";
+
 const SITE_URL = (process.env.SITE_URL ?? "http://localhost").replace(/\/$/, "");
 const BASE_PATH = process.env.BASE_PATH ?? "/alyaev";
 
@@ -16,18 +18,34 @@ export function siteBase(): string {
   return SITE_URL + BASE_PATH;
 }
 
-/** Open Graph и Twitter-карточка для страницы. */
+/** Open Graph для страницы.
+ *
+ *  Next.js заменяет корневой openGraph целиком, а не дополняет его.
+ *  Из-за этого страница со своим openGraph теряла locale и siteName --
+ *  поля, которые нужны каждой странице и никто не обязан помнить про них.
+ *  Поэтому строим объект здесь, а страница передаёт только своё.
+ */
 export function openGraph(input: {
-  title: string;
-  description: string;
+  /** Заголовок и описание могут отсутствовать: у статьи без анонса description пуст. */
+  title: string | undefined;
+  description: string | undefined;
   path: string;
+  /** og:type: website для обычных страниц, article для статей, profile для «Обо мне». */
+  type?: string;
+  /** Путь к картинке для соцсетей, если у страницы она есть. */
+  image?: string;
+  /** Особые поля страницы: publishedTime у статей и подобное. */
+  extra?: Record<string, unknown>;
 }): Record<string, unknown> {
-  return {
+  const result: Record<string, unknown> = {
     title: input.title,
     description: input.description,
     url: canonicalUrl(input.path),
-    siteName: "Дмитрий Аляев",
-    locale: "ru_RU",
-    type: "website",
+    siteName: SITE_NAME,
+    locale: SITE_OG_LOCALE,
+    type: input.type ?? "website",
   };
+  if (input.image) result.images = [{ url: input.image }];
+  if (input.extra) Object.assign(result, input.extra);
+  return result;
 }

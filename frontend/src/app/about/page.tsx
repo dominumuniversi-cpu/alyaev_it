@@ -6,20 +6,20 @@ import { JsonLd } from "@/components/seo/JsonLd";
 import { ButtonLink } from "@/components/ui/Button";
 import { FeatureCard } from "@/components/ui/FeatureCard";
 import { Section } from "@/components/ui/Section";
-import { canonicalUrl } from "@/lib/seo";
+import { canonicalUrl, openGraph } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: "Обо мне и опыте",
   description:
     "Дмитрий Аляев — IT-специалист, разработчик решений для автоматизации бизнеса. В IT с 2007 года: корпоративные системы, инфраструктура, интеграции.",
   alternates: { canonical: canonicalUrl("/about/") },
-  openGraph: {
+  openGraph: openGraph({
     title: "Обо мне — Дмитрий Аляев",
     description: "IT-специалист и разработчик решений для автоматизации бизнеса. В IT с 2007 года.",
-    url: canonicalUrl("/about/"),
+    path: "/about/",
     type: "profile",
-  },
-};
+  }),
+}
 
 const FOCUS = [
   { title: "Telegram-боты", text: "Приём заявок, меню, уведомления, база клиентов." },

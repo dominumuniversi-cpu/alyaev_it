@@ -8,20 +8,20 @@ import type { PortfolioCard } from "@/lib/api";
 import { fetchPortfolio, PORTFOLIO_STATUS_LABELS } from "@/lib/api";
 import { ButtonLink } from "@/components/ui/Button";
 import { Section } from "@/components/ui/Section";
-import { canonicalUrl } from "@/lib/seo";
+import { canonicalUrl, openGraph } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: "Проекты и решения",
   description:
     "Демонстрационные проекты по автоматизации: AI-консультант, поиск по документам, автоматизация заявок, парсеры и интеграции. С описанием архитектуры.",
   alternates: { canonical: canonicalUrl("/portfolio/") },
-  openGraph: {
+  openGraph: openGraph({
     title: "Проекты и решения — Дмитрий Аляев",
     description: "Демонстрационные проекты по автоматизации бизнеса: архитектура, технологии, результаты.",
-    url: canonicalUrl("/portfolio/"),
+    path: "/portfolio/",
     type: "website",
-  },
-};
+  }),
+}
 
 /** Демонстрационные проекты. Статус указывается честно, показатели не выдумываются. */
 const FALLBACK_PROJECTS: PortfolioCard[] = [

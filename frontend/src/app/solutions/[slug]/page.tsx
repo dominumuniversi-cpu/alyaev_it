@@ -8,7 +8,7 @@ import { ButtonLink } from "@/components/ui/Button";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { Section } from "@/components/ui/Section";
 import { fetchSolutionItem, type SolutionFull } from "@/lib/api";
-import { canonicalUrl } from "@/lib/seo";
+import { canonicalUrl, openGraph } from "@/lib/seo";
 
 type Params = { slug: string };
 
@@ -51,12 +51,12 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
     title: item.title,
     description: item.summary,
     alternates: { canonical: canonicalUrl("/solutions/" + slug + "/") },
-    openGraph: {
+    openGraph: openGraph({
       title: item.title + " — Дмитрий Аляев",
       description: item.summary,
-      url: canonicalUrl("/solutions/" + slug + "/"),
+      path: "/solutions/" + slug + "/",
       type: "website",
-    },
+    }),
   };
 }
 
