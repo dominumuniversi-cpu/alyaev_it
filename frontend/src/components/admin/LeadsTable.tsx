@@ -52,7 +52,7 @@ export function LeadsTable() {
   const load = useCallback(async () => {
     setState("loading");
     try {
-      const url = BASE_PATH + "/api/admin/leads" + (filter ? "?status=" + filter : "");
+      const url = BASE_PATH + "/api/v1/admin/leads" + (filter ? "?status=" + filter : "");
       const res = await fetch(url, { credentials: "include", cache: "no-store" });
       if (res.status === 401 || res.status === 403) {
         window.location.assign(BASE_PATH + "/login/");
@@ -80,7 +80,7 @@ export function LeadsTable() {
     setBusy(publicId);
     setMessage(null);
     try {
-      const res = await fetch(BASE_PATH + "/api/admin/leads/" + publicId + "/status", {
+      const res = await fetch(BASE_PATH + "/api/v1/admin/leads/" + publicId + "/status", {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         credentials: "include",

@@ -55,7 +55,7 @@ export function LeadForm({ taskOptions }: { taskOptions: { value: string; label:
     }
 
     try {
-      const response = await fetch(BASE_PATH + "/api/leads", {
+      const response = await fetch(BASE_PATH + "/api/v1/leads", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -161,7 +161,7 @@ export function LeadForm({ taskOptions }: { taskOptions: { value: string; label:
             aria-invalid={errors.consent ? true : undefined}
             className="mt-0.5 h-4 w-4 shrink-0 rounded border-[color:var(--c-border)] accent-[color:var(--c-gold)]" />
           <span>
-            Согласен с <a href={BASE_PATH + "/privacy/"} className="text-[color:var(--c-gold)] underline">политикой обработки персональных данных</a>.
+            Даю <a href={BASE_PATH + "/personal-data-consent/"} className="text-[color:var(--c-gold)] underline">согласие на обработку персональных данных</a> на условиях <a href={BASE_PATH + "/privacy/"} className="text-[color:var(--c-gold)] underline">политики</a>.
           </span>
         </label>
         {errors.consent ? (

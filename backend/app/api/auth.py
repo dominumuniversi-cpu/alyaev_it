@@ -13,7 +13,7 @@ from app.core.security import generate_session_token, hash_password, hash_token,
 from app.db.models import Session, User
 from app.db.session import get_session
 
-router = APIRouter(prefix="/api/auth", tags=["auth"])
+router = APIRouter(prefix="/api/v1/auth", tags=["auth"])
 
 SESSION_HOURS = 12
 

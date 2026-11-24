@@ -11,7 +11,7 @@ from app.api.deps import require_staff
 from app.db.models import Lead, LeadEvent, User
 from app.db.session import get_session
 
-router = APIRouter(prefix="/api/admin", tags=["admin"])
+router = APIRouter(prefix="/api/v1/admin", tags=["admin"])
 
 ALLOWED_STATUSES = ("new", "in_progress", "qualified", "proposal", "won", "lost", "spam")
 

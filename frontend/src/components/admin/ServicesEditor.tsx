@@ -30,7 +30,7 @@ export function ServicesEditor() {
   const load = useCallback(async () => {
     setState("loading");
     try {
-      const res = await fetch(BASE_PATH + "/api/admin/services", { credentials: "include", cache: "no-store" });
+      const res = await fetch(BASE_PATH + "/api/v1/admin/services", { credentials: "include", cache: "no-store" });
       if (res.status === 401 || res.status === 403) {
         window.location.assign(BASE_PATH + "/login/");
         return;
@@ -68,7 +68,7 @@ export function ServicesEditor() {
       payload.price_on_request = false;
     }
     try {
-      const res = await fetch(BASE_PATH + "/api/admin/services/" + service.id, {
+      const res = await fetch(BASE_PATH + "/api/v1/admin/services/" + service.id, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
@@ -85,7 +85,7 @@ export function ServicesEditor() {
     const next = service.status === "published" ? "draft" : "published";
     setError(null);
     try {
-      const res = await fetch(BASE_PATH + "/api/admin/services/" + service.id, {
+      const res = await fetch(BASE_PATH + "/api/v1/admin/services/" + service.id, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         credentials: "include",

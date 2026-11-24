@@ -12,7 +12,7 @@ const SECTIONS = [
 
 const DOCS = [
   { href: "/privacy/", label: "Политика конфиденциальности" },
-  { href: "/consent/", label: "Согласие на обработку данных" },
+  { href: "/personal-data-consent/", label: "Согласие на обработку данных" },
 ];
 
 /** Подвал: бренд, разделы, документы, контакты и копирайт. */

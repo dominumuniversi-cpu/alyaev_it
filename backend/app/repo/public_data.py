@@ -19,6 +19,14 @@ def list_categories(session: Session) -> list[ServiceCategory]:
     return list(session.scalars(stmt))
 
 
+def get_category_by_slug(session: Session, slug: str) -> ServiceCategory | None:
+    """Активная категория по слагу или None."""
+    stmt = select(ServiceCategory).where(
+        ServiceCategory.slug == slug, ServiceCategory.is_active.is_(True)
+    )
+    return session.scalar(stmt)
+
+
 def list_published_services(session: Session) -> list[Service]:
     """Опубликованные неудалённые услуги по возрастанию порядка."""
     stmt = (

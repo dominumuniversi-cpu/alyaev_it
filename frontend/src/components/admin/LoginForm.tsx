@@ -21,7 +21,7 @@ export function LoginForm() {
     setSending(true);
     setError(null);
     try {
-      const res = await fetch(BASE_PATH + "/api/auth/login", {
+      const res = await fetch(BASE_PATH + "/api/v1/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",

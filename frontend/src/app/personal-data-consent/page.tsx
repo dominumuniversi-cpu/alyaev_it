@@ -8,7 +8,7 @@ import { canonicalUrl } from "@/lib/seo";
 export const metadata: Metadata = {
   title: "Согласие на обработку персональных данных",
   description: "Условия согласия на обработку персональных данных при отправке формы заявки на сайте.",
-  alternates: { canonical: canonicalUrl("/consent/") },
+  alternates: { canonical: canonicalUrl("/personal-data-consent/") },
   robots: { index: false, follow: true },
 };
 

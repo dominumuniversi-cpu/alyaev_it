@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 from app.db.session import get_session
 from app.repo import public_data
 
-router = APIRouter(prefix="/api", tags=["public"])
+router = APIRouter(prefix="/api/v1/public", tags=["public"])
 
 
 def _service_card(service) -> dict:
@@ -62,6 +62,49 @@ def categories(session: Session = Depends(get_session)) -> list[dict]:
 def services(session: Session = Depends(get_session)) -> list[dict]:
     """Все опубликованные услуги в виде карточек."""
     return [_service_card(s) for s in public_data.list_published_services(session)]
+
+
+
+
+# Алиасы URL из ТЗ v1.0 (раздел 3): часть посадочных страниц — подгруппы внутри категории.
+# Мастер-список: docs/manifests/url-structure.md. Правка здесь = правка ТЗ.
+TZ_PAGE_ALIASES: dict[str, dict] = {
+    "ai-assistants": {
+        "title": "AI-ассистенты для автоматизации бизнеса",
+        "short_description": "Консультанты по товарам и услугам, передача сложных вопросов менеджеру, ответы с опорой на знания компании.",
+        "service_slugs": ["ai-consultant-bot"],
+    },
+    "knowledge-base": {
+        "title": "AI-бот с базой знаний по документам",
+        "short_description": "Поиск по инструкциям, регламентам и прайсам с ответами и ссылками на источники.",
+        "service_slugs": ["knowledge-base-bot"],
+    },
+}
+
+
+@router.get("/categories/{slug}")
+def category_detail(slug: str, session: Session = Depends(get_session)) -> dict:
+    """Категория услуг с её опубликованными услугами; 404 если нет."""
+    category = public_data.get_category_by_slug(session, slug)
+    if category is None:
+        alias = TZ_PAGE_ALIASES.get(slug)
+        if alias is None:
+            raise HTTPException(status_code=404, detail="Категория не найдена")
+        wanted = set(alias["service_slugs"])
+        items = [s for s in public_data.list_published_services(session) if s.slug in wanted]
+        return {
+            "slug": slug,
+            "title": alias["title"],
+            "short_description": alias["short_description"],
+            "services": [_service_card(s) for s in items],
+        }
+    items = [s for s in public_data.list_published_services(session) if s.category and s.category.slug == slug]
+    return {
+        "slug": category.slug,
+        "title": category.title,
+        "short_description": category.short_description,
+        "services": [_service_card(s) for s in items],
+    }
 
 
 @router.get("/services/{slug}")

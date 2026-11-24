@@ -29,6 +29,8 @@ export type ServiceFull = ServiceCard & {
 
 export type Category = { slug: string; title: string; short_description: string };
 
+export type CategoryFull = Category & { services: ServiceCard[] };
+
 /** Публичный путь с учётом basePath. */
 export function withBase(path: string): string {
   return BASE_PATH + path;
@@ -46,22 +48,27 @@ async function getJson<T>(path: string): Promise<T | null> {
 
 /** Опубликованные услуги или пустой список при сбое API. */
 export async function fetchServices(): Promise<ServiceCard[]> {
-  return (await getJson<ServiceCard[]>("/api/services")) ?? [];
+  return (await getJson<ServiceCard[]>("/api/v1/public/services")) ?? [];
 }
 
 /** Категории услуг. */
 export async function fetchCategories(): Promise<Category[]> {
-  return (await getJson<Category[]>("/api/categories")) ?? [];
+  return (await getJson<Category[]>("/api/v1/public/categories")) ?? [];
+}
+
+/** Категория с её услугами или null. */
+export async function fetchCategory(slug: string): Promise<CategoryFull | null> {
+  return getJson<CategoryFull>("/api/v1/public/categories/" + encodeURIComponent(slug));
 }
 
 /** Полная карточка услуги или null. */
 export async function fetchService(slug: string): Promise<ServiceFull | null> {
-  return getJson<ServiceFull>("/api/services/" + encodeURIComponent(slug));
+  return getJson<ServiceFull>("/api/v1/public/services/" + encodeURIComponent(slug));
 }
 
 /** Публичные настройки сайта. */
 export async function fetchSettings(): Promise<Record<string, Record<string, string>>> {
-  return (await getJson<Record<string, Record<string, string>>>("/api/settings")) ?? {};
+  return (await getJson<Record<string, Record<string, string>>>("/api/v1/public/settings")) ?? {};
 }
 
 /** Форматирование цены: «от 6 000 ₽» или «по запросу». */

@@ -10,7 +10,7 @@ from app.api.schemas import LeadCreate
 from app.db.models import Lead
 from app.db.session import get_session
 
-router = APIRouter(prefix="/api/leads", tags=["leads"])
+router = APIRouter(prefix="/api/v1/leads", tags=["leads"])
 
 
 def _contact_type(value: str) -> str:

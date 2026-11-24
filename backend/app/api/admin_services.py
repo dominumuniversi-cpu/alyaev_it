@@ -11,7 +11,7 @@ from app.api.deps import require_staff
 from app.db.models import AuditLog, Service, User
 from app.db.session import get_session
 
-router = APIRouter(prefix="/api/admin/services", tags=["admin-services"])
+router = APIRouter(prefix="/api/v1/admin/services", tags=["admin-services"])
 
 
 class ServiceUpdate(BaseModel):

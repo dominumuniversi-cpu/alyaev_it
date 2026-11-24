@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/Badge";
 import { ButtonLink } from "@/components/ui/Button";
 import { Section } from "@/components/ui/Section";
 import { JsonLd, serviceSchema } from "@/components/seo/JsonLd";
-import { fetchService, formatPrice } from "@/lib/api";
+import { type CategoryFull, fetchCategory, fetchService, formatPrice } from "@/lib/api";
 import { canonicalUrl, siteBase } from "@/lib/seo";
 
 type Params = { params: Promise<{ slug: string }> };
@@ -16,7 +16,16 @@ type Params = { params: Promise<{ slug: string }> };
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const { slug } = await params;
   const service = await fetchService(slug);
-  if (!service) return { title: "Услуга не найдена" };
+  if (!service) {
+    // Слаг может быть категорией: /services/telegram-bots/
+    const category = await fetchCategory(slug);
+    if (!category) return { title: "Страница не найдена" };
+    return {
+      title: category.title,
+      description: category.short_description,
+      alternates: { canonical: canonicalUrl("/services/" + category.slug) },
+    };
+  }
   return {
     title: service.title,
     description: service.short_description,
@@ -47,11 +56,67 @@ const List = ({ items, tone }: { items: string[]; tone: "plus" | "minus" }) =>
     </ul>
   );
 
+/** Страница категории услуг: список услуг, цены, CTA. */
+function CategoryPage({ category }: { category: CategoryFull }) {
+  return (
+    <>
+      <Section
+        id="category"
+        title={category.title}
+        subtitle={category.short_description}
+      >
+        <div className="grid gap-4 md:grid-cols-2">
+          {category.services.map((service) => (
+            <article
+              key={service.slug}
+              className="flex flex-col rounded-xl border border-[color:var(--c-border)] bg-[color:var(--c-surface)] p-6"
+            >
+              <div className="mb-2 flex items-start justify-between gap-3">
+                <h3 className="text-lg font-semibold">{service.title}</h3>
+                <span className="whitespace-nowrap text-sm text-[color:var(--c-gold)]">
+                  {formatPrice(service)}
+                </span>
+              </div>
+              <p className="mb-3 text-sm leading-relaxed text-[color:var(--c-text-muted)]">
+                {service.short_description}
+              </p>
+              {service.examples.length > 0 ? (
+                <ul className="mb-4 space-y-1.5 text-sm text-[color:var(--c-text-muted)]">
+                  {service.examples.slice(0, 3).map((example) => (
+                    <li key={example} className="flex gap-2">
+                      <span aria-hidden="true" className="text-[color:var(--c-cyan)]">→</span>
+                      <span>{example}</span>
+                    </li>
+                  ))}
+                </ul>
+              ) : null}
+              <div className="mt-auto flex items-center justify-between gap-3 pt-2">
+                <span className="text-xs text-[color:var(--c-text-muted)]">Срок: {service.duration_text}</span>
+                <ButtonLink href={"/services/" + service.slug} variant="secondary">Подробнее</ButtonLink>
+              </div>
+            </article>
+          ))}
+        </div>
+      </Section>
+
+      <Section id="category-cta" title="Не нашли подходящий формат?">
+        <p className="mb-5 max-w-2xl text-[color:var(--c-text-muted)]">
+          Опишите задачу — предложу решение и предварительно оценю стоимость.
+        </p>
+        <ButtonLink href="/contacts/" size="lg">Обсудить задачу</ButtonLink>
+      </Section>
+    </>
+  );
+}
 /** Карточка услуги с обязательным набором блоков из ТЗ. */
 export default async function ServicePage({ params }: Params) {
   const { slug } = await params;
   const service = await fetchService(slug);
-  if (!service) notFound();
+  if (!service) {
+    const category = await fetchCategory(slug);
+    if (!category) notFound();
+    return <CategoryPage category={category} />;
+  }
 
   return (
     <>
