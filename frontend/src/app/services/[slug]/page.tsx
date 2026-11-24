@@ -135,6 +135,29 @@ export default async function ServicePage({ params }: Params) {
         {service.category_title ? <Badge variant="tech">{service.category_title}</Badge> : null}
       </div>
 
+      {service.body_md ? (
+        <p className="mb-8 max-w-3xl whitespace-pre-line text-base leading-relaxed text-[color:var(--c-text-muted)]">
+          {service.body_md}
+        </p>
+      ) : null}
+
+      {service.examples.length > 0 ? (
+        <div className="mb-8">
+          <h2 className="mb-3 text-base font-semibold">Типовые задачи</h2>
+          <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {service.examples.map((example) => (
+              <li
+                key={example}
+                className="rounded-xl border border-[color:var(--c-border)] bg-[color:var(--c-surface)] p-4 text-sm text-[color:var(--c-text-muted)]"
+              >
+                <span aria-hidden="true" className="mr-2 text-[color:var(--c-cyan)]">→</span>
+                {example}
+              </li>
+            ))}
+          </ul>
+        </div>
+      ) : null}
+
       <div className="grid gap-6 lg:grid-cols-2">
         <div className="rounded-2xl border border-[color:var(--c-border)] bg-[color:var(--c-surface)] p-6">
           <h2 className="mb-3 text-base font-semibold">Что входит в стоимость</h2>
@@ -156,6 +179,27 @@ export default async function ServicePage({ params }: Params) {
 
       {service.warranty_text ? (
         <p className="mt-6 text-sm text-[color:var(--c-text-muted)]">Гарантия: {service.warranty_text}</p>
+      ) : null}
+
+      {service.faq.length > 0 ? (
+        <div className="mt-8">
+          <h2 className="mb-4 text-base font-semibold">Частые вопросы</h2>
+          <div className="space-y-3">
+            {service.faq.map((item) => (
+              <details
+                key={item.q}
+                className="group rounded-xl border border-[color:var(--c-border)] bg-[color:var(--c-surface)] p-4"
+              >
+                <summary className="cursor-pointer list-none text-sm font-medium marker:hidden">
+                  <span className="mr-2 text-[color:var(--c-gold)] group-open:hidden" aria-hidden="true">+</span>
+                  <span className="mr-2 hidden text-[color:var(--c-gold)] group-open:inline" aria-hidden="true">−</span>
+                  {item.q}
+                </summary>
+                <p className="mt-3 pl-6 text-sm leading-relaxed text-[color:var(--c-text-muted)]">{item.a}</p>
+              </details>
+            ))}
+          </div>
+        </div>
       ) : null}
 
       <div className="mt-8 rounded-2xl border border-[color:var(--c-border)] bg-[color:var(--c-surface)] p-6">
