@@ -8,6 +8,7 @@ type Section = { href: string; label: string };
 const SECTIONS: Section[] = [
   { href: "/admin/", label: "Заявки" },
   { href: "/admin/clients/", label: "Клиенты" },
+  { href: "/admin/projects/", label: "Проекты" },
   { href: "/admin/services/", label: "Услуги и цены" },
   { href: "/admin/portfolio/", label: "Портфолио" },
   { href: "/admin/articles/", label: "Блог" },

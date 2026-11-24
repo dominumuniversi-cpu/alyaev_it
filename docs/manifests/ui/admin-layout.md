@@ -18,6 +18,8 @@
 | Раздел | Путь | Данные |
 |---|---|---|
 | Заявки | `/admin/` | `leads` |
+| Клиенты | `/admin/clients/` | `clients`, `users` (манифест `ui/admin-clients.md`) |
+| Проекты | `/admin/projects/` | `projects`, `project_tasks` (манифест `ui/admin-projects.md`) |
 | Услуги и цены | `/admin/services/` | `services` |
 | Портфолио | `/admin/portfolio/` | `portfolio` |
 | Блог | `/admin/articles/` | `articles` |
@@ -27,7 +29,7 @@
 | Журнал | `/admin/audit/` | `audit_log` (только чтение) |
 
 Порядок в меню фиксирован и задаётся в `components/admin/AdminNav.tsx` — он отражает частоту
-работы: заявки открывают каждый день, журнал — когда что-то пошло не так.
+работы: заявки открывают каждый день, клиентов и проекты — при каждом новом заказе, журнал — когда что-то пошло не так.
 
 ## Обязательная разметка
 
