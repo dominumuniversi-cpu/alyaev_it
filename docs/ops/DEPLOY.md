@@ -53,9 +53,27 @@ docker exec proxy nginx -s reload
 
 ## 5. Миграции
 
+Схема БД версионируется alembic. Каталог `backend/alembic`, ревизии — `backend/alembic/versions`.
+
 ```powershell
-docker exec alyaev-api alembic upgrade head
+docker exec -w /app alyaev-api alembic upgrade head     # применить
+docker exec -w /app alyaev-api alembic current         # что применено
+docker exec -w /app alyaev-api alembic check           # база совпадает с моделями?
 ```
+
+```powershell
+# Новая миграция после правки app/db/models.py
+docker exec -w /app alyaev-api alembic revision --autogenerate -m "что изменили"
+docker cp alyaev-api:/app/alembic/versions/<файл>.py backend/alembic/versions/
+```
+
+> **Правила:**
+> 1. Ревизии генерируются **внутри контейнера** и копируются в репозиторий — иначе они теряются при пересборке.
+> 2. `alembic check` должен говорить «No new upgrade operations detected». Если он предлагает удалить
+>    индекс или колонку — значит в модели чего-то нет, а в базе есть. Правится модель, а не база.
+> 3. Не править живой сайт `--force-recreate` без `alembic upgrade head` в той же команде.
+> 4. Baseline-ревизия `b7b4674a9b88` описывает схему на 24.11.2026. Она уже помечена применённой
+>    (`alembic stamp head`) на рабочей базе — повторно применять её к рабочей базе нельзя.
 
 ## 6. Бэкап/восстановление
 

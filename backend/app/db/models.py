@@ -11,6 +11,7 @@ from sqlalchemy import (
     Column,
     DateTime,
     ForeignKey,
+    Index,
     Integer,
     String,
     Table,
@@ -231,6 +232,9 @@ class Review(Base, TimestampMixin):
     """Отзыв клиента. Публикуется только при наличии согласия автора. Манифест схемы, п. 12."""
 
     __tablename__ = "reviews"
+    # Публичная выборка фильтрует по этим трём полям — индекс держим в модели,
+    # иначе autogenerate считает его лишним и предлагает удалить.
+    __table_args__ = (Index("ix_reviews_public", "status", "consent_given", "deleted_at"),)
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     public_id: Mapped[str] = mapped_column(String(36), default=lambda: str(uuid.uuid4()), unique=True, nullable=False)
