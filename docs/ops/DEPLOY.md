@@ -79,3 +79,23 @@ docker cp alyaev-api:/app/alembic/versions/<файл>.py backend/alembic/version
 
 - Бэкап: `repo\infra\scripts\backup.ps1` → `E:\DockerData\alyaev-it\backups\`. Глубина 14 дней.
 - Восстановление: `repo\infra\scripts\restore.ps1 -File <dump>`. Только по решению владельца.
+
+## 6. Резервное копирование и восстановление
+
+Полные правила — `docs/ops/BACKUP.md`. Коротко для эксплуатации:
+
+| Действие | Команда |
+|---|---|
+| Сделать бэкап сейчас | `infra\scripts\backup.ps1` |
+| Проверить последний бэкап | `infra\scripts\verify-backup.ps1` |
+| Проверить конкретный | `infra\scripts\verify-backup.ps1 -File <путь>` |
+| Восстановить | `infra\scripts\restore.ps1 -File <путь>` |
+
+**Расписание:** задача планировщика `AlyaevIT-Backup`, ежедневно 03:30, от имени SYSTEM.
+Проверить: `schtasks /query /tn "AlyaevIT-Backup" /fo LIST /v` (Last Result должен быть 0).
+
+**Восстановление всегда сначала делает страховочную копию.** Если ошиблись файлом —
+предыдущее состояние осталось в `E:\DockerData\alyaev-it\backups`.
+
+**Проверено 24.11.2026:** бэкап → восстановление во временную базу → сверка 5 таблиц → совпало;
+восстановление в рабочую базу → 15 таблиц, миграции на head, сайт отдаёт 200.
