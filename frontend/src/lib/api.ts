@@ -108,3 +108,24 @@ export async function fetchCalculator(): Promise<CalculatorConfig> {
     }
   );
 }
+/** SEO-настройки страницы из админки. Пусто = работают автоматические значения. */
+export type PageSeo = {
+  path: string;
+  title: string;
+  description: string;
+  h1?: string;
+  canonical?: string | null;
+  robots_index: boolean;
+  robots_follow: boolean;
+  og_title?: string;
+  og_description?: string;
+  og_image?: string;
+  schema?: Record<string, unknown>;
+};
+
+/** Метаданные, которые редактор задал вручную для этого пути. */
+export async function fetchSeo(path: string): Promise<PageSeo | null> {
+  const data = await getJson<PageSeo>("/api/v1/public/seo?path=" + encodeURIComponent(path));
+  // Пустой объект — записи нет, это норма: вызывающий возьмёт автоматические значения.
+  return data && data.path ? data : null;
+}

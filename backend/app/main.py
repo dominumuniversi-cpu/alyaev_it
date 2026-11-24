@@ -3,7 +3,7 @@
 from fastapi import FastAPI
 from sqlalchemy import text
 
-from app.api import admin, admin_services, auth, leads, public
+from app.api import admin, admin_seo, admin_services, auth, leads, public
 from app.core.config import settings
 from app.db.session import engine
 
@@ -13,6 +13,7 @@ app.include_router(leads.router)
 app.include_router(auth.router)
 app.include_router(admin.router)
 app.include_router(admin_services.router)
+app.include_router(admin_seo.router)
 
 
 @app.get("/api/v1/health")

@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/Badge";
 import { ButtonLink } from "@/components/ui/Button";
 import { Section } from "@/components/ui/Section";
 import { JsonLd, serviceSchema } from "@/components/seo/JsonLd";
-import { type CategoryFull, fetchCategory, fetchService, formatPrice } from "@/lib/api";
+import { type CategoryFull, fetchCategory, fetchSeo, fetchService, formatPrice } from "@/lib/api";
 import { canonicalUrl, siteBase } from "@/lib/seo";
 
 type Params = { params: Promise<{ slug: string }> };
@@ -15,25 +15,31 @@ type Params = { params: Promise<{ slug: string }> };
 /** Метаданные услуги из БД; 404 если услуги нет. */
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const { slug } = await params;
-  const service = await fetchService(slug);
-  if (!service) {
-    // Слаг может быть категорией: /services/telegram-bots/
-    const category = await fetchCategory(slug);
-    if (!category) return { title: "Страница не найдена" };
-    return {
-      title: category.title,
-      description: category.short_description,
-      alternates: { canonical: canonicalUrl("/services/" + category.slug) },
-    };
-  }
+  const [service, category] = await Promise.all([
+    fetchService(slug),
+    fetchCategory(slug),
+  ]);
+  const entity = service ?? category;
+  if (!entity) return { title: "Страница не найдена" };
+
+  const path = "/services/" + entity.slug + "/";
+  // SEO из админки главнее: редактор мог поправить заголовок под запрос.
+  const seo = await fetchSeo(path);
+  const title = seo?.title ?? entity.title;
+  const description = seo?.description ?? entity.short_description;
+  const url = seo?.canonical || canonicalUrl("/services/" + entity.slug);
+
   return {
-    title: service.title,
-    description: service.short_description,
-    alternates: { canonical: canonicalUrl("/services/" + service.slug) },
+    title,
+    description,
+    alternates: { canonical: url },
+    robots: seo
+      ? { index: seo.robots_index, follow: seo.robots_follow }
+      : undefined,
     openGraph: {
-      title: service.title,
-      description: service.short_description,
-      url: canonicalUrl("/services/" + service.slug),
+      title: seo?.og_title || title,
+      description: seo?.og_description || description,
+      url,
       type: "website",
     },
   };

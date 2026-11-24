@@ -80,6 +80,12 @@
 | admin | `/api/v1/admin/*` | персонал |
 | account | `/api/v1/account/*` | клиент, только свои данные |
 | system | `/api/v1/health`, `/api/v1/ready` | без раскрытия конфигурации |
+| seo-admin | `/api/v1/admin/seo/*` | контент-права (редактор) |
+
+**Правило адресов API: без замыкающего слэша.** `trailingSlash: false` в Next превращает
+`/api/v1/admin/seo/calculator/` в **308-редирект** ещё до FastAPI — PUT уходит не туда,
+и вызов молча «не работает». Пути API всегда пишем без слеша на конце:
+`/api/v1/admin/seo/calculator`, а путь страницы передаём в теле или в query.
 
 ## 5. Правила
 

@@ -1,6 +1,6 @@
 """Публичный API сайта: каталог услуг, настройки, SEO."""
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 
 from app.db.session import get_session
@@ -149,6 +149,35 @@ def calculator(session: Session = Depends(get_session)) -> dict:
             {"slug": row.slug, "title": row.title, "factor": float(row.factor)}
             for row in config["complexity"]
         ],
+    }
+
+
+@router.get("/seo")
+def seo(path: str = Query(max_length=255), session: Session = Depends(get_session)) -> dict:
+    """SEO-настройки страницы по пути. Пустой объект, если записи нет.
+
+    Фронтенд спрашивает один путь; отсутствие записи — норма, тогда работают
+    автоматические значения из сущности. Секретов здесь нет — всё публичное.
+    """
+    # Нормализуем путь: со слешем и без, с basePath — это один адрес.
+    normalized = "/" + path.strip("/")
+    if not normalized.endswith("/") and "." not in normalized.split("/")[-1]:
+        normalized += "/"
+    row = public_data.get_seo(session, normalized)
+    if row is None:
+        return {}
+    return {
+        "path": row.path,
+        "title": row.title,
+        "description": row.description,
+        "h1": row.h1,
+        "canonical": row.canonical,
+        "robots_index": row.robots_index,
+        "robots_follow": row.robots_follow,
+        "og_title": row.og_title,
+        "og_description": row.og_description,
+        "og_image": row.og_image,
+        "schema": row.schema_json,
     }
 
 
