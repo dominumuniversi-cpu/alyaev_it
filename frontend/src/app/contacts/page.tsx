@@ -25,6 +25,9 @@ export default async function ContactsPage() {
   const [settings, services] = await Promise.all([fetchSettings(), fetchServices()]);
   const contacts = settings.contacts ?? {};
   const taskOptions = services.map((service) => ({ value: service.slug, label: service.title }));
+  // Названия услуг нужны форме, чтобы расшифровать ?service=<slug> из ссылки калькулятора.
+  const serviceTitles: Record<string, string> = {};
+  for (const service of services) serviceTitles[service.slug] = service.title;
 
   return (
     <Section id="contacts"
@@ -59,7 +62,7 @@ export default async function ContactsPage() {
         </div>
         <div id="lead" className="rounded-2xl border border-[color:var(--c-border)] bg-[color:var(--c-surface)] p-6 sm:p-8">
           <h2 className="mb-6 text-base font-semibold">Оставить заявку</h2>
-          <LeadForm taskOptions={taskOptions} />
+          <LeadForm taskOptions={taskOptions} serviceTitles={serviceTitles} />
         </div>
       </div>
     </Section>

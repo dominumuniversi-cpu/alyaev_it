@@ -2,7 +2,7 @@
 
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/Button";
 import { SelectField, TextAreaField, TextField } from "@/components/ui/Field";
@@ -22,11 +22,42 @@ function validate(data: { name: string; contact: string; message: string; consen
   return errors;
 }
 
+/** Собирает приписку о расчёте калькулятора из параметров ссылки (манифест: lead-form.md).
+ *  Клиент видит, что его расчёт дошёл, и может стереть это одной клавишей. */
+function calculatorNote(params: URLSearchParams, serviceTitles: Record<string, string>): string {
+  if (params.get("source") !== "calculator") return "";
+  const slug = params.get("service") ?? "";
+  const price = params.get("price") ?? "";
+  const options = (params.get("options") ?? "").split(",").filter(Boolean);
+  const title = serviceTitles[slug] ?? slug;
+  if (!title && !price) return "";
+  const parts = ["Расчёт с калькулятора: " + title];
+  if (options.length > 0) parts.push("опции: " + options.join(", "));
+  if (price) parts.push("предварительно " + Number(price).toLocaleString("ru-RU") + " ₽");
+  return parts.join(", ") + ".";
+}
+
 /** Форма заявки: отправка через fetch, без перезагрузки страницы. */
-export function LeadForm({ taskOptions }: { taskOptions: { value: string; label: string }[] }) {
+export function LeadForm({
+  taskOptions,
+  serviceTitles = {},
+}: {
+  taskOptions: { value: string; label: string }[];
+  serviceTitles?: Record<string, string>;
+}) {
   const [state, setState] = useState<"idle" | "sending" | "sent" | "error">("idle");
   const [errors, setErrors] = useState<Errors>({});
   const [serverError, setServerError] = useState<string | null>(null);
+  const [messageDefault, setMessageDefault] = useState("");
+  const [taskDefault, setTaskDefault] = useState("");
+
+  // Параметры расчёта читаем только в браузере: на сервере location нет.
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    setMessageDefault(calculatorNote(params, serviceTitles));
+    // Услуга из ссылки калькулятора сразу подставляет тип задачи — клиенту не надо выбирать заново.
+    setTaskDefault(params.get("service") ?? "");
+  }, [serviceTitles]);
 
   /** Отправляет заявку и показывает результат на месте. */
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -64,7 +95,11 @@ export function LeadForm({ taskOptions }: { taskOptions: { value: string; label:
           task_type: String(formData.get("task_type") ?? "") || null,
           message: data.message.trim(),
           company_site: String(formData.get("company_site") ?? "") || null,
-          source_page: window.location.pathname,
+          // Если пришли с калькулятора — в источнике это видно, а не просто /contacts/.
+          source_page:
+            params.get("source") === "calculator"
+              ? window.location.pathname + "?source=calculator"
+              : window.location.pathname,
           utm,
           consent_version: CONSENT_VERSION,
           website_check: String(formData.get("website_check") ?? ""),
@@ -135,6 +170,7 @@ export function LeadForm({ taskOptions }: { taskOptions: { value: string; label:
         label="Тип задачи"
         hint="Необязательно, если пока не уверены"
         disabled={sending}
+        defaultValue={taskDefault}
         options={[{ value: "", label: "Не выбрано" }, ...taskOptions]}
       />
       <TextAreaField
@@ -142,6 +178,7 @@ export function LeadForm({ taskOptions }: { taskOptions: { value: string; label:
         name="message"
         label="Описание задачи"
         hint="Что сейчас делаете вручную и какой результат нужен"
+        defaultValue={messageDefault}
         required
         disabled={sending}
         error={errors.message}
