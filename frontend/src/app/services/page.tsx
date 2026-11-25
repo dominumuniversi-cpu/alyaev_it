@@ -41,13 +41,13 @@ export default async function ServicesPage() {
       title="Услуги и цены"
       subtitle="Цены стартовые: итоговая стоимость определяется после анализа задачи и согласования ТЗ."
     >
-      <div className="space-y-12">
+      <div className="space-y-[var(--space-section)]">
         {[...groups.entries()].map(([title, items]) => (
           <div key={title}>
-            <h2 className="mb-6 border-b border-[color:var(--c-line)] pb-3 font-[family-name:var(--font-display)] text-[clamp(22px,2.6vw,32px)] font-bold uppercase leading-none tracking-[-0.02em] text-[color:var(--c-ink)]">
+            <h2 className="mb-8 border-b border-[color:var(--c-line)] pb-4 font-[family-name:var(--font-display)] text-[clamp(22px,2.6vw,32px)] font-bold uppercase leading-none tracking-[-0.02em] text-[color:var(--c-ink)]">
               {title}
             </h2>
-            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-px border border-[color:var(--c-line)] bg-[color:var(--c-line)] sm:grid-cols-2 lg:grid-cols-3">
               {items.map((service) => (
                 <ServiceCard key={service.slug} service={service} />
               ))}

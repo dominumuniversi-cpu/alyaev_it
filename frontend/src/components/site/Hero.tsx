@@ -1,6 +1,7 @@
 /** Главный экран. Манифест: docs/manifests/ui/hero.md (PERSONAL v2.0) */
 
 import { ButtonLink } from "@/components/ui/Button";
+import { HeroArt } from "@/components/site/HeroArt";
 
 const DIRECTIONS = ["CRM", "API", "1С", "Сайты", "Автоматизация"];
 const POINTS = [
@@ -19,7 +20,7 @@ const SCHEME = [
 export function Hero() {
   return (
     <section aria-labelledby="hero-title" className="relative overflow-hidden border-b border-[color:var(--c-line)]">
-      <div className="mx-auto grid w-full max-w-[var(--shell-max)] gap-10 px-[var(--shell-gutter)] pb-[var(--space-section)] pt-10 lg:grid-cols-[1.15fr_.85fr] lg:items-end lg:pt-14">
+      <div className="mx-auto grid w-full max-w-[var(--shell-max)] gap-10 px-[var(--shell-gutter)] pb-[var(--space-section)] pt-10 lg:grid-cols-[1.12fr_.88fr] lg:items-end lg:gap-12 lg:pt-14">
         <div>
           <p className="mb-6 font-[family-name:var(--font-mono)] text-[11px] uppercase tracking-[0.22em] text-[color:var(--c-terracotta)]">
             Автоматизация бизнеса / AI-разработка / системная интеграция
@@ -58,7 +59,10 @@ export function Hero() {
           </ul>
         </div>
 
-        <HeroSchema />
+        <div className="flex flex-col gap-4">
+          <HeroArt />
+          <HeroSchema />
+        </div>
       </div>
     </section>
   );
