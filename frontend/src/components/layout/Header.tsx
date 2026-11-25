@@ -54,7 +54,7 @@ export function Header() {
           : "border-transparent bg-[color:var(--c-paper)]")
       }
     >
-      <div className="mx-auto flex h-16 w-full max-w-[1320px] items-center justify-between gap-4 px-4 sm:px-6 lg:h-[76px] lg:px-8">
+      <div className="mx-auto flex h-16 w-full max-w-[var(--shell-max)] items-center justify-between gap-4 px-[var(--shell-gutter)] lg:h-[76px]">
         <Link
           href="/"
           aria-label="Дмитрий Аляев — на главную"
@@ -102,7 +102,7 @@ export function Header() {
 
       {open ? (
         <div id="mobile-menu" className="border-t border-[color:var(--c-line)] bg-[color:var(--c-paper)] xl:hidden">
-          <nav aria-label="Мобильная навигация" className="mx-auto flex w-full max-w-[1320px] flex-col px-4 py-3 sm:px-6">
+          <nav aria-label="Мобильная навигация" className="mx-auto flex w-full max-w-[var(--shell-max)] flex-col px-[var(--shell-gutter)] py-3">
             {NAV.map((item) => (
               <Link
                 key={item.href}

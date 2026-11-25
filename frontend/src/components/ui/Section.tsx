@@ -37,12 +37,12 @@ export function Section({
       id={id}
       aria-labelledby={title ? id + "-title" : undefined}
       className={"relative overflow-hidden " + (surface ? "on-dark" : "bg-transparent")}
-      style={flat ? { paddingTop: "calc(var(--space-section) / 3)", paddingBottom: "var(--space-section)" } : { paddingBlock: "var(--space-section)" }}
+      style={flat ? { paddingTop: "calc(var(--space-section) * 0.55)", paddingBottom: "var(--space-section)" } : { paddingBlock: "var(--space-section)" }}
     >
-      <div className="relative mx-auto w-full max-w-[1320px] px-4 sm:px-6 lg:px-8">
+      <div className="relative mx-auto w-full max-w-[var(--shell-max)] px-[var(--shell-gutter)]">
         {breadcrumbs ? <Breadcrumbs items={breadcrumbs} /> : null}
         {title ? (
-          <header className="mb-10 max-w-4xl">
+          <header className="mb-10 max-w-[min(100%,74ch)]">
             {Heading === "h1" ? (
               <h1
                 id={id + "-title"}

@@ -2,31 +2,75 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Токены — единственный источник цветов/шрифтов. См. docs/manifests/ui/tokens.md */
+/* PERSONAL Design System v2.0 — единственный источник цветов и шрифтов.
+   Манифест: docs/manifests/ui/tokens.md. Значения — из пакета темы (DESIGN_SYSTEM.md).
+   Правило: компоненты НЕ содержат сырых HEX, только эти переменные. */
 :root {
-  --c-bg: #05070D;
-  --c-surface: #0B1220;
-  --c-surface-2: #0F1A2B;
-  --c-border: #1D2A3A;
-  --c-border-strong: #2A3B50;
-  --c-gold: #E3BC7A;
-  --c-gold-dim: #B8935A;
-  --c-cyan: #22B8E6;
-  --c-text: #F3F5F8;
-  --c-text-muted: #929CAB;
-  --c-success: #3FBF7F;
-  --c-warning: #E0A64A;
-  --c-danger: #E5544B;
-  --font-sans: Inter, system-ui, -apple-system, Segoe UI, sans-serif;
+  /* Основная палитра */
+  --c-paper: #EAE7DF;
+  --c-paper-2: #F3F0E8;
+  --c-ink: #242522;
+  --c-ink-2: #343631;
+  --c-muted: #77786F;
+  --c-line: #D3CFC4;
+  --c-line-2: #B9B3A4;
+  --c-lime: #B9E56B;
+  --c-terracotta: #D97859;
+  /* Редкий технический акцент из пакета (не фон секции) */
+  --c-blue: #6E9DA0;
+
+  /* Легаси-алиасы: старые компоненты продолжают работать, новых HEX не появляется */
+  --c-bg: var(--c-paper);
+  --c-surface: var(--c-paper-2);
+  --c-surface-2: var(--c-paper);
+  --c-border: var(--c-line);
+  --c-border-strong: var(--c-line-2);
+  --c-gold: var(--c-lime);
+  --c-gold-dim: #A5CE58;
+  --c-cyan: var(--c-terracotta);
+  --c-text: var(--c-ink);
+  --c-text-muted: var(--c-muted);
+  --c-success: #3F7F4E;
+  --c-warning: #B07A1E;
+  --c-danger: #B4453A;
+
+  /* Типографика */
+  --font-sans: Manrope, Inter, system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-display: Manrope, Inter, system-ui, sans-serif;
-  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
-  --space-section: clamp(64px, 10vw, 128px);
+  --font-mono: 'IBM Plex Mono', 'JetBrains Mono', ui-monospace, monospace;
+
+  /* Ритм: шаг секций из пакета (76–148 px) и поля контейнера (20–76 px) */
+  --space-section: clamp(56px, 7vw, 104px);
+  --shell-gutter: clamp(20px, 5vw, 76px);
+  --shell-max: 1240px;
+  --radius-sm: 8px;
+  --radius-md: 18px;
+  --radius-lg: 28px;
+  /* Мягкая тень поверхности из пакета; не для AI-лендинговых «свечений» */
+  --shadow-paper: 0 24px 80px rgba(20, 21, 18, 0.12);
 }
 
-html { color-scheme: dark; scroll-behavior: smooth; }
-body { background: var(--c-bg); color: var(--c-text); font-family: var(--font-sans); }
+/* Тёмные секции и подвал: роли переопределяются, а не задаются в разметке заново */
+.on-dark {
+  --c-bg: var(--c-ink);
+  --c-surface: var(--c-ink-2);
+  --c-surface-2: var(--c-ink);
+  --c-border: rgba(234, 231, 223, 0.2);
+  --c-border-strong: rgba(234, 231, 223, 0.34);
+  --c-line: rgba(234, 231, 223, 0.2);
+  --c-line-2: rgba(234, 231, 223, 0.34);
+  --c-text: var(--c-paper);
+  --c-ink: #EAE7DF;
+  --c-ink-2: #D6D4CB;
+  --c-text-muted: #BDBBB2;
+  color: var(--c-paper);
+  background-color: var(--c-ink);
+}
 
-:focus-visible { outline: 2px solid var(--c-cyan); outline-offset: 2px; }
+html { color-scheme: light; scroll-behavior: smooth; }
+body { background: var(--c-paper); color: var(--c-text); font-family: var(--font-sans); -webkit-font-smoothing: antialiased; }
+
+:focus-visible { outline: 2px solid var(--c-terracotta); outline-offset: 3px; }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
