@@ -30,6 +30,14 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   return (
     <html lang={SITE_LANG} className={theme}>
       <body>
+        {/* Ссылка «к содержанию»: первая позиция в табуляции, видна только при фокусе.
+            Требование пакета темы: клавиатурная навигация и видимый фокус. */}
+        <a
+          href="#content"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-[var(--radius-sm)] focus:bg-[color:var(--c-ink)] focus:px-4 focus:py-2 focus:text-sm focus:text-[color:var(--c-paper)]"
+        >
+          Перейти к содержанию
+        </a>
         <SiteChrome>{children}</SiteChrome>
         <Analytics />
       </body>
