@@ -222,7 +222,7 @@ docker build -t alyaev-it-frontend:latest \
 ```
 
 Проверка после пересборки: `docker exec alyaev-web sh -c "head -c 200 /app/.next/routes-manifest.json"`
-должен показать `"basePath": ""`. Затем `curl -k -H 'Host: alyaev.ru' https://192.168.8.49/images/hero/hero-visual.webp` → 200.
+должен показать `"basePath": ""`. Затем на самом домене: `curl -sI https://alyaev.ru/images/hero/hero-visual.webp` → 200.
 
 ## PERSONAL v2.0 — что изменилось 25.11.2026
 
