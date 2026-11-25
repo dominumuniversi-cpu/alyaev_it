@@ -1,12 +1,14 @@
 /** Обо мне: опыт, направления и подход. */
 
 import type { Metadata } from "next";
+import Image from "next/image";
 
 import { JsonLd } from "@/components/seo/JsonLd";
 import { ButtonLink } from "@/components/ui/Button";
 import { FeatureCard } from "@/components/ui/FeatureCard";
 import { Section } from "@/components/ui/Section";
 import { canonicalUrl, openGraph } from "@/lib/seo";
+import { aboutWorkspace } from "@/lib/design/images";
 
 export const metadata: Metadata = {
   title: "Обо мне и опыте",
@@ -72,6 +74,14 @@ export default function AboutPage() {
             </div>
           </div>
           <aside className="rounded-2xl border border-[color:var(--c-border)] bg-[color:var(--c-surface)] p-6">
+            <Image
+              src={aboutWorkspace.src}
+              alt={aboutWorkspace.alt}
+              width={aboutWorkspace.width}
+              height={aboutWorkspace.height}
+              sizes="(max-width: 1024px) 100vw, 420px"
+              className="mb-5 h-auto w-full rounded-xl border border-[color:var(--c-border)]"
+            />
             <h2 className="mb-4 text-base font-semibold">Чем занимаюсь</h2>
             <ul className="space-y-2 text-sm text-[color:var(--c-text-muted)]">
               {[

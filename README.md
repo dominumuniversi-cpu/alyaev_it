@@ -7,9 +7,24 @@
 | Задачник | TASKS.md → docs/tasks/ |
 | ТЗ (клиентское) | docs/spec/TZ.md |
 | Правила разработки | docs/rules/RULES.md |
-| UI-манифесты | docs/manifests/ui/ |
+| UI-манифесты | docs/manifests/ui/ (карта компонентов — ниже) |
 | Схема БД | docs/manifests/db/ |
 | Архитектура | docs/architecture/ARCHITECTURE.md |
+| Графические материалы | docs/personal-site-assets-v1/ (+ .zip); на сайте — `frontend/public/images/`, реестр `frontend/src/lib/design/images.ts` |
+
+## Где что искать (три источника истины)
+
+| Вопрос | Ответ ищется здесь |
+|---|---|
+| Что делать, в каком статусе | GitHub Issues `dominumuniversi-cpu/alyaev_it` + TASKS.md (только индекс) |
+| Как делать: правила | docs/rules/RULES.md |
+| Как выглядит элемент: разметка, токены, состояния | docs/manifests/ui/<компонент>.md |
+| Не знаешь, какой манифест нужен | docs/manifests/ui.md — карта всех манифестов с областью ответственности |
+| Картинки: какие есть, где лежат, куда ставить | docs/manifests/ui/images.md |
+| Решения и ловушки по проекту | kaeru, инициатива `alyaev` |
+
+Новый `.md` заводится только по месту смысла: правила — docs/rules/, манифесты элементов — docs/manifests/ui/,
+схема данных — docs/manifests/db/, эксплуатация — docs/ops/. Дублировать правила в нескольких файлах нельзя.
 
 ## Стек
 

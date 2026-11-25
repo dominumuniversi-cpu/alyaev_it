@@ -1,6 +1,7 @@
 /** Портфолио: демонстрационные проекты с честным статусом. */
 
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 
 import { Badge } from "@/components/ui/Badge";
@@ -9,6 +10,7 @@ import { fetchPortfolio, PORTFOLIO_STATUS_LABELS } from "@/lib/api";
 import { ButtonLink } from "@/components/ui/Button";
 import { Section } from "@/components/ui/Section";
 import { canonicalUrl, openGraph } from "@/lib/seo";
+import { imageForPortfolio } from "@/lib/design/images";
 
 export const metadata: Metadata = {
   title: "Проекты и решения",
@@ -93,8 +95,18 @@ export default async function PortfolioPage() {
       id="portfolio"
       breadcrumbs={[{ label: "Главная", href: "/" }, { label: "Портфолио" }]} title="Проекты и решения" subtitle="Демонстрационные проекты: как устроено решение и какие технологии использованы. Коммерческих внедрений с показателями здесь пока нет — процентные улучшения не придумываю.">
       <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-        {items.map((project) => (
+        {items.map((project, index) => {
+          const image = imageForPortfolio(index);
+          return (
           <article key={project.slug} className="flex h-full flex-col rounded-2xl border border-[color:var(--c-border)] bg-[color:var(--c-surface)] p-6">
+            <Image
+              src={image.src}
+              alt={image.alt}
+              width={image.width}
+              height={image.height}
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 380px"
+              className="mb-4 h-auto w-full rounded-xl border border-[color:var(--c-border)] object-cover"
+            />
             <div className="mb-4 flex items-center justify-between gap-3">
               <Badge variant="status">{PORTFOLIO_STATUS_LABELS[project.status] ?? project.status}</Badge>
             </div>
@@ -117,7 +129,8 @@ export default async function PortfolioPage() {
               </Link>
             </div>
           </article>
-        ))}
+          );
+        })}
       </div>
       <div className="mt-10 rounded-2xl border border-[color:var(--c-border)] bg-[color:var(--c-surface)] p-6">
         <p className="text-sm text-[color:var(--c-text-muted)]">

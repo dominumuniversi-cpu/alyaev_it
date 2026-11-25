@@ -1,6 +1,9 @@
 /** Главный экран. Манифест: docs/manifests/ui/hero.md */
 
+import Image from "next/image";
+
 import { ButtonLink } from "@/components/ui/Button";
+import { heroVisual } from "@/lib/design/images";
 
 // Только то, чего нет в лиде выше: Telegram-боты и AI-ассистенты там уже названы.
 const DIRECTIONS = ["CRM", "API", "1С", "Сайты", "Автоматизация"];
@@ -63,7 +66,10 @@ export function Hero() {
             ))}
           </ul>
         </div>
-        <HeroScene />
+        <div className="flex flex-col items-center gap-6">
+          <HeroVisual />
+          <HeroScene />
+        </div>
       </div>
     </section>
   );
@@ -75,7 +81,26 @@ const SCENE = [
   { label: "Результат", text: "CRM, таблица, уведомление", tone: "var(--c-cyan)" },
 ];
 
-/** Схема обработки заявки: три панели со стрелками. Только CSS, без изображений. */
+/**
+ * Иллюстрация главного экрана (340×300). Маленькая по исходнику, поэтому показывается
+ * скромно и не растягивается; LCP — текст заголовка, картинка грузится с priority только
+ * потому, что видна на первом экране на десктопе. Манифест: docs/manifests/ui/images.md
+ */
+function HeroVisual() {
+  return (
+    <Image
+      src={heroVisual.src}
+      alt={heroVisual.alt}
+      width={heroVisual.width}
+      height={heroVisual.height}
+      priority
+      sizes="(max-width: 768px) 100vw, 540px"
+      className="mx-auto h-auto w-full max-w-[340px] rounded-2xl border border-[color:var(--c-border)]"
+    />
+  );
+}
+
+/** Схема обработки заявки: три панели со стрелками (CSS, без картинок). */
 function HeroScene() {
   return (
     <div className="relative rounded-2xl border border-[color:var(--c-border)] bg-[color:var(--c-surface)]/70 p-5 backdrop-blur">

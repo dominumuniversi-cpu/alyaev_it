@@ -1,14 +1,29 @@
 /** Карточка услуги. Манифест: docs/manifests/ui/service-card.md */
 
+import Image from "next/image";
 import Link from "next/link";
 
 import { Badge } from "@/components/ui/Badge";
 import { formatPrice, type ServiceCard as ServiceCardData } from "@/lib/api";
+import { imageForService } from "@/lib/design/images";
 
-/** Карточка услуги: категория, название, описание, примеры, цена и срок. */
+/** Карточка услуги: иллюстрация, категория, название, описание, примеры, цена и срок. */
+/**
+ * Картинка берётся из реестра по slug (запасной вариант — по категории),
+ * поэтому в разметке нет ни одного ручного пути. Манифест: docs/manifests/ui/images.md
+ */
 export function ServiceCard({ service }: { service: ServiceCardData }) {
+  const image = imageForService(service.slug, service.category_slug);
   return (
     <article className="group relative flex h-full flex-col rounded-2xl border border-[color:var(--c-border)] bg-[color:var(--c-surface)] p-6 transition-all duration-150 hover:-translate-y-0.5 hover:border-[color:rgba(227,188,122,.4)]">
+      <Image
+        src={image.src}
+        alt={image.alt}
+        width={image.width}
+        height={image.height}
+        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 380px"
+        className="mb-4 h-auto w-full max-w-[276px] rounded-xl border border-[color:var(--c-border)] bg-[color:var(--c-surface-2)] object-contain"
+      />
       {service.category_title ? (
         <div className="mb-4">
           <Badge variant="tech">{service.category_title}</Badge>

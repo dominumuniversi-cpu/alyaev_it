@@ -1,6 +1,8 @@
 # Дизайн-токены (единый источник истины)
 
-> Файл кода: `frontend/src/styles/tokens.css` (CSS-переменные) и `frontend/tailwind.config.ts`.
+> Файл кода: `frontend/src/app/globals.css` (CSS-переменные, блок `:root`) и `frontend/tailwind.config.ts`.
+> Уточнено 25.11.2026: раньше здесь был указан `frontend/src/styles/tokens.css` — такого файла нет;
+> переменная основы поверхностей называется `--c-surface-2` (не `--c-surface-2`).
 > **Правило:** в манифестах UI и в компонентах нельзя писать сырые HEX — только имена токенов.
 
 ## 1. Цвет
