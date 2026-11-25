@@ -11,3 +11,7 @@ dist/
 *.log
 .DS_Store
 backups/
+
+# Артефакты сборки фронтенда, которые не должны попадать в репозиторий.
+*.tsbuildinfo
+frontend/package-lock.json
