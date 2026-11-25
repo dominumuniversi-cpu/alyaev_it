@@ -18,7 +18,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
   if (!Number.isInteger(projectId) || projectId <= 0) notFound();
 
   return (
-    <main className="mx-auto w-full max-w-[1200px] px-4 py-12">
+    <main className="mx-auto w-full max-w-[var(--shell-max)] px-4 py-12">
       <AccountShell mode="detail" projectId={projectId} />
     </main>
   );

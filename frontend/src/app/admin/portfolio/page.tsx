@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <main className="mx-auto w-full max-w-[1200px] px-4 py-10 sm:px-6 lg:px-8">
+    <main className="mx-auto w-full max-w-[var(--shell-max)] px-4 py-10 sm:px-6 lg:px-8">
       <AdminNav current="/admin/portfolio/" />
       <h1 className="mb-1 text-2xl font-semibold">Портфолио</h1>
       <p className="mb-6 text-sm text-[color:var(--c-text-muted)]">Кейсы и демонстрационные проекты. Статус проекта показывается посетителю честно.</p>

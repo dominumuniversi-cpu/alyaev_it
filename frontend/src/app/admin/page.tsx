@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 /** Страница с заявками. Данные грузятся на клиенте с cookie сессии. */
 export default function AdminPage() {
   return (
-    <main className="mx-auto w-full max-w-[1200px] px-4 py-10 sm:px-6 lg:px-8">
+    <main className="mx-auto w-full max-w-[var(--shell-max)] px-4 py-10 sm:px-6 lg:px-8">
       <AdminNav current="/admin/" />
       <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
           <h1 className="text-2xl font-semibold">Заявки</h1>

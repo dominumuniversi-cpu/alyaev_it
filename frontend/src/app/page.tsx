@@ -6,7 +6,7 @@ import type { IconName } from "@/components/ui/Icon";
 import { ProcessFlow } from "@/components/ui/ProcessFlow";
 import { Section } from "@/components/ui/Section";
 import { Hero } from "@/components/site/Hero";
-import { ServiceCard } from "@/components/site/ServiceCard";
+import { ServiceRow } from "@/components/site/ServiceRow";
 import { JsonLd, websiteSchema } from "@/components/seo/JsonLd";
 import { fetchServices } from "@/lib/api";
 import { LeadForm } from "@/components/site/LeadForm";
@@ -28,8 +28,6 @@ const STAGES = [
   { marker: "03", title: "Анализ", text: "Смотрю, что уже есть и какие системы надо связать." },
   { marker: "04", title: "Оценка", text: "Согласуем стоимость и сроки до начала работ." },
   { marker: "05", title: "Разработка", text: "Делаю, тестирую на реальных данных, показываю результат." },
-  { marker: "06", title: "Передача", text: "Отдаю решение с инструкциями и документацией." },
-  { marker: "07", title: "Поддержка", text: "Остаюсь на связи для доработок и развития." },
 ];
 
 const SCENARIO = [
@@ -65,9 +63,9 @@ export default async function HomePage() {
         subtitle="Понятные цены и сроки. Указанные цены являются стартовыми — итоговая стоимость определяется после анализа задачи."
       >
         {services.length > 0 ? (
-          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {services.slice(0, 6).map((service) => (
-              <ServiceCard key={service.slug} service={service} />
+          <div className="border-t border-[color:var(--c-line)]">
+            {services.slice(0, 6).map((service, index) => (
+              <ServiceRow key={service.slug} service={service} index={index} />
             ))}
           </div>
         ) : (
@@ -103,20 +101,23 @@ export default async function HomePage() {
         title="Этапы работы"
         subtitle="От заявки до поддержки — понятный процесс без сюрпризов."
       >
-        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        <ol className="grid gap-px border-y border-[color:var(--c-paper)] bg-[color:var(--c-paper)]/25 sm:grid-cols-2 lg:grid-cols-4">
           {STAGES.map((stage) => (
-            <FeatureCard
-              key={stage.marker}
-              marker={stage.marker}
-              title={stage.title}
-              text={stage.text}
-            />
+            <li key={stage.marker} className="flex flex-col gap-3 bg-[color:var(--c-ink)] p-5">
+              <span className="font-[family-name:var(--font-mono)] text-[11px] uppercase tracking-[0.22em] text-[color:var(--c-lime)]">
+                {stage.marker}
+              </span>
+              <span className="font-[family-name:var(--font-display)] text-lg font-bold uppercase leading-tight tracking-[-0.01em] text-[color:var(--c-paper)]">
+                {stage.title}
+              </span>
+              <span className="text-sm leading-relaxed text-[color:var(--c-paper)] opacity-70">{stage.text}</span>
+            </li>
           ))}
-        </div>
+        </ol>
       </Section>
 
       <Section id="lead" title="Есть задача, которую можно автоматизировать?">
-        <div className="grid gap-8 rounded-2xl border border-[color:var(--c-border)] bg-[color:var(--c-surface)] p-6 sm:p-8 lg:grid-cols-[1fr_1.1fr]">
+        <div className="grid gap-8 rounded-[var(--radius-md)] border border-[color:var(--c-ink)] bg-[color:var(--c-lime)] p-6 text-[color:var(--c-ink)] sm:p-8 lg:grid-cols-[1fr_1.1fr]">
           <div>
             <p className="text-base leading-relaxed text-[color:var(--c-text-muted)]">
               Опишите, что сейчас приходится делать вручную. Предложу подходящее решение и предварительно оценю стоимость.

@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 /** Кабинет целиком на клиенте: данные приходят по cookie сессии. */
 export default function AccountPage() {
   return (
-    <main className="mx-auto w-full max-w-[1200px] px-4 py-12">
+    <main className="mx-auto w-full max-w-[var(--shell-max)] px-4 py-12">
       <AccountShell mode="list" />
     </main>
   );
