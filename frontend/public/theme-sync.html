@@ -6,6 +6,6 @@
   var t = q.get('theme') === 'dark' ? 'dark' : 'light';
   var back = q.get('to') || '/';
   document.cookie = 'theme=' + t + '; path=/; max-age=31536000; samesite=lax';
-  location.replace('https://alyaev.ru' + back);
+  location.replace(location.origin + back);
 </script>
 </body></html>
