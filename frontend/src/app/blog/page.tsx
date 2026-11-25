@@ -51,7 +51,7 @@ export default async function Page() {
                 </time>
               ) : null}
               <h2 className="mt-2 mb-3 text-lg font-semibold leading-snug">
-                <Link href={"/blog/" + article.slug} className="hover:text-[color:var(--c-accent)]">
+                <Link href={"/blog/" + article.slug} className="hover:text-[color:var(--c-terracotta)]">
                   {article.title}
                 </Link>
               </h2>
