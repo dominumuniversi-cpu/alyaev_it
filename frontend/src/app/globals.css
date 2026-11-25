@@ -46,6 +46,9 @@
   --radius-sm: 8px;
   --radius-md: 18px;
   --radius-lg: 28px;
+  /* Сетка фона и мягкое затемнение — тоже токены, а не HEX по месту */
+  --c-grid-line: rgba(36, 37, 34, 0.055);
+  --c-veil: rgba(234, 231, 223, 0.9);
   /* Мягкая тень поверхности из пакета; не для AI-лендинговых «свечений» */
   --shadow-paper: 0 24px 80px rgba(20, 21, 18, 0.12);
 }
@@ -74,4 +77,32 @@ body { background: var(--c-paper); color: var(--c-text); font-family: var(--font
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+}
+
+/* Фон страницы: бумага + техническая сетка из пакета темы (DESIGN_SYSTEM.md, «фон = инфраструктура»).
+   Сетка рисуется CSS, поэтому не грузит картинку и не влияет на LCP. */
+body {
+  background-color: var(--c-paper);
+  background-image:
+    linear-gradient(var(--c-grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--c-grid-line) 1px, transparent 1px);
+  background-size: 88px 88px;
+  background-position: -1px -1px;
+}
+
+/* Мягкое затемнение к краям: текст остаётся читаемым, сетка не «спорит» с содержанием. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background: radial-gradient(120% 90% at 50% 0%, transparent 40%, var(--c-veil) 100%);
+}
+
+/* Контент выше слоя затемнения. */
+body > * { position: relative; z-index: 1; }
+
+@media (max-width: 640px) {
+  body { background-size: 56px 56px; }
 }
