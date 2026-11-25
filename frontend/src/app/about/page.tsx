@@ -51,6 +51,8 @@ export default function AboutPage() {
       />
       <Section
       headingLevel={1}
+          flat
+          backdrop="bgCircuitGold"
       id="about"
       breadcrumbs={[{ label: "Главная", href: "/" }, { label: "Обо мне" }]} title="Обо мне и опыте">
         <div className="grid gap-8 lg:grid-cols-[1.1fr_.9fr]">

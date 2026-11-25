@@ -11,7 +11,8 @@ export function Section({
   subtitle,
   children,
   surface = false,
-  backdrop,
+  backdrop = "bgCircuitBlue",
+  flat = false,
   breadcrumbs,
   headingLevel = 2,
 }: {
@@ -20,8 +21,11 @@ export function Section({
   subtitle?: string;
   children: React.ReactNode;
   surface?: boolean;
-  /** Декоративный фон из реестра (docs/manifests/ui/images.md); самый «дешёвый» способ оживить секцию. */
+  /** Декоративный фон из реестра (docs/manifests/ui/images.md). По умолчанию включён:
+   *  иначе внутренние страницы выглядят глухой тёмной плитой. */
   backdrop?: DecorativeBackgroundName;
+  /** Первая секция страницы: верхний отступ срезан, чтобы под шапкой не висела пустая полоса. */
+  flat?: boolean;
   /** Крошки для страниц второго уровня и глубже (манифест breadcrumbs.md). */
   breadcrumbs?: Crumb[];
   /**
@@ -40,11 +44,12 @@ export function Section({
       className={
         "relative overflow-hidden " + (surface ? "bg-[color:var(--c-surface)]" : "bg-transparent")
       }
-      style={{ paddingBlock: "var(--space-section)" }}
+      style={flat ? { paddingTop: "calc(var(--space-section) / 3)", paddingBottom: "var(--space-section)" } : { paddingBlock: "var(--space-section)" }}
     >
-      {backdrop ? (
-        <SectionBackdrop name={backdrop} className="bg-[length:min(900px,120%)] opacity-[0.18]" />
-      ) : null}
+      <SectionBackdrop
+        name={backdrop}
+        className="bg-[length:min(900px,110%)] bg-[position:right_top] opacity-[0.16]"
+      />
       <div className="relative mx-auto w-full max-w-[1200px] px-4 sm:px-6 lg:px-8">
         {breadcrumbs ? <Breadcrumbs items={breadcrumbs} /> : null}
         {title ? (

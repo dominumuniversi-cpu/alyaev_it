@@ -53,6 +53,8 @@ export default async function SolutionsPage() {
   return (
     <Section
       headingLevel={1}
+          flat
+          backdrop="bgCircuitBlue"
       id="solutions"
       breadcrumbs={[{ label: "Главная", href: "/" }, { label: "Готовые решения" }]}
       title="Готовые решения"

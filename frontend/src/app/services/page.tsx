@@ -35,6 +35,8 @@ export default async function ServicesPage() {
   return (
     <Section
       headingLevel={1}
+          flat
+          backdrop="bgCircuitBlue"
       id="services"
       breadcrumbs={[{ label: "Главная", href: "/" }, { label: "Услуги" }]}
       title="Услуги и цены"

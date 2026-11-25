@@ -45,6 +45,8 @@ export default async function DiagnosticsPage() {
     <>
       <Section
         headingLevel={1}
+          flat
+          backdrop="bgEarthNetwork"
         id="diagnostics"
         breadcrumbs={[{ label: "Главная", href: "/" }, { label: "Разбор процесса" }]}
         title="Бесплатный разбор бизнес-процесса"

@@ -32,6 +32,8 @@ export default async function ContactsPage() {
   return (
     <Section
       headingLevel={1}
+          flat
+          backdrop="bgWave"
       id="contacts"
       breadcrumbs={[{ label: "Главная", href: "/" }, { label: "Контакты" }]} title="Контакты" subtitle="Опишите задачу — отвечу и предложу вариант решения.">
       <div className="grid gap-8 lg:grid-cols-[1fr_1.2fr]">
