@@ -76,7 +76,7 @@ export default async function SolutionsPage() {
           {items.map((item) => (
             <article
               key={item.slug}
-              className="flex flex-col rounded-2xl border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-6 transition-colors hover:border-[color:var(--c-lime-ink)]"
+              className="flex flex-col rounded-[var(--radius-lg)] border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-6 transition-colors hover:border-[color:var(--c-lime-ink)]"
             >
               <div className="mb-3 flex flex-wrap gap-2">
                 <Badge variant="tech">{KIND_LABELS[item.kind] ?? item.kind}</Badge>

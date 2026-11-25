@@ -55,7 +55,7 @@ export default async function DiagnosticsPage() {
       >
         <div className="grid gap-4 sm:grid-cols-2">
           {OUTCOMES.map((item) => (
-            <div key={item.title} className="rounded-2xl border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-5">
+            <div key={item.title} className="rounded-[var(--radius-lg)] border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-5">
               <h2 className="mb-2 text-base font-semibold">{item.title}</h2>
               <p className="text-sm leading-relaxed text-[color:var(--c-muted)]">{item.text}</p>
             </div>
@@ -66,7 +66,7 @@ export default async function DiagnosticsPage() {
       <Section id="diagnostics-steps" title="Как это происходит" surface>
         <ol className="grid gap-4 sm:grid-cols-3">
           {STEPS.map((step, index) => (
-            <li key={step.title} className="rounded-2xl border border-[color:var(--c-line)] bg-[color:var(--c-paper)] p-5">
+            <li key={step.title} className="rounded-[var(--radius-lg)] border border-[color:var(--c-line)] bg-[color:var(--c-paper)] p-5">
               <Badge variant="tech">Шаг {index + 1}</Badge>
               <h3 className="mb-2 mt-3 text-base font-semibold">{step.title}</h3>
               <p className="text-sm leading-relaxed text-[color:var(--c-muted)]">{step.text}</p>

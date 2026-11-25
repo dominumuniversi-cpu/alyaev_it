@@ -98,7 +98,7 @@ export default async function PortfolioItemPage({ params }: { params: Promise<Pa
           </>
         ) : null}
       </div>
-      <div className="mt-10 rounded-2xl border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-6">
+      <div className="mt-10 rounded-[var(--radius-lg)] border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-6">
         <p className="text-sm text-[color:var(--c-muted)]">
           Похожая задача в вашем бизнесе? Обсудим, что именно стоит автоматизировать.
         </p>

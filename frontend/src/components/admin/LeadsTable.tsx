@@ -140,14 +140,14 @@ export function LeadsTable() {
       ) : null}
 
       {state === "ready" && leads.length === 0 ? (
-        <p className="rounded-xl border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-6 text-sm text-[color:var(--c-muted)]">
+        <p className="rounded-[var(--radius-md)] border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-6 text-sm text-[color:var(--c-muted)]">
           Заявок пока нет. Они появятся здесь, как только кто-то отправит форму на сайте.
         </p>
       ) : null}
 
       <div className="space-y-4">
         {leads.map((lead) => (
-          <article key={lead.public_id} className="rounded-xl border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-5">
+          <article key={lead.public_id} className="rounded-[var(--radius-md)] border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-5">
             <div className="mb-3 flex flex-wrap items-center gap-3">
               <h2 className="text-base font-semibold">{lead.name}</h2>
               <Badge variant="status">{STATUS_LABELS[lead.status] ?? lead.status}</Badge>

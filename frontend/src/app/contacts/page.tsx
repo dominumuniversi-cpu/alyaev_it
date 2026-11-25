@@ -62,7 +62,7 @@ export default async function ContactsPage() {
             Данные из формы использую только чтобы ответить на вашу заявку.
           </p>
         </div>
-        <div id="lead" className="rounded-2xl border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-6 sm:p-8">
+        <div id="lead" className="rounded-[var(--radius-lg)] border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-6 sm:p-8">
           <h2 className="mb-6 text-base font-semibold">Оставить заявку</h2>
           <LeadForm taskOptions={taskOptions} serviceTitles={serviceTitles} />
         </div>

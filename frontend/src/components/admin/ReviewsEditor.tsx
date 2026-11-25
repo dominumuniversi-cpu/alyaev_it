@@ -176,7 +176,7 @@ export function ReviewsEditor() {
 
   return (
     <div className="space-y-5">
-      <div className="rounded-xl border border-[color:var(--c-warning)]/40 bg-[color:var(--c-warning)]/5 p-3 text-sm text-[color:var(--c-muted)]">
+      <div className="rounded-[var(--radius-md)] border border-[color:var(--c-warning)]/40 bg-[color:var(--c-warning)]/5 p-3 text-sm text-[color:var(--c-muted)]">
         Отзыв попадает на сайт только при включённом согласии автора. Если согласие снять,
         отзыв автоматически снимается с публикации.
       </div>
@@ -189,7 +189,7 @@ export function ReviewsEditor() {
       </div>
 
       {formOpen ? (
-        <section className="rounded-2xl border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-5 space-y-4">
+        <section className="rounded-[var(--radius-lg)] border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-5 space-y-4">
           <h2 className="text-lg font-semibold">{editingId ? "Редактирование отзыва" : "Новый отзыв"}</h2>
           <TextField
             id="author_name"
@@ -219,7 +219,7 @@ export function ReviewsEditor() {
             value={draft.project_title}
             onChange={(e) => setDraft({ ...draft, project_title: e.target.value })}
           />
-          <div className="rounded-xl border border-[color:var(--c-line)] p-3 space-y-3">
+          <div className="rounded-[var(--radius-md)] border border-[color:var(--c-line)] p-3 space-y-3">
             <label className="flex items-center gap-2 text-sm">
               <input
                 type="checkbox"
@@ -280,7 +280,7 @@ export function ReviewsEditor() {
       ) : null}
 
       {state === "ready" && items.length > 0 ? (
-        <div className="overflow-x-auto rounded-2xl border border-[color:var(--c-line)]">
+        <div className="overflow-x-auto rounded-[var(--radius-lg)] border border-[color:var(--c-line)]">
           <table className="w-full text-sm">
             <thead className="bg-[color:var(--c-paper)] text-left text-[color:var(--c-muted)]">
               <tr>

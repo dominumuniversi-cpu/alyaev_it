@@ -78,11 +78,11 @@ function CategoryPage({ category }: { category: CategoryFull }) {
         title={category.title}
         subtitle={category.short_description}
       >
-        <div className="grid gap-4 md:grid-cols-2">
+        <div className="grid gap-px border border-[color:var(--c-line)] bg-[color:var(--c-line)] md:grid-cols-2">
           {category.services.map((service) => (
             <article
               key={service.slug}
-              className="flex flex-col rounded-xl border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-6"
+              className="flex flex-col bg-[color:var(--c-paper-2)] p-6"
             >
               <div className="mb-2 flex items-start justify-between gap-3">
                 <h3 className="text-lg font-semibold">{service.title}</h3>
@@ -176,7 +176,7 @@ export default async function ServicePage({ params }: Params) {
             {service.examples.map((example) => (
               <li
                 key={example}
-                className="rounded-xl border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-4 text-sm text-[color:var(--c-muted)]"
+                className="rounded-[var(--radius-md)] border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-4 text-sm text-[color:var(--c-muted)]"
               >
                 <span aria-hidden="true" className="mr-2 text-[color:var(--c-terra-ink)]">→</span>
                 {example}
@@ -187,19 +187,19 @@ export default async function ServicePage({ params }: Params) {
       ) : null}
 
       <div className="grid gap-6 lg:grid-cols-2">
-        <div className="rounded-2xl border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-6">
+        <div className="rounded-[var(--radius-lg)] border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-6">
           <h2 className="mb-3 text-base font-semibold">Что входит в стоимость</h2>
           <List items={service.included} tone="plus" />
         </div>
-        <div className="rounded-2xl border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-6">
+        <div className="rounded-[var(--radius-lg)] border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-6">
           <h2 className="mb-3 text-base font-semibold">Что не входит</h2>
           <List items={service.excluded} tone="minus" />
         </div>
-        <div className="rounded-2xl border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-6">
+        <div className="rounded-[var(--radius-lg)] border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-6">
           <h2 className="mb-3 text-base font-semibold">Что нужно от вас</h2>
           <List items={service.client_data} tone="plus" />
         </div>
-        <div className="rounded-2xl border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-6">
+        <div className="rounded-[var(--radius-lg)] border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-6">
           <h2 className="mb-3 text-base font-semibold">Возможные дополнительные расходы</h2>
           <List items={service.extra_costs} tone="minus" />
         </div>
@@ -216,7 +216,7 @@ export default async function ServicePage({ params }: Params) {
             {service.faq.map((item) => (
               <details
                 key={item.q}
-                className="group rounded-xl border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-4"
+                className="group rounded-[var(--radius-md)] border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-4"
               >
                 <summary className="cursor-pointer list-none text-sm font-medium marker:hidden">
                   <span className="mr-2 text-[color:var(--c-lime-ink)] group-open:hidden" aria-hidden="true">+</span>
@@ -238,7 +238,7 @@ export default async function ServicePage({ params }: Params) {
               <li key={item.slug}>
                 <Link
                   href={"/solutions/" + item.slug + "/"}
-                  className="flex h-full flex-col rounded-xl border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-4 transition-colors hover:border-[color:var(--c-lime-ink)]"
+                  className="flex h-full flex-col rounded-[var(--radius-md)] border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-4 transition-colors hover:border-[color:var(--c-lime-ink)]"
                 >
                   <span className="text-sm font-medium">{item.title}</span>
                   <span className="mt-1 text-xs leading-relaxed text-[color:var(--c-muted)]">{item.summary}</span>
@@ -250,7 +250,7 @@ export default async function ServicePage({ params }: Params) {
         </div>
       ) : null}
 
-      <div className="mt-8 rounded-2xl border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-6">
+      <div className="mt-8 rounded-[var(--radius-lg)] border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-6">
         <p className="text-sm text-[color:var(--c-muted)]">
           Указанная цена является стартовой. Итоговая стоимость определяется после анализа задачи и согласования технического задания.
         </p>

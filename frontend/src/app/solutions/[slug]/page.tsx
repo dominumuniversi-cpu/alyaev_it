@@ -148,7 +148,7 @@ export default async function SolutionPage({ params }: { params: Promise<Params>
         </p>
       ) : null}
 
-      <p className="mb-6 rounded-xl border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-4 text-sm text-[color:var(--c-muted)]">
+      <p className="mb-6 rounded-[var(--radius-md)] border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-4 text-sm text-[color:var(--c-muted)]">
         Указанные цены являются стартовыми. Итоговая стоимость внедрения определяется
         после анализа задачи. Расходы на сервер, токены моделей и внешние сервисы
         не входят в стоимость внедрения.

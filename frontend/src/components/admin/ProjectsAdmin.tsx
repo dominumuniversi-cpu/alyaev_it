@@ -124,7 +124,7 @@ function ProjectChat({ projectId }: { projectId: number }) {
       ) : (
         <ul className="space-y-2">
           {items.map((m) => (
-            <li key={m.id} className="rounded-xl border border-[color:var(--c-line)] p-3">
+            <li key={m.id} className="rounded-[var(--radius-md)] border border-[color:var(--c-line)] p-3">
               <p className="text-xs text-[color:var(--c-muted)]">
                 {m.author_role === "client" ? "Клиент" : "Студия"}
               </p>
@@ -316,12 +316,12 @@ export function ProjectsAdmin() {
   return (
     <div className="space-y-8">
       {notice ? (
-        <p role="status" className="rounded-xl border border-[color:var(--c-line)] bg-[color:var(--c-paper)] px-4 py-3 text-sm">
+        <p role="status" className="rounded-[var(--radius-md)] border border-[color:var(--c-line)] bg-[color:var(--c-paper)] px-4 py-3 text-sm">
           {notice}
         </p>
       ) : null}
 
-      <form onSubmit={onCreate} className="rounded-2xl border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-6">
+      <form onSubmit={onCreate} className="rounded-[var(--radius-lg)] border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-6">
         <h2 className="mb-4 text-lg font-semibold">Новый проект</h2>
         {clients.length === 0 ? (
           <p className="text-sm text-[color:var(--c-muted)]">
@@ -347,13 +347,13 @@ export function ProjectsAdmin() {
       </form>
 
       {projects.length === 0 ? (
-        <p className="rounded-2xl border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-8 text-center text-[color:var(--c-muted)]">
+        <p className="rounded-[var(--radius-lg)] border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-8 text-center text-[color:var(--c-muted)]">
           Проектов пока нет.
         </p>
       ) : (
         <ul className="space-y-4">
           {projects.map((p) => (
-            <li key={p.id} className="rounded-2xl border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-5">
+            <li key={p.id} className="rounded-[var(--radius-lg)] border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-5">
               <div className="flex flex-wrap items-start justify-between gap-4">
                 <div>
                   <h3 className="text-base font-semibold">{p.title}</h3>

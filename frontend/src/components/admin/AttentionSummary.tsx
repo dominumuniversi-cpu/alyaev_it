@@ -42,7 +42,7 @@ export function AttentionSummary() {
   }
 
   return (
-    <section className="mb-6 rounded-2xl border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-5">
+    <section className="mb-6 rounded-[var(--radius-lg)] border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-5">
       <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-[color:var(--c-muted)]">
         Требует внимания
       </h2>

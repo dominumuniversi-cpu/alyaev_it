@@ -86,7 +86,7 @@ export function AuditLog() {
   }
   if (state === "error") {
     return (
-      <div className="rounded-2xl border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-6">
+      <div className="rounded-[var(--radius-lg)] border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-6">
         <p className="mb-4 text-sm">Не удалось загрузить журнал.</p>
         <Button onClick={() => void load()}>Повторить</Button>
       </div>
@@ -110,7 +110,7 @@ export function AuditLog() {
       </div>
 
       {items.length === 0 ? (
-        <div className="rounded-2xl border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-6">
+        <div className="rounded-[var(--radius-lg)] border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-6">
           <p className="text-sm text-[color:var(--c-muted)]">
             Изменений пока не было. Здесь появятся создание и правка услуг, статей,
             кейсов, отзывов, SEO и семантики — с указанием, кто их сделал.

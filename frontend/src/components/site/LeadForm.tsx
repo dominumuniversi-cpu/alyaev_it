@@ -160,7 +160,7 @@ export function LeadForm({
 
   if (state === "sent") {
     return (
-      <div role="status" className="rounded-2xl border border-[rgba(63,191,127,.4)] bg-[rgba(63,191,127,.08)] p-8">
+      <div role="status" className="rounded-[var(--radius-lg)] border border-[rgba(63,191,127,.4)] bg-[rgba(63,191,127,.08)] p-8">
         <p className="text-base font-semibold text-[color:var(--c-success)]">Заявка отправлена</p>
         <p className="mt-2 text-sm text-[color:var(--c-muted)]">
           Спасибо! Свяжусь с вами, чтобы обсудить задачу и предложить решение.
@@ -231,7 +231,7 @@ export function LeadForm({
       />
 
       {/* Бриф по ТЗ 14: помогает ответить подготовленным. Ни одно поле не обязательно. */}
-      <details className="rounded-xl border border-[color:var(--c-line)] p-4">
+      <details className="rounded-[var(--radius-md)] border border-[color:var(--c-line)] p-4">
         <summary className="cursor-pointer text-sm font-medium">
           Уточнить детали (необязательно) — ответ будет полезнее
         </summary>

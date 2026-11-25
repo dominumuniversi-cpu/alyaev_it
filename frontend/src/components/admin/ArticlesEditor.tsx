@@ -181,7 +181,7 @@ export function ArticlesEditor() {
       </div>
 
       {formOpen ? (
-        <section className="rounded-2xl border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-5 space-y-4">
+        <section className="rounded-[var(--radius-lg)] border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-5 space-y-4">
           <h2 className="text-lg font-semibold">{editingId ? "Редактирование статьи" : "Новая статья"}</h2>
           <TextField
             id="slug"
@@ -255,7 +255,7 @@ export function ArticlesEditor() {
       ) : null}
 
       {state === "ready" && items.length > 0 ? (
-        <div className="overflow-x-auto rounded-2xl border border-[color:var(--c-line)]">
+        <div className="overflow-x-auto rounded-[var(--radius-lg)] border border-[color:var(--c-line)]">
           <table className="w-full text-sm">
             <thead className="bg-[color:var(--c-paper)] text-left text-[color:var(--c-muted)]">
               <tr>

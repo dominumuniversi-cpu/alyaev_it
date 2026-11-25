@@ -30,7 +30,7 @@ export function ChannelStatus() {
   return (
     <div
       role="status"
-      className="mb-6 rounded-xl border border-[color:var(--c-danger)] bg-[color:var(--c-paper-2)] p-4 text-sm"
+      className="mb-6 rounded-[var(--radius-md)] border border-[color:var(--c-danger)] bg-[color:var(--c-paper-2)] p-4 text-sm"
     >
       <p className="font-semibold text-[color:var(--c-danger)]">Уведомления в Telegram не настроены</p>
       <p className="mt-1 text-[color:var(--c-muted)]">

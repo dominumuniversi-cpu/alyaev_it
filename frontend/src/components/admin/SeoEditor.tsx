@@ -154,7 +154,7 @@ export function SeoEditor() {
 
   return (
     <div className="space-y-6">
-      <section className="rounded-2xl border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-5 space-y-4">
+      <section className="rounded-[var(--radius-lg)] border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-5 space-y-4">
         <div className="flex flex-wrap items-end gap-3">
           <div className="min-w-[240px] flex-1">
             <label htmlFor="page-path" className="mb-1.5 block text-sm font-medium">Страница</label>
@@ -189,7 +189,7 @@ export function SeoEditor() {
 
       {state === "ready" ? (
         <>
-          <section className="rounded-2xl border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-5 space-y-4">
+          <section className="rounded-[var(--radius-lg)] border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-5 space-y-4">
             <TextField
               id="seo-title"
               label="SEO Title"
@@ -236,7 +236,7 @@ export function SeoEditor() {
             />
           </section>
 
-          <section className="rounded-2xl border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-5 space-y-3">
+          <section className="rounded-[var(--radius-lg)] border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-5 space-y-3">
             <h2 className="text-lg font-semibold">Индексация</h2>
             {forced ? (
               <p className="text-sm text-[color:var(--c-muted)]">
@@ -265,9 +265,9 @@ export function SeoEditor() {
             </label>
           </section>
 
-          <section className="rounded-2xl border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-5 space-y-3">
+          <section className="rounded-[var(--radius-lg)] border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-5 space-y-3">
             <h2 className="text-lg font-semibold">Превью в поиске</h2>
-            <div className="rounded-xl on-dark:bg-[color:var(--c-ink-2)] bg-[color:var(--c-paper-2)] p-4">
+            <div className="rounded-[var(--radius-md)] on-dark:bg-[color:var(--c-ink-2)] bg-[color:var(--c-paper-2)] p-4">
               <p className="text-[13px] text-[color:var(--c-terra-ink)]">{values.title || "Заголовок страницы"}</p>
               <p className="text-[12px] text-[color:var(--c-success)]">alyaev.ru{path}</p>
               <p className="mt-1 text-[13px] text-[color:var(--c-muted)]">
@@ -277,7 +277,7 @@ export function SeoEditor() {
           </section>
 
           {warnings.length > 0 ? (
-            <section className="rounded-2xl border border-[color:var(--c-warning)]/40 bg-[color:var(--c-warning)]/5 p-4">
+            <section className="rounded-[var(--radius-lg)] border border-[color:var(--c-warning)]/40 bg-[color:var(--c-warning)]/5 p-4">
               <h2 className="mb-2 text-sm font-semibold text-[color:var(--c-warning)]">Предупреждения</h2>
               <ul className="list-disc space-y-1 pl-5 text-sm text-[color:var(--c-muted)]">
                 {warnings.map((w) => <li key={w}>{w}</li>)}

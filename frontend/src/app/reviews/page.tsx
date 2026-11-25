@@ -35,7 +35,7 @@ export default async function ReviewsPage() {
         {reviews.map((review) => (
           <figure
             key={review.author_name + review.text.slice(0, 20)}
-            className="rounded-xl border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-6"
+            className="rounded-[var(--radius-md)] border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-6"
           >
             <blockquote className="text-base leading-relaxed text-[color:var(--c-ink)]">
               {review.text}

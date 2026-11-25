@@ -44,7 +44,7 @@ export default async function Page() {
       ) : (
         <div className="grid gap-5 md:grid-cols-2">
           {articles.map((article) => (
-            <article key={article.slug} className="rounded-2xl border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-6">
+            <article key={article.slug} className="rounded-[var(--radius-lg)] border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-6">
               {article.published_at ? (
                 <time className="text-xs uppercase tracking-wide text-[color:var(--c-muted)]" dateTime={article.published_at}>
                   {formatDate(article.published_at)}

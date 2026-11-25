@@ -91,7 +91,7 @@ export function Calculator({
                   type="button"
                   onClick={() => setServiceSlug(item.slug)}
                   aria-pressed={active}
-                  className={"rounded-xl border p-3 text-left text-sm transition-colors " +
+                  className={"rounded-[var(--radius-md)] border p-3 text-left text-sm transition-colors " +
                     (active
                       ? "border-[color:var(--c-lime-ink)] bg-[rgba(227,188,122,0.08)] text-[color:var(--c-ink)]"
                       : "border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] text-[color:var(--c-muted)] hover:border-[color:var(--c-terra-ink)]")}
@@ -158,7 +158,7 @@ export function Calculator({
 
       {/* Итог */}
       <aside
-        className="h-fit rounded-2xl border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-6 lg:sticky lg:top-24"
+        className="h-fit rounded-[var(--radius-lg)] border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-6 lg:sticky lg:top-24"
         aria-live="polite"
       >
         <p className="text-xs uppercase tracking-[0.12em] text-[color:var(--c-muted)]">Предварительно</p>

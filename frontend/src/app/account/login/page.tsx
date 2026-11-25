@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 export default function ClientLoginPage() {
   return (
     <main className="mx-auto flex min-h-[70vh] w-full max-w-md items-center px-4 py-16">
-      <div className="w-full rounded-2xl border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-8">
+      <div className="w-full rounded-[var(--radius-lg)] border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-8">
         <h1 className="mb-1 text-xl font-semibold">Вход в личный кабинет</h1>
         <p className="mb-6 text-sm text-[color:var(--c-muted)]">
           Здесь ваши проекты, задачи и документы. Доступ выдаёт исполнитель после заказа.

@@ -30,7 +30,7 @@ export function AdminNav({ current }: { current: string }) {
             href={BASE_PATH + s.href}
             aria-current={active ? "page" : undefined}
             className={
-              "rounded-xl border px-4 py-2 text-sm font-medium no-underline transition-colors " +
+              "rounded-[var(--radius-md)] border px-4 py-2 text-sm font-medium no-underline transition-colors " +
               (active
                 ? "border-[color:var(--c-lime-ink)] bg-[color:var(--c-paper)] text-[color:var(--c-lime-ink)]"
                 : "border-[color:var(--c-line)] text-[color:var(--c-muted)] hover:border-[color:var(--c-line-2)] hover:text-[color:var(--c-ink)]")

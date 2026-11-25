@@ -169,7 +169,7 @@ export function AccountShell({ mode, projectId }: { mode: "list" | "detail"; pro
 
   if (state === "unauth") {
     return (
-      <div className="rounded-2xl border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-8">
+      <div className="rounded-[var(--radius-lg)] border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-8">
         <h1 className="mb-2 text-xl font-semibold">Нужен вход</h1>
         <p className="mb-5 text-sm text-[color:var(--c-muted)]">
           Кабинет доступен после входа. Учётную запись выдаёт исполнитель после заказа.
@@ -181,7 +181,7 @@ export function AccountShell({ mode, projectId }: { mode: "list" | "detail"; pro
 
   if (state === "nocabinet") {
     return (
-      <div className="rounded-2xl border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-8">
+      <div className="rounded-[var(--radius-lg)] border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-8">
         <h1 className="mb-2 text-xl font-semibold">Кабинет ещё не заведён</h1>
         <p className="text-sm text-[color:var(--c-muted)]">
           Учётная запись есть, но карточки клиента пока нет. Напишите исполнителю — он откроет доступ.
@@ -264,7 +264,7 @@ function NotificationsBlock() {
   if (items === null) return null;
 
   return (
-    <section className="rounded-2xl border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-6">
+    <section className="rounded-[var(--radius-lg)] border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-6">
       <h2 className="mb-1 text-lg font-semibold">Уведомления</h2>
       <p className="mb-4 text-sm text-[color:var(--c-muted)]">
         {unread > 0 ? "Непрочитанных: " + unread : "Всё прочитано"}
@@ -312,7 +312,7 @@ function NotificationsBlock() {
 function ProjectList({ projects }: { projects: Project[] }) {
   if (projects.length === 0) {
     return (
-      <div className="rounded-2xl border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-8 text-center">
+      <div className="rounded-[var(--radius-lg)] border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-8 text-center">
         <p className="text-[color:var(--c-muted)]">
           Проектов пока нет. Как только работа начнётся, она появится здесь.
         </p>
@@ -325,7 +325,7 @@ function ProjectList({ projects }: { projects: Project[] }) {
         <li key={p.id}>
           <a
             href={BASE_PATH + "/account/projects/" + p.id}
-            className="block h-full rounded-2xl border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-6 transition-colors hover:border-[color:var(--c-lime)]/50"
+            className="block h-full rounded-[var(--radius-lg)] border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-6 transition-colors hover:border-[color:var(--c-lime)]/50"
           >
             <div className="mb-3 flex items-start justify-between gap-3">
               <h2 className="text-lg font-semibold">{p.title}</h2>
@@ -354,7 +354,7 @@ function ProjectList({ projects }: { projects: Project[] }) {
 function ProjectCard({ project }: { project: ProjectDetail }) {
   return (
     <div className="space-y-6">
-      <section className="rounded-2xl border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-6">
+      <section className="rounded-[var(--radius-lg)] border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-6">
         <div className="mb-4 flex flex-wrap items-center gap-3">
           <h2 className="text-xl font-semibold">{project.title}</h2>
           <span className={"rounded-full border px-3 py-1 text-xs " + statusClass(project.status)}>
@@ -382,7 +382,7 @@ function ProjectCard({ project }: { project: ProjectDetail }) {
         </dl>
       </section>
 
-      <section className="rounded-2xl border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-6">
+      <section className="rounded-[var(--radius-lg)] border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-6">
         <h3 className="mb-4 text-lg font-semibold">Задачи</h3>
         {project.tasks.length === 0 ? (
           <p className="text-sm text-[color:var(--c-muted)]">Задач пока нет.</p>
@@ -406,7 +406,7 @@ function ProjectCard({ project }: { project: ProjectDetail }) {
         )}
       </section>
 
-      <section className="rounded-2xl border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-6">
+      <section className="rounded-[var(--radius-lg)] border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-6">
         <h3 className="mb-4 text-lg font-semibold">История</h3>
         {project.history.length === 0 ? (
           <p className="text-sm text-[color:var(--c-muted)]">Изменений пока не было.</p>
@@ -480,7 +480,7 @@ function DocumentsBlock({ projectId }: { projectId: number }) {
   }, [reload]);
 
   return (
-    <section className="rounded-2xl border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-6">
+    <section className="rounded-[var(--radius-lg)] border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-6">
       <h3 className="mb-4 text-lg font-semibold">Документы</h3>
       {failed ? (
         <p className="text-sm text-[color:var(--c-muted)]">Не удалось загрузить документы.</p>
@@ -590,7 +590,7 @@ function MessagesBlock({ projectId }: { projectId: number }) {
   }
 
   return (
-    <section className="rounded-2xl border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-6">
+    <section className="rounded-[var(--radius-lg)] border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-6">
       <h3 className="mb-4 text-lg font-semibold">Переписка</h3>
       {items === null ? (
         <p className="text-sm text-[color:var(--c-muted)]">Загрузка…</p>
@@ -605,7 +605,7 @@ function MessagesBlock({ projectId }: { projectId: number }) {
             >
               <div
                 className={
-                  "max-w-[80%] rounded-xl px-3 py-2 text-sm " +
+                  "max-w-[80%] rounded-[var(--radius-md)] px-3 py-2 text-sm " +
                   (m.author_role === "client"
                     ? "bg-[color:var(--c-paper)] border border-[color:var(--c-lime-ink)]"
                     : "bg-[color:var(--c-paper)] border border-[color:var(--c-line)]")

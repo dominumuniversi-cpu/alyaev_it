@@ -143,12 +143,12 @@ export function ClientsAdmin() {
       {creds ? <CredentialsCard creds={creds} onClose={() => setCreds(null)} /> : null}
 
       {notice ? (
-        <p role="status" className="rounded-xl border border-[color:var(--c-line)] bg-[color:var(--c-paper)] px-4 py-3 text-sm">
+        <p role="status" className="rounded-[var(--radius-md)] border border-[color:var(--c-line)] bg-[color:var(--c-paper)] px-4 py-3 text-sm">
           {notice}
         </p>
       ) : null}
 
-      <form onSubmit={onCreate} className="rounded-2xl border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-6">
+      <form onSubmit={onCreate} className="rounded-[var(--radius-lg)] border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-6">
         <h2 className="mb-4 text-lg font-semibold">Новый клиент</h2>
         <div className="grid gap-4 sm:grid-cols-2">
           <TextField id="display_name" name="display_name" label="Имя или название" required />
@@ -160,11 +160,11 @@ export function ClientsAdmin() {
       </form>
 
       {clients.length === 0 ? (
-        <p className="rounded-2xl border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-8 text-center text-[color:var(--c-muted)]">
+        <p className="rounded-[var(--radius-lg)] border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-8 text-center text-[color:var(--c-muted)]">
           Клиентов пока нет. Создайте первого — затем выдайте ему доступ.
         </p>
       ) : (
-        <div className="overflow-x-auto rounded-2xl border border-[color:var(--c-line)]">
+        <div className="overflow-x-auto rounded-[var(--radius-lg)] border border-[color:var(--c-line)]">
           <table className="w-full min-w-[720px] text-sm">
             <thead className="bg-[color:var(--c-paper)] text-left">
               <tr>
@@ -215,7 +215,7 @@ export function ClientsAdmin() {
 /** Карточка с выданными данными входа. Показывается один раз — потом не восстановить. */
 function CredentialsCard({ creds, onClose }: { creds: Credentials; onClose: () => void }) {
   return (
-    <div className="rounded-2xl border border-[color:var(--c-lime)]/60 bg-[color:var(--c-paper)] p-6">
+    <div className="rounded-[var(--radius-lg)] border border-[color:var(--c-lime)]/60 bg-[color:var(--c-paper)] p-6">
       <h2 className="mb-2 text-lg font-semibold text-[color:var(--c-lime-ink)]">Данные для входа</h2>
       <p className="mb-4 text-sm text-[color:var(--c-muted)]">
         {creds.warning || "Пароль показывается один раз. Передайте его клиенту и закройте это окно."}

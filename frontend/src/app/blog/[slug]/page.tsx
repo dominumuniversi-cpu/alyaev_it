@@ -167,7 +167,7 @@ export default async function ArticlePage({ params }: { params: Promise<Params> 
               <li key={item.slug}>
                 <Link
                   href={"/blog/" + item.slug + "/"}
-                  className="flex h-full flex-col rounded-xl border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-4 transition-colors hover:border-[color:var(--c-lime-ink)]"
+                  className="flex h-full flex-col rounded-[var(--radius-md)] border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-4 transition-colors hover:border-[color:var(--c-lime-ink)]"
                 >
                   <span className="text-sm font-medium">{item.title}</span>
                 </Link>
@@ -185,7 +185,7 @@ export default async function ArticlePage({ params }: { params: Promise<Params> 
               <li key={item.slug}>
                 <Link
                   href={"/services/" + item.slug + "/"}
-                  className="flex h-full flex-col rounded-xl border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-4 transition-colors hover:border-[color:var(--c-lime-ink)]"
+                  className="flex h-full flex-col rounded-[var(--radius-md)] border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-4 transition-colors hover:border-[color:var(--c-lime-ink)]"
                 >
                   <span className="text-sm font-medium">{item.title}</span>
                   <span className="mt-1 text-xs leading-relaxed text-[color:var(--c-muted)]">
@@ -199,7 +199,7 @@ export default async function ArticlePage({ params }: { params: Promise<Params> 
         </div>
       ) : null}
 
-      <div className="mt-10 rounded-2xl border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-6">
+      <div className="mt-10 rounded-[var(--radius-lg)] border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-6">
         <p className="text-sm text-[color:var(--c-muted)]">
           Если в вашем бизнесе есть похожая задача — обсудим, что именно стоит автоматизировать.
         </p>
