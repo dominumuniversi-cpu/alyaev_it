@@ -55,7 +55,7 @@ export default function AboutPage() {
       id="about"
       breadcrumbs={[{ label: "Главная", href: "/" }, { label: "Обо мне" }]} title="Обо мне и опыте">
         <div className="grid gap-10 lg:grid-cols-[minmax(280px,420px)_minmax(0,1fr)] lg:items-start lg:gap-[clamp(32px,5vw,72px)]">
-          <div>
+          <div className="lg:sticky lg:top-[92px]">
             <Image
               src={ownerPortrait.src}
               alt={ownerPortrait.alt}
@@ -65,6 +65,8 @@ export default function AboutPage() {
               priority
               className="h-auto w-full border border-[color:var(--c-border)] object-cover"
             />
+          </div>
+          <div>
             <p className="text-base leading-relaxed text-[color:var(--c-text)]">
               В IT с 2007 года. Работал с корпоративными информационными системами, IT-инфраструктурой,
               технической поддержкой, автоматизацией процессов и интеграцией программных решений.
@@ -82,8 +84,7 @@ export default function AboutPage() {
             <div className="mt-8">
               <ButtonLink href="/contacts/#lead">Обсудить задачу</ButtonLink>
             </div>
-          </div>
-          <aside className="border border-[color:var(--c-border)] bg-[color:var(--c-paper-2)] p-6">
+            <aside className="mt-10 border-t border-[color:var(--c-line)] pt-6">
             <h2 className="mb-4 font-[family-name:var(--font-display)] text-base font-bold uppercase tracking-[-0.01em] text-[color:var(--c-text)]">Чем занимаюсь</h2>
             <ul className="space-y-2 text-sm text-[color:var(--c-text-muted)]">
               {[
@@ -100,7 +101,8 @@ export default function AboutPage() {
                 </li>
               ))}
             </ul>
-          </aside>
+            </aside>
+          </div>
         </div>
       </Section>
 

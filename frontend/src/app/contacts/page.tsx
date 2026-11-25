@@ -35,8 +35,8 @@ export default async function ContactsPage() {
           flat
       id="contacts"
       breadcrumbs={[{ label: "Главная", href: "/" }, { label: "Контакты" }]} title="Контакты" subtitle="Опишите задачу — отвечу и предложу вариант решения.">
-      <div className="grid gap-8 lg:grid-cols-[1fr_1.2fr]">
-        <div className="rounded-2xl border border-[color:var(--c-border)] bg-[color:var(--c-surface)] p-6">
+      <div className="grid gap-px border border-[color:var(--c-line)] bg-[color:var(--c-line)] lg:grid-cols-[1fr_1.2fr]">
+        <div className="bg-[color:var(--c-paper-2)] p-6 sm:p-8">
           <h2 className="mb-3 text-base font-semibold">Как связаться напрямую</h2>
           {contacts.telegram ? (
             <div className="mt-3">
