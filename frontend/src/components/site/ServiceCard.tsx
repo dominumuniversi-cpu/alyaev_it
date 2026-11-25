@@ -6,7 +6,8 @@
 
 import Link from "next/link";
 
-import { PersonalServiceVisual, visualTypeFor } from "@/components/site/PersonalServiceVisual";
+import { KitServiceVisual, type KitServiceType } from "@/components/site/KitServiceVisual";
+import { visualTypeFor } from "@/components/site/PersonalServiceVisual";
 import { Badge } from "@/components/ui/Badge";
 import { formatPrice, type ServiceCard as ServiceCardData } from "@/lib/api";
 
@@ -24,7 +25,9 @@ export function ServiceCard({ service }: { service: ServiceCardData }) {
         <span aria-hidden="true" className="h-1.5 w-1.5 bg-[color:var(--c-terracotta)]" />
       </div>
       <div className="flex items-center justify-center border-b border-[color:var(--c-line)] px-4 py-5">
-        <PersonalServiceVisual type={visualType} className="h-[150px] w-auto" />
+        <div className="h-[150px] w-full max-w-[210px]">
+            <KitServiceVisual type={visualType as KitServiceType} />
+          </div>
       </div>
       <div className="flex flex-1 flex-col p-5">
         <h3 className="mb-2 font-[family-name:var(--font-display)] text-lg font-bold uppercase leading-tight tracking-[-0.01em] text-[color:var(--c-ink)]">
