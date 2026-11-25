@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { headers } from 'next/headers';
 import './globals.css';
 
 import { SiteChrome } from '@/components/layout/SiteChrome';
@@ -21,10 +22,13 @@ export const metadata: Metadata = {
   },
 };
 
-/** Корневой layout: общая оболочка всех страниц. */
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+/** Корневой layout: общая оболочка всех страниц.
+ *  Тема приходит заголовком x-theme из middleware (по cookie) — класс ставится на <html>
+ *  на сервере, поэтому страница сразу отдаётся в выбранной теме, без вспышки. */
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const theme = (await headers()).get('x-theme') === 'dark' ? 'dark' : 'light';
   return (
-    <html lang={SITE_LANG}>
+    <html lang={SITE_LANG} className={theme}>
       <body>
         <SiteChrome>{children}</SiteChrome>
         <Analytics />

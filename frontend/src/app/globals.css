@@ -2,28 +2,39 @@
 @tailwind components;
 @tailwind utilities;
 
-/* PERSONAL Design System v2.0 — единственный источник цветов и шрифтов.
-   Манифест: docs/manifests/ui/tokens.md. Значения — из пакета темы (DESIGN_SYSTEM.md).
-   Правило: компоненты НЕ содержат сырых HEX, только эти переменные. */
+/* PERSONAL v2.0 — единственный источник цветов и шрифтов. Манифест: docs/manifests/ui/tokens.md.
+   Две темы: светлая (по умолчанию, как в пакете темы) и тёмная.
+   Тёмная тема сохраняет ПАЛИТРУ первой версии сайта (#05070D, поверхность #0B1220, янтарь #E3BC7A)
+   и меняет только поверхности/текст под сегодняшнюю композицию. Переключение — класс на <html>.
+   Компоненты не содержат сырых HEX: только эти переменные. */
+
 :root {
-  /* Основная палитра */
+  /* Бумага и графит */
   --c-paper: #EAE7DF;
   --c-paper-2: #F3F0E8;
   --c-ink: #242522;
   --c-ink-2: #343631;
-  --c-muted: #77786F;
+  --c-muted: #6E6F66;
   --c-line: #D3CFC4;
   --c-line-2: #B9B3A4;
+
+  /* Акценты: лайм для плашек, «чернильный лайм» для текста на бумаге (контраст ≥ 4,5:1) */
   --c-lime: #B9E56B;
+  --c-lime-ink: #2F4A12;
   --c-terracotta: #D97859;
-  /* Редкий технический акцент из пакета (не фон секции) */
+  --c-terra-ink: #A34A2C;
   --c-blue: #6E9DA0;
+
+  /* Служебные */
+  --c-success: #3F7F4E;
+  --c-warning: #B07A1E;
+  --c-danger: #B4453A;
 
   /* Легаси-алиасы: старые компоненты продолжают работать, новых HEX не появляется */
   --c-bg: var(--c-paper);
   --c-surface: var(--c-paper-2);
-  --c-surface-2: var(--c-paper);
   --c-surface-1: var(--c-paper-2);
+  --c-surface-2: var(--c-paper);
   --c-border: var(--c-line);
   --c-border-strong: var(--c-line-2);
   --c-gold: var(--c-lime);
@@ -31,67 +42,70 @@
   --c-cyan: var(--c-terracotta);
   --c-text: var(--c-ink);
   --c-text-muted: var(--c-muted);
-  --c-success: #3F7F4E;
-  --c-warning: #B07A1E;
-  --c-danger: #B4453A;
 
   /* Типографика */
   --font-sans: Manrope, Inter, system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-display: Manrope, Inter, system-ui, sans-serif;
   --font-mono: 'IBM Plex Mono', 'JetBrains Mono', ui-monospace, monospace;
 
-  /* Ритм: шаг секций из пакета (76–148 px) и поля контейнера (20–76 px) */
-  --space-section: clamp(56px, 7vw, 104px);
-  --shell-gutter: clamp(20px, 5vw, 76px);
-  --shell-max: 1240px;
+  /* Ритм: шаг секций 40–80px (плотнее, чем 76–148 в пакете — просьба владельца «уменьшай»),
+     поля 20–56px, контейнер на всю ширину до 1400px: текст не оставляет пустоту справа */
+  --space-section: clamp(40px, 5.2vw, 80px);
+  --shell-gutter: clamp(20px, 4vw, 56px);
+  --shell-max: 1400px;
   --radius-sm: 8px;
   --radius-md: 18px;
   --radius-lg: 28px;
-  /* Сетка фона и мягкое затемнение — тоже токены, а не HEX по месту */
+  --shadow-paper: 0 24px 80px rgba(20, 21, 18, 0.12);
+
+  /* Сетка фона и мягкое затемнение */
   --c-grid-line: rgba(36, 37, 34, 0.055);
   --c-veil: rgba(234, 231, 223, 0.9);
-  /* Мягкая тень поверхности из пакета; не для AI-лендинговых «свечений» */
-  --shadow-paper: 0 24px 80px rgba(20, 21, 18, 0.12);
 }
 
-/* Тёмные секции и подвал: роли переопределяются, а не задаются в разметке заново */
-.on-dark {
-  --c-bg: var(--c-ink);
-  --c-surface: var(--c-ink-2);
-  --c-surface-2: var(--c-ink);
-  --c-border: rgba(234, 231, 223, 0.2);
-  --c-border-strong: rgba(234, 231, 223, 0.34);
-  --c-line: rgba(234, 231, 223, 0.2);
-  --c-line-2: rgba(234, 231, 223, 0.34);
-  --c-text: var(--c-paper);
-  --c-ink: #EAE7DF;
-  --c-ink-2: #D6D4CB;
-  --c-text-muted: #BDBBB2;
-  color: var(--c-paper);
-  background-color: var(--c-ink);
+/* Тёмная тема: та же композиция, палитра первой версии сайта. */
+html.dark {
+  --c-paper: #05070D;
+  --c-paper-2: #0B1220;
+  --c-ink: #F3F5F8;
+  --c-ink-2: #CFD6E0;
+  --c-muted: #929CAB;
+  --c-line: #1D2A3A;
+  --c-line-2: #2A3B50;
+  --c-lime: #E3BC7A;
+  --c-lime-ink: #1A1206;
+  --c-gold-dim: #B8935A;
+  --c-terracotta: #E3BC7A;
+  --c-terra-ink: #E3BC7A;
+  --c-blue: #22B8E6;
+  --c-cyan: #22B8E6;
+  --c-success: #3FBF7F;
+  --c-warning: #E0A64A;
+  --c-danger: #E5544B;
+  --c-gold: #E3BC7A;
+  --c-grid-line: rgba(243, 245, 248, 0.05);
+  --c-veil: rgba(5, 7, 13, 0.88);
+  --shadow-paper: 0 24px 80px rgba(0, 0, 0, 0.55);
 }
 
+/* Светлая тема явно (если системная тёмная, а выбрана светлая). */
+html.light { color-scheme: light; }
+html.dark { color-scheme: dark; }
 html { color-scheme: light; scroll-behavior: smooth; }
-body { background: var(--c-paper); color: var(--c-text); font-family: var(--font-sans); -webkit-font-smoothing: antialiased; }
 
-:focus-visible { outline: 2px solid var(--c-terracotta); outline-offset: 3px; }
-
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
-}
-
-/* Фон страницы: бумага + техническая сетка из пакета темы (DESIGN_SYSTEM.md, «фон = инфраструктура»).
-   Сетка рисуется CSS, поэтому не грузит картинку и не влияет на LCP. */
 body {
   background-color: var(--c-paper);
+  color: var(--c-text);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
   background-image:
     linear-gradient(var(--c-grid-line) 1px, transparent 1px),
     linear-gradient(90deg, var(--c-grid-line) 1px, transparent 1px);
   background-size: 88px 88px;
   background-position: -1px -1px;
+  transition: background-color 200ms ease, color 200ms ease;
 }
 
-/* Мягкое затемнение к краям: текст остаётся читаемым, сетка не «спорит» с содержанием. */
 body::before {
   content: "";
   position: fixed;
@@ -101,8 +115,40 @@ body::before {
   background: radial-gradient(120% 90% at 50% 0%, transparent 40%, var(--c-veil) 100%);
 }
 
-/* Контент выше слоя затемнения. */
 body > * { position: relative; z-index: 1; }
+
+/* Тёмная секция — теперь роль, а не отдельная палитра: на свету это графит, в тёмной теме — приподнятая панель */
+html:not(.dark) .on-dark {
+  --c-bg: #242522;
+  --c-surface: #343631;
+  --c-surface-1: #343631;
+  --c-surface-2: #242522;
+  --c-border: rgba(234, 231, 223, 0.2);
+  --c-border-strong: rgba(234, 231, 223, 0.34);
+  --c-line: rgba(234, 231, 223, 0.2);
+  --c-line-2: rgba(234, 231, 223, 0.34);
+  --c-text: #EAE7DF;
+  --c-ink: #EAE7DF;
+  --c-ink-2: #D6D4CB;
+  --c-muted: #BDBBB2;
+  --c-text-muted: #BDBBB2;
+  color: var(--c-paper);
+  background-color: #242522;
+}
+
+html.dark .on-dark {
+  --c-bg: #0B1220;
+  --c-surface: #0F1A2B;
+  --c-line: #1D2A3A;
+  --c-line-2: #2A3B50;
+  background-color: #0B1220;
+}
+
+:focus-visible { outline: 2px solid var(--c-terracotta); outline-offset: 3px; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+}
 
 @media (max-width: 640px) {
   body { background-size: 56px 56px; }

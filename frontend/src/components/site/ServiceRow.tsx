@@ -18,7 +18,7 @@ export function ServiceRow({ service, index }: { service: ServiceCardData; index
     <article data-service-card={service.slug} className="group relative grid gap-6 border-b border-[color:var(--c-line)] py-8 lg:grid-cols-[1.05fr_.95fr] lg:items-center lg:gap-12">
       <div>
         <div className="mb-3 flex items-center gap-3">
-          <span className="font-[family-name:var(--font-mono)] text-[11px] uppercase tracking-[0.22em] text-[color:var(--c-terracotta)]">
+          <span className="font-[family-name:var(--font-mono)] text-[11px] uppercase tracking-[0.22em] text-[color:var(--c-terra-ink)]">
             {number}
           </span>
           <span className="font-[family-name:var(--font-mono)] text-[11px] uppercase tracking-[0.18em] text-[color:var(--c-text-muted)]">
@@ -26,7 +26,7 @@ export function ServiceRow({ service, index }: { service: ServiceCardData; index
           </span>
         </div>
         <h3 className="mb-3 font-[family-name:var(--font-display)] text-[clamp(22px,2.6vw,34px)] font-bold uppercase leading-[1.05] tracking-[-0.02em] text-[color:var(--c-ink)]">
-          <Link href={"/services/" + service.slug + "/"} className="no-underline after:absolute after:inset-0 after:content-[''] hover:text-[color:var(--c-terracotta)]">
+          <Link href={"/services/" + service.slug + "/"} className="no-underline after:absolute after:inset-0 after:content-[''] hover:text-[color:var(--c-terra-ink)]">
             {service.title}
           </Link>
         </h3>
@@ -37,7 +37,7 @@ export function ServiceRow({ service, index }: { service: ServiceCardData; index
           <ul className="mb-5 space-y-1.5 text-sm text-[color:var(--c-text-muted)]">
             {service.examples.slice(0, 3).map((example) => (
               <li key={example} className="flex gap-2">
-                <span aria-hidden="true" className="text-[color:var(--c-terracotta)]">
+                <span aria-hidden="true" className="text-[color:var(--c-terra-ink)]">
                   —
                 </span>
                 <span>
@@ -54,7 +54,7 @@ export function ServiceRow({ service, index }: { service: ServiceCardData; index
           {service.duration_text ? <Badge variant="muted">{service.duration_text}</Badge> : null}
         </div>
       </div>
-      <div className="flex items-center justify-center border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] px-4 py-6">
+      <div className="flex items-center justify-center border border-[color:var(--c-line)] on-dark:bg-[color:var(--c-ink-2)] bg-[color:var(--c-paper-2)] px-4 py-6">
         <PersonalServiceVisual type={visualType} className="h-[190px] w-auto" />
       </div>
     </article>

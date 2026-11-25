@@ -18,7 +18,7 @@ export function FeatureCard({
   tone?: "gold" | "cyan";
 }) {
   return (
-    <div className="h-full border-t-2 border-[color:var(--c-ink)] bg-[color:var(--c-paper-2)] p-6">
+    <div className="h-full border-t-2 border-[color:var(--c-ink)] on-dark:bg-[color:var(--c-ink-2)] bg-[color:var(--c-paper-2)] p-6">
       {marker ? (
         <p
           className={

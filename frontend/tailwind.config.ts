@@ -3,6 +3,7 @@ import type { Config } from 'tailwindcss';
 /** PERSONAL v2.0. Токены соответствуют docs/manifests/ui/tokens.md; сырые HEX в компонентах запрещены.
  *  Сетка и ритм взяты из пакета темы: контейнер 1240px, поля 20–76px, шаг секций 56–104px. */
 const config: Config = {
+  darkMode: 'class',
   content: ['./src/**/*.{ts,tsx}'],
   theme: {
     extend: {

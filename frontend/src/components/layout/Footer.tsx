@@ -30,25 +30,25 @@ export function Footer({
   const email = contacts.email ?? "";
 
   return (
-    <footer className="on-dark border-t border-[color:var(--c-border)] bg-[color:var(--c-ink)] text-[color:var(--c-paper)]">
+    <footer className="border-t border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] text-[color:var(--c-text)]">
       <div className="mx-auto w-full max-w-[var(--shell-max)] px-[var(--shell-gutter)] py-12">
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
           <div>
             <p className="font-[family-name:var(--font-display)] text-lg font-bold">
-              Дмитрий <span className="text-[color:var(--c-gold)]">Аляев</span>
+              Дмитрий <span className="text-[color:var(--c-terra-ink)]">Аляев</span>
             </p>
-            <p className="mt-2 text-sm text-[color:var(--c-text-muted)]">AI & Business Automation</p>
-            <p className="mt-3 max-w-xs text-sm leading-relaxed text-[color:var(--c-text-muted)]">
+            <p className="mt-2 text-sm text-[color:var(--c-muted)]">AI & Business Automation</p>
+            <p className="mt-3 max-w-xs text-sm leading-relaxed text-[color:var(--c-muted)]">
               Автоматизация бизнеса, AI-разработка и интеграция информационных систем.
             </p>
           </div>
 
           <nav aria-label="Разделы сайта">
-            <p className="mb-3 text-xs uppercase tracking-widest text-[color:var(--c-text-muted)]">Разделы</p>
+            <p className="mb-3 text-xs uppercase tracking-widest text-[color:var(--c-muted)]">Разделы</p>
             <ul className="space-y-2 text-sm">
               {SECTIONS.map((item) => (
                 <li key={item.href}>
-                  <Link href={item.href} className="no-underline hover:text-[color:var(--c-gold)]">
+                  <Link href={item.href} className="no-underline hover:text-[color:var(--c-terra-ink)]">
                     {item.label}
                   </Link>
                 </li>
@@ -57,13 +57,13 @@ export function Footer({
           </nav>
 
           <nav aria-label="Услуги">
-            <p className="mb-3 text-xs uppercase tracking-widest text-[color:var(--c-text-muted)]">Услуги</p>
+            <p className="mb-3 text-xs uppercase tracking-widest text-[color:var(--c-muted)]">Услуги</p>
             <ul className="space-y-2 text-sm">
               {services.slice(0, 6).map((service) => (
                 <li key={service.slug}>
                   <Link
                     href={"/services/" + service.slug + "/"}
-                    className="no-underline hover:text-[color:var(--c-gold)]"
+                    className="no-underline hover:text-[color:var(--c-terra-ink)]"
                   >
                     {service.title}
                   </Link>
@@ -73,18 +73,18 @@ export function Footer({
           </nav>
 
           <div>
-            <p className="mb-3 text-xs uppercase tracking-widest text-[color:var(--c-text-muted)]">Документы</p>
+            <p className="mb-3 text-xs uppercase tracking-widest text-[color:var(--c-muted)]">Документы</p>
             <ul className="space-y-2 text-sm">
               {DOCS.map((item) => (
                 <li key={item.href}>
-                  <Link href={item.href} className="no-underline hover:text-[color:var(--c-gold)]">
+                  <Link href={item.href} className="no-underline hover:text-[color:var(--c-terra-ink)]">
                     {item.label}
                   </Link>
                 </li>
               ))}
             </ul>
             {(telegram || email) ? (
-              <ul className="mt-4 space-y-2 text-sm text-[color:var(--c-text-muted)]">
+              <ul className="mt-4 space-y-2 text-sm text-[color:var(--c-muted)]">
                 {telegram ? (
                   <li>
                     Telegram:{" "}
@@ -92,7 +92,7 @@ export function Footer({
                       href={contacts.telegram_url || "https://t.me/" + telegram.replace(/^@/, "")}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-[color:var(--c-gold)] no-underline hover:underline"
+                      className="text-[color:var(--c-terra-ink)] no-underline hover:underline"
                     >
                       {telegram}
                     </a>
@@ -104,9 +104,9 @@ export function Footer({
           </div>
         </div>
 
-        <div className="mt-10 flex flex-col gap-3 border-t border-[color:var(--c-border)] pt-6 text-sm text-[color:var(--c-text-muted)] sm:flex-row sm:items-center sm:justify-between">
+        <div className="mt-10 flex flex-col gap-3 border-t border-[color:var(--c-line)] pt-6 text-sm text-[color:var(--c-muted)] sm:flex-row sm:items-center sm:justify-between">
           <p>© {year} Дмитрий Аляев</p>
-          <Link href="/login/" className="no-underline hover:text-[color:var(--c-gold)]">
+          <Link href="/login/" className="no-underline hover:text-[color:var(--c-terra-ink)]">
             Вход для клиентов
           </Link>
         </div>

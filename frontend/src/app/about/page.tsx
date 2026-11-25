@@ -96,7 +96,7 @@ export default function AboutPage() {
                 "Проектирование решений на базе LLM и AI-агентов",
               ].map((item) => (
                 <li key={item} className="flex gap-2">
-                  <span aria-hidden="true" className="text-[color:var(--c-terracotta)]">—</span>
+                  <span aria-hidden="true" className="text-[color:var(--c-terra-ink)]">—</span>
                   <span>{item}</span>
                 </li>
               ))}

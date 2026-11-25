@@ -1,0 +1,11 @@
+<html><body>
+<p>Переключение темы…</p>
+<script>
+  /* Служебная страница: ставит cookie темы и возвращает на сайт. Нужна для проверки и для ссылок без JS. */
+  var q = new URLSearchParams(location.search);
+  var t = q.get('theme') === 'dark' ? 'dark' : 'light';
+  var back = q.get('to') || '/';
+  document.cookie = 'theme=' + t + '; path=/; max-age=31536000; samesite=lax';
+  location.replace('https://alyaev.ru' + back);
+</script>
+</body></html>

@@ -6,6 +6,8 @@
  */
 
 import type { PortfolioVisual as Visual } from "@/lib/design/portfolio";
+import { imageForPortfolio } from "@/lib/design/images";
+import Image from "next/image";
 
 /** Общая рамка схемы: 320×200, бумажный фон, лёгкая сетка. */
 function Frame({ children }: { children: React.ReactNode }) {
@@ -151,8 +153,10 @@ function GenericScene() {
   );
 }
 
-/** Схема решения по типу проекта. */
-export function PortfolioVisual({ type }: { type: Visual }) {
+/** Схема решения по типу проекта.
+ *  Каждый второй кейс показывает живую картинку из пакета темы (панель управления, рост показателей),
+ *  а не только «кружочки»: владелец просил больше настоящих изображений (26.11.2026). */
+export function PortfolioVisual({ type, index = 0 }: { type: Visual; index?: number }) {
   const scene = (() => {
     switch (type) {
       case "dialog":
@@ -171,5 +175,18 @@ export function PortfolioVisual({ type }: { type: Visual }) {
         return <GenericScene />;
     }
   })();
+  if (index % 2 === 1) {
+    const image = imageForPortfolio(index);
+    return (
+      <Image
+        src={image.src}
+        alt={image.alt}
+        width={image.width}
+        height={image.height}
+        sizes="(max-width: 640px) 100vw, 640px"
+        className="h-auto w-full"
+      />
+    );
+  }
   return <Frame>{scene}</Frame>;
 }

@@ -16,8 +16,8 @@ export function ServiceCard({ service }: { service: ServiceCardData }) {
   return (
     <article
       data-service-card={service.slug}
-      className="group relative flex h-full flex-col border border-[color:var(--c-border)] bg-[color:var(--c-paper-2)] transition-colors duration-150 hover:border-[color:var(--c-ink)]">
-      <div className="flex items-center justify-between border-b border-[color:var(--c-border)] bg-[color:var(--c-paper)] px-4 py-2">
+      className="group relative flex h-full flex-col border border-[color:var(--c-border)] on-dark:bg-[color:var(--c-ink-2)] bg-[color:var(--c-paper-2)] transition-colors duration-150 hover:border-[color:var(--c-ink)]">
+      <div className="flex items-center justify-between border-b border-[color:var(--c-border)] on-dark:bg-[color:var(--c-ink)] bg-[color:var(--c-paper)] px-4 py-2">
         <span className="font-[family-name:var(--font-mono)] text-[10px] uppercase tracking-[0.18em] text-[color:var(--c-text-muted)]">
           {service.category_title ?? "Услуга"}
         </span>
@@ -30,7 +30,7 @@ export function ServiceCard({ service }: { service: ServiceCardData }) {
         <h3 className="mb-2 font-[family-name:var(--font-display)] text-lg font-bold uppercase leading-tight tracking-[-0.01em] text-[color:var(--c-ink)]">
           <Link
             href={"/services/" + service.slug + "/"}
-            className="no-underline after:absolute after:inset-0 after:content-[''] hover:text-[color:var(--c-terracotta)]"
+            className="no-underline after:absolute after:inset-0 after:content-[''] hover:text-[color:var(--c-terra-ink)]"
           >
             {service.title}
           </Link>
@@ -42,7 +42,7 @@ export function ServiceCard({ service }: { service: ServiceCardData }) {
           <ul className="mb-6 space-y-1.5 text-sm text-[color:var(--c-text-muted)]">
             {service.examples.slice(0, 3).map((example) => (
               <li key={example} className="flex gap-2">
-                <span aria-hidden="true" className="text-[color:var(--c-terracotta)]">—</span>
+                <span aria-hidden="true" className="text-[color:var(--c-terra-ink)]">—</span>
                 <span>{example}</span>
               </li>
             ))}

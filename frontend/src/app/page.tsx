@@ -101,23 +101,23 @@ export default async function HomePage() {
         title="Этапы работы"
         subtitle="От заявки до поддержки — понятный процесс без сюрпризов."
       >
-        <ol className="grid gap-px border-y border-[color:var(--c-paper)] bg-[color:var(--c-paper)]/25 sm:grid-cols-2 lg:grid-cols-4">
+        <ol className="grid gap-px border-y border-[color:var(--c-line)] bg-[color:var(--c-line)] sm:grid-cols-2 lg:grid-cols-4">
           {STAGES.map((stage) => (
-            <li key={stage.marker} className="flex flex-col gap-3 bg-[color:var(--c-ink)] p-5">
-              <span className="font-[family-name:var(--font-mono)] text-[11px] uppercase tracking-[0.22em] text-[color:var(--c-lime)]">
+            <li key={stage.marker} className="flex flex-col gap-3 bg-[color:var(--c-paper-2)] p-5">
+              <span className="font-[family-name:var(--font-mono)] text-[11px] uppercase tracking-[0.22em] text-[color:var(--c-terra-ink)]">
                 {stage.marker}
               </span>
-              <span className="font-[family-name:var(--font-display)] text-lg font-bold uppercase leading-tight tracking-[-0.01em] text-[color:var(--c-paper)]">
+              <span className="font-[family-name:var(--font-display)] text-lg font-bold uppercase leading-tight tracking-[-0.01em] text-[color:var(--c-ink)]">
                 {stage.title}
               </span>
-              <span className="text-sm leading-relaxed text-[color:var(--c-paper)] opacity-70">{stage.text}</span>
+              <span className="text-sm leading-relaxed text-[color:var(--c-muted)]">{stage.text}</span>
             </li>
           ))}
         </ol>
       </Section>
 
       <Section id="lead" title="Есть задача, которую можно автоматизировать?">
-        <div className="grid gap-8 rounded-[var(--radius-md)] border border-[color:var(--c-ink)] bg-[color:var(--c-lime)] p-6 text-[color:var(--c-ink)] sm:p-8 lg:grid-cols-[1fr_1.1fr]">
+        <div className="grid gap-8 rounded-[var(--radius-md)] border border-[color:var(--c-ink)] bg-[color:var(--c-lime)] p-6 text-[color:var(--c-lime-ink)] sm:p-8 lg:grid-cols-[1fr_1.1fr]">
           <div>
             <p className="text-base leading-relaxed text-[color:var(--c-text-muted)]">
               Опишите, что сейчас приходится делать вручную. Предложу подходящее решение и предварительно оценю стоимость.

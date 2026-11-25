@@ -107,10 +107,10 @@ export default async function PortfolioPage() {
               </Badge>
             </div>
             <div className="mb-5 border border-[color:var(--c-line)]">
-              <PortfolioVisual type={portfolioVisualFor(project.slug)} />
+              <PortfolioVisual type={portfolioVisualFor(project.slug)} index={index} />
             </div>
             <h2 className="mb-3 font-[family-name:var(--font-display)] text-xl font-bold uppercase leading-tight tracking-[-0.01em]">
-              <Link href={"/portfolio/" + project.slug + "/"} className="text-[color:var(--c-ink)] no-underline hover:text-[color:var(--c-terracotta)]">
+              <Link href={"/portfolio/" + project.slug + "/"} className="text-[color:var(--c-ink)] no-underline hover:text-[color:var(--c-terra-ink)]">
                 {project.title}
               </Link>
             </h2>
@@ -125,7 +125,7 @@ export default async function PortfolioPage() {
               ))}
             </div>
             <div className="mt-auto pt-5">
-              <Link href={"/portfolio/" + project.slug + "/"} className="text-sm font-semibold text-[color:var(--c-terracotta)] no-underline hover:underline">
+              <Link href={"/portfolio/" + project.slug + "/"} className="text-sm font-semibold text-[color:var(--c-terra-ink)] no-underline hover:underline">
                 Как устроено решение →
               </Link>
             </div>

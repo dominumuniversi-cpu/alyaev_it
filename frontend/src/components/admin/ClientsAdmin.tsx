@@ -216,7 +216,7 @@ export function ClientsAdmin() {
 function CredentialsCard({ creds, onClose }: { creds: Credentials; onClose: () => void }) {
   return (
     <div className="rounded-2xl border border-[color:var(--c-lime)]/60 bg-[color:var(--c-surface-2)] p-6">
-      <h2 className="mb-2 text-lg font-semibold text-[color:var(--c-lime)]">Данные для входа</h2>
+      <h2 className="mb-2 text-lg font-semibold text-[color:var(--c-lime-ink)]">Данные для входа</h2>
       <p className="mb-4 text-sm text-[color:var(--c-text-muted)]">
         {creds.warning || "Пароль показывается один раз. Передайте его клиенту и закройте это окно."}
       </p>

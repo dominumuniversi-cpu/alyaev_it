@@ -6,6 +6,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
+import { ThemeToggle } from "@/components/layout/ThemeToggle";
+
 const NAV = [
   { href: "/services/", label: "Услуги" },
   { href: "/portfolio/", label: "Портфолио" },
@@ -50,8 +52,8 @@ export function Header() {
       className={
         "sticky top-0 z-50 border-b transition-colors duration-150 " +
         (scrolled
-          ? "border-[color:var(--c-line)] bg-[color:var(--c-paper)]/95 backdrop-blur"
-          : "border-transparent bg-[color:var(--c-paper)]")
+          ? "border-[color:var(--c-line)] on-dark:bg-[color:var(--c-ink)] bg-[color:var(--c-paper)]/95 backdrop-blur"
+          : "border-transparent on-dark:bg-[color:var(--c-ink)] bg-[color:var(--c-paper)]")
       }
     >
       <div className="mx-auto flex h-16 w-full max-w-[var(--shell-max)] items-center justify-between gap-4 px-[var(--shell-gutter)] lg:h-[76px]">
@@ -60,7 +62,7 @@ export function Header() {
           aria-label="Дмитрий Аляев — на главную"
           className="font-[family-name:var(--font-display)] text-[15px] font-bold uppercase tracking-[0.14em] text-[color:var(--c-ink)] no-underline"
         >
-          Дмитрий <span className="text-[color:var(--c-terracotta)]">Аляев</span>
+          Дмитрий <span className="text-[color:var(--c-terra-ink)]">Аляев</span>
         </Link>
 
         <nav aria-label="Основная навигация" className="hidden items-center gap-6 xl:flex">
@@ -82,6 +84,7 @@ export function Header() {
         </nav>
 
         <div className="flex items-center gap-2">
+          <ThemeToggle />
           <Link href="/contacts/#lead" className={CTA + " hidden sm:inline-flex"}>
             Обсудить проект
           </Link>
@@ -101,7 +104,7 @@ export function Header() {
       </div>
 
       {open ? (
-        <div id="mobile-menu" className="border-t border-[color:var(--c-line)] bg-[color:var(--c-paper)] xl:hidden">
+        <div id="mobile-menu" className="border-t border-[color:var(--c-line)] on-dark:bg-[color:var(--c-ink)] bg-[color:var(--c-paper)] xl:hidden">
           <nav aria-label="Мобильная навигация" className="mx-auto flex w-full max-w-[var(--shell-max)] flex-col px-[var(--shell-gutter)] py-3">
             {NAV.map((item) => (
               <Link
@@ -113,7 +116,13 @@ export function Header() {
                 {item.label}
               </Link>
             ))}
-            <Link href="/contacts/#lead" className={CTA + " mt-3"}>
+            <div className="mt-4 flex items-center justify-between border-t border-[color:var(--c-line)] pt-4">
+              <span className="font-[family-name:var(--font-mono)] text-[11px] uppercase tracking-[0.14em] text-[color:var(--c-text-muted)]">
+                Тема оформления
+              </span>
+              <ThemeToggle />
+            </div>
+            <Link href="/contacts/#lead" className={CTA + " mt-4"}>
               Обсудить проект
             </Link>
           </nav>

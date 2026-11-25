@@ -23,7 +23,7 @@ export function HeroArt() {
         <br />
         DATA / AI / INTEGRATION
         <br />
-        <span className="text-[color:var(--c-lime)]">
+        <span className="text-[color:var(--c-lime-ink)]">
           SYSTEM STATUS: READY
         </span>
       </p>

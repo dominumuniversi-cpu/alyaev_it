@@ -105,8 +105,8 @@ function date(value: string | null): string {
 /** Цвет статуса: золото — работа идёт, голубой — впереди, серый — закрыто. */
 function statusClass(status: string): string {
   if (status === "done") return "border-[color:var(--c-border)] text-[color:var(--c-text-muted)]";
-  if (status === "new") return "border-[color:var(--c-terracotta)]/40 text-[color:var(--c-terracotta)]";
-  return "border-[color:var(--c-lime)]/40 text-[color:var(--c-lime)]";
+  if (status === "new") return "border-[color:var(--c-terracotta)]/40 text-[color:var(--c-terra-ink)]";
+  return "border-[color:var(--c-lime)]/40 text-[color:var(--c-lime-ink)]";
 }
 
 /** Кабинет: список проектов или карточка одного проекта. */
@@ -208,7 +208,7 @@ export function AccountShell({ mode, projectId }: { mode: "list" | "detail"; pro
         </div>
         <div className="flex gap-3">
           {mode === "detail" ? (
-            <a href={BASE_PATH + "/account"} className="text-sm text-[color:var(--c-terracotta)] hover:underline">
+            <a href={BASE_PATH + "/account"} className="text-sm text-[color:var(--c-terra-ink)] hover:underline">
               ← Все проекты
             </a>
           ) : null}
@@ -300,7 +300,7 @@ function NotificationsBlock() {
                   <button
                     type="button"
                     onClick={() => void markRead(n.id)}
-                    className="text-xs text-[color:var(--c-terracotta)] hover:underline"
+                    className="text-xs text-[color:var(--c-terra-ink)] hover:underline"
                   >
                     Отметить прочитанным
                   </button>

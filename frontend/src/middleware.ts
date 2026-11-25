@@ -9,6 +9,14 @@ import type { NextRequest } from "next/server";
 
 const BASE_PATH = process.env.BASE_PATH ?? "/alyaev";
 
+/** Имя cookie темы. Читается здесь и на клиенте (переключатель в шапке). */
+const THEME_COOKIE = "theme";
+
+/** Класс темы для <html>: тёмная по cookie "dark", иначе светлая. */
+function themeClass(cookieValue: string | undefined): "dark" | "light" {
+  return cookieValue === "dark" ? "dark" : "light";
+}
+
 /** Постоянные редиректы: старый путь → новый. Срабатывают на 301. */
 const REDIRECTS: Record<string, string> = {
   "/consent/": "/personal-data-consent/",
@@ -35,6 +43,12 @@ function normalize(pathname: string): string {
 export function middleware(request: NextRequest) {
   const path = normalize(request.nextUrl.pathname);
 
+  // Тема: значение cookie передаём в заголовок запроса, корневой layout ставит класс на <html>.
+  // Так страница отдаётся сразу в нужной теме — без вспышки светлой и без скрипта в body.
+  const theme = themeClass(request.cookies.get(THEME_COOKIE)?.value);
+  const requestHeaders = new Headers(request.headers);
+  requestHeaders.set("x-theme", theme);
+
   const target = REDIRECTS[path];
   if (target) {
     // nextUrl.pathname уже содержит BASE_PATH — поэтому задаём полный путь от корня.
@@ -49,7 +63,7 @@ export function middleware(request: NextRequest) {
     );
   }
 
-  return NextResponse.next();
+  return NextResponse.next({ request: { headers: requestHeaders } });
 }
 
 export const config = {

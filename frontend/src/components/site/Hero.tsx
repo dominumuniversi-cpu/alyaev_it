@@ -22,20 +22,20 @@ export function Hero() {
     <section aria-labelledby="hero-title" className="relative overflow-hidden border-b border-[color:var(--c-line)]">
       <div className="mx-auto grid w-full max-w-[var(--shell-max)] gap-10 px-[var(--shell-gutter)] pb-[var(--space-section)] pt-10 lg:grid-cols-[1.12fr_.88fr] lg:items-end lg:gap-12 lg:pt-14">
         <div>
-          <p className="mb-6 font-[family-name:var(--font-mono)] text-[11px] uppercase tracking-[0.22em] text-[color:var(--c-terracotta)]">
+          <p className="mb-6 font-[family-name:var(--font-mono)] text-[11px] uppercase tracking-[0.22em] text-[color:var(--c-terra-ink)]">
             Автоматизация бизнеса / AI-разработка / системная интеграция
           </p>
           <h1
             id="hero-title"
-            className="font-[family-name:var(--font-display)] text-[clamp(38px,7vw,92px)] font-bold uppercase leading-[0.92] tracking-[-0.03em] text-[color:var(--c-ink)]"
+            className="font-[family-name:var(--font-display)] text-[clamp(40px,6.4vw,104px)] font-bold uppercase leading-[0.9] tracking-[-0.035em] text-[color:var(--c-ink)]"
           >
             Сложные процессы.
             <br />
-            <span className="bg-[color:var(--c-lime)] px-2">Понятные</span>
+            <span className="mt-1 inline-block bg-[color:var(--c-lime)] px-3 pb-1 text-[color:var(--c-lime-ink)]">Понятные</span>
             <br />
             системы.
           </h1>
-          <p className="mt-8 max-w-2xl text-lg leading-relaxed text-[color:var(--c-ink-2)] sm:text-xl">
+          <p className="mt-7 max-w-[42ch] text-lg leading-relaxed text-[color:var(--c-ink-2)] sm:text-xl">
             Проектирую и внедряю цифровые решения: AI-ассистентов, автоматизацию, интеграции и инструменты для работы с данными.
           </p>
           <p className="mt-4 font-[family-name:var(--font-mono)] text-xs uppercase tracking-[0.16em] text-[color:var(--c-text-muted)]">
@@ -52,7 +52,7 @@ export function Hero() {
           <ul className="mt-9 flex flex-wrap gap-x-6 gap-y-2 text-sm text-[color:var(--c-text-muted)]">
             {POINTS.map((point) => (
               <li key={point} className="flex items-center gap-2">
-                <span aria-hidden="true" className="text-[color:var(--c-terracotta)]">—</span>
+                <span aria-hidden="true" className="text-[color:var(--c-terra-ink)]">—</span>
                 {point}
               </li>
             ))}
@@ -71,7 +71,7 @@ export function Hero() {
 /** Техническая схема вместо декоративной картинки: объясняет конвейер обработки. */
 function HeroSchema() {
   return (
-    <div className="border border-[color:var(--c-line-2)] bg-[color:var(--c-paper-2)]">
+    <div className="border border-[color:var(--c-line-2)] on-dark:bg-[color:var(--c-ink-2)] bg-[color:var(--c-paper-2)]">
       <div className="flex items-center justify-between border-b border-[color:var(--c-line)] px-4 py-3">
         <span className="font-[family-name:var(--font-mono)] text-[10px] uppercase tracking-[0.2em] text-[color:var(--c-text-muted)]">
           Схема обработки

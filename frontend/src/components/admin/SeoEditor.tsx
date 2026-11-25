@@ -267,8 +267,8 @@ export function SeoEditor() {
 
           <section className="rounded-2xl border border-[color:var(--c-border)] bg-[color:var(--c-surface-1)] p-5 space-y-3">
             <h2 className="text-lg font-semibold">Превью в поиске</h2>
-            <div className="rounded-xl bg-[color:var(--c-paper-2)] p-4">
-              <p className="text-[13px] text-[color:var(--c-terracotta)]">{values.title || "Заголовок страницы"}</p>
+            <div className="rounded-xl on-dark:bg-[color:var(--c-ink-2)] bg-[color:var(--c-paper-2)] p-4">
+              <p className="text-[13px] text-[color:var(--c-terra-ink)]">{values.title || "Заголовок страницы"}</p>
               <p className="text-[12px] text-[color:var(--c-success)]">alyaev.ru{path}</p>
               <p className="mt-1 text-[13px] text-[color:var(--c-text-muted)]">
                 {values.description || "Описание страницы появится здесь."}
