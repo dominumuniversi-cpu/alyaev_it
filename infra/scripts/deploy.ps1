@@ -33,7 +33,7 @@ $InfraDir = Split-Path -Parent $PSScriptRoot
 $DataDir = "E:\DockerData\alyaev-it"
 $EnvFile = Join-Path $DataDir ".env"
 $Compose = "C:\Program Files\Docker\Docker\resources\cli-plugins\docker-compose.exe"
-$SiteUrl = "https://188.226.71.169/alyaev/services"
+$SiteUrl = "https://alyaev.ru/services"
 
 function Write-Step($text) { Write-Host ""; Write-Host "==> $text" -ForegroundColor Cyan }
 
@@ -87,4 +87,4 @@ if (-not $ready) {
 
 Write-Host ""
 Write-Host "Готово. Сайт отвечает 200." -ForegroundColor Green
-Write-Host "  https://188.226.71.169/alyaev"
+Write-Host "  https://alyaev.ru"

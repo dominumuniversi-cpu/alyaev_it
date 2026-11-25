@@ -79,10 +79,10 @@
 ## 6. Как проверять
 
 ```
-curl -k -c cookies.txt -X POST https://188.226.71.169/alyaev/api/v1/auth/login \
+curl -k -c cookies.txt -X POST https://alyaev.ru/api/v1/auth/login \
   -H "Content-Type: application/json" -d '{"email":"...","password":"..."}'
-curl -k -b cookies.txt https://188.226.71.169/alyaev/api/v1/admin/content/articles
-curl -k -b cookies.txt https://188.226.71.169/alyaev/api/v1/admin/content/portfolio
+curl -k -b cookies.txt https://alyaev.ru/api/v1/admin/content/articles
+curl -k -b cookies.txt https://alyaev.ru/api/v1/admin/content/portfolio
 ```
 
 ## 7. Адреса API (важно не перепутать)

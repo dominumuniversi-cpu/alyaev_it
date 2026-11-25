@@ -42,21 +42,24 @@ services:
         # ID счётчиков нужны на этапе сборки: NEXT_PUBLIC_* вшиваются в бандл.
         NEXT_PUBLIC_YM_ID: ${NEXT_PUBLIC_YM_ID:-}
         NEXT_PUBLIC_GA_ID: ${NEXT_PUBLIC_GA_ID:-}
-        BASE_PATH: ${FRONTEND_BASE_PATH:-/alyaev}
+        # Пустое значение = сайт в корне (домен); /alyaev = стенд по префиксу.
+        # ВНИМАНИЕ: синтаксис ${VAR:-default} тут НЕЛЬЗЯ — Compose считает пустую
+        # переменную отсутствующей и подставляет default, сайт уезжает в /alyaev/.
+        BASE_PATH: ${FRONTEND_BASE_PATH}
         # SITE_URL попадает в сборку: robots.txt и sitemap — статические маршруты,
         # они генерятся на build, а не на каждый запрос. Без этого аргумента
         # в образ вшивается http://localhost, и поисковик получает мёртвый адрес.
-        SITE_URL: ${SITE_URL:-https://188.226.71.169}
+        SITE_URL: ${SITE_URL:-https://alyaev.ru}
     container_name: alyaev-web
     restart: unless-stopped
     environment:
       NODE_ENV: production
       BACKEND_URL: http://backend:8000
       # На стенде сайт по префиксу /alyaev/; на домене — пусто (корень).
-      BASE_PATH: ${FRONTEND_BASE_PATH:-/alyaev}
+      BASE_PATH: ${FRONTEND_BASE_PATH}
       # Публичный адрес для canonical, OG и sitemap. Домена пока нет — стендовый адрес.
       # При появлении домена: поменять SITE_URL в .env и пересобрать frontend.
-      SITE_URL: ${SITE_URL:-https://188.226.71.169}
+      SITE_URL: ${SITE_URL:-https://alyaev.ru}
       # ID счётчиков. Пусто = счётчик не грузится (docs/manifests/analytics.md).
       # Значение вшивается в сборку, поэтому после прописывания нужна пересборка frontend.
       NEXT_PUBLIC_YM_ID: ${NEXT_PUBLIC_YM_ID:-}
