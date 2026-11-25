@@ -54,8 +54,11 @@ export function ServiceRow({ service, index }: { service: ServiceCardData; index
           {service.duration_text ? <Badge variant="muted">{service.duration_text}</Badge> : null}
         </div>
       </div>
-      <div className="flex items-center justify-center border border-[color:var(--c-line)] on-dark:bg-[color:var(--c-ink-2)] bg-[color:var(--c-paper-2)] px-4 py-6">
-        <PersonalServiceVisual type={visualType} className="h-[190px] w-auto" />
+      <div className="on-dark:bg-[color:var(--c-ink-2)] flex items-center justify-center overflow-hidden border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] px-4 py-6">
+        <PersonalServiceVisual
+          type={visualType}
+          className="h-[190px] w-auto transition-transform duration-300 motion-safe:group-hover:scale-[1.04]"
+        />
       </div>
     </article>
   );

@@ -122,9 +122,11 @@ export function imageForService(slug?: string | null, category?: string | null):
   return SERVICE_DEFAULT;
 }
 
-/** Картинка портфолио: номера проектов чередуются, чтобы не было двух одинаковых подряд. */
+/** Картинка портфолио: сюжеты перебираются по кругу — карточки подряд показывают разные иллюстрации.
+ *  В пуле намеренно только демонстрационные картинки проектов: чужое «рабочее место» в портфолио
+ *  выдавалось бы за кейс клиента. */
 export function imageForPortfolio(index: number): SiteImage {
-  const pool = [portfolioDashboard, portfolioGrowth, aboutWorkspace];
+  const pool = [portfolioDashboard, portfolioGrowth, automation];
   return pool[(index >= 0 ? index : 0) % pool.length];
 }
 
