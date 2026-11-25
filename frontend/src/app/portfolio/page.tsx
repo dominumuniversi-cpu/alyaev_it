@@ -93,7 +93,6 @@ export default async function PortfolioPage() {
     <Section
       headingLevel={1}
           flat
-          backdrop="bgEarthNetwork"
       id="portfolio"
       breadcrumbs={[{ label: "Главная", href: "/" }, { label: "Портфолио" }]} title="Проекты и решения" subtitle="Демонстрационные проекты: как устроено решение и какие технологии использованы. Коммерческих внедрений с показателями здесь пока нет — процентные улучшения не придумываю.">
       <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">

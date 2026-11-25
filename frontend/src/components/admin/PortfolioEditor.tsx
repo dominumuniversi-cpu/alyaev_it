@@ -199,7 +199,7 @@ export function PortfolioEditor() {
         <Button onClick={startCreate} disabled={busy}>Новый кейс</Button>
         <Button variant="secondary" onClick={() => void load()} disabled={busy}>Обновить</Button>
         {notice ? <span className="text-sm text-[color:var(--c-cyan)]">{notice}</span> : null}
-        {error ? <span role="alert" className="text-sm text-[#E5544B]">{error}</span> : null}
+        {error ? <span role="alert" className="text-sm text-[color:var(--c-danger)]">{error}</span> : null}
       </div>
 
       {formOpen ? (
@@ -292,7 +292,7 @@ export function PortfolioEditor() {
       {state === "loading" ? <p className="text-sm text-[color:var(--c-text-muted)]">Загружаю…</p> : null}
       {state === "error" ? (
         <div className="space-y-2">
-          <p className="text-sm text-[#E5544B]">Не удалось загрузить список</p>
+          <p className="text-sm text-[color:var(--c-danger)]">Не удалось загрузить список</p>
           <Button variant="secondary" onClick={() => void load()}>Повторить</Button>
         </div>
       ) : null}

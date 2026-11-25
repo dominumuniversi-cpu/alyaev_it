@@ -97,11 +97,11 @@ export function ServicesEditor() {
   }
 
   if (state === "loading") return <p className="text-sm text-[color:var(--c-text-muted)]">Загружаем услуги…</p>;
-  if (state === "error") return <p className="text-sm text-[#E5544B]">Не удалось загрузить услуги.</p>;
+  if (state === "error") return <p className="text-sm text-[color:var(--c-danger)]">Не удалось загрузить услуги.</p>;
 
   return (
     <div>
-      {error ? <p role="alert" className="mb-4 text-sm text-[#E5544B]">{error}</p> : null}
+      {error ? <p role="alert" className="mb-4 text-sm text-[color:var(--c-danger)]">{error}</p> : null}
       <div className="space-y-3">
         {items.map((service) => (
           <div key={service.id} className="rounded-xl border border-[color:var(--c-border)] bg-[color:var(--c-surface)] p-5">

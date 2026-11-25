@@ -136,7 +136,7 @@ export function ClientsAdmin() {
   }
 
   if (state === "loading") return <p className="text-[color:var(--c-text-muted)]">Загружаем…</p>;
-  if (state === "error") return <p role="alert" className="text-[#E5544B]">Не удалось загрузить клиентов.</p>;
+  if (state === "error") return <p role="alert" className="text-[color:var(--c-danger)]">Не удалось загрузить клиентов.</p>;
 
   return (
     <div className="space-y-8">
@@ -215,8 +215,8 @@ export function ClientsAdmin() {
 /** Карточка с выданными данными входа. Показывается один раз — потом не восстановить. */
 function CredentialsCard({ creds, onClose }: { creds: Credentials; onClose: () => void }) {
   return (
-    <div className="rounded-2xl border border-[#E3BC7A]/60 bg-[color:var(--c-surface-2)] p-6">
-      <h2 className="mb-2 text-lg font-semibold text-[#E3BC7A]">Данные для входа</h2>
+    <div className="rounded-2xl border border-[color:var(--c-lime)]/60 bg-[color:var(--c-surface-2)] p-6">
+      <h2 className="mb-2 text-lg font-semibold text-[color:var(--c-lime)]">Данные для входа</h2>
       <p className="mb-4 text-sm text-[color:var(--c-text-muted)]">
         {creds.warning || "Пароль показывается один раз. Передайте его клиенту и закройте это окно."}
       </p>

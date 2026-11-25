@@ -263,14 +263,14 @@ export function LeadForm({
           </span>
         </label>
         {errors.consent ? (
-          <p role="alert" className="mt-1.5 text-xs text-[#E5544B]">
+          <p role="alert" className="mt-1.5 text-xs text-[color:var(--c-danger)]">
             {errors.consent}
           </p>
         ) : null}
       </div>
 
       {serverError ? (
-        <p role="alert" className="text-sm text-[#E5544B]">
+        <p role="alert" className="text-sm text-[color:var(--c-danger)]">
           {serverError}
         </p>
       ) : null}

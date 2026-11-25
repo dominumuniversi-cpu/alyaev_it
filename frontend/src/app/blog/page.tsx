@@ -35,7 +35,6 @@ export default async function Page() {
     <Section
       headingLevel={1}
           flat
-          backdrop="bgCircuitGold"
       id="page"
       breadcrumbs={[{ label: "Главная", href: "/" }, { label: "Блог" }]} title={"Статьи и разборы"}>
       {articles.length === 0 ? (

@@ -46,7 +46,7 @@ function apiUrl(pagePath: string): string {
 /** Подсвечивает счётчик, если длина вне рекомендуемого диапазона. */
 function lengthClass(len: number, min: number, max: number): string {
   if (len === 0) return "text-[color:var(--c-text-muted)]";
-  if (len < min || len > max) return "text-[#E5A54B]";
+  if (len < min || len > max) return "text-[color:var(--c-warning)]";
   return "text-[color:var(--c-cyan)]";
 }
 
@@ -182,7 +182,7 @@ export function SeoEditor() {
       {state === "loading" ? <p className="text-sm text-[color:var(--c-text-muted)]">Загружаю…</p> : null}
       {state === "error" ? (
         <div className="space-y-2">
-          <p className="text-sm text-[#E5544B]">Не удалось загрузить SEO этой страницы</p>
+          <p className="text-sm text-[color:var(--c-danger)]">Не удалось загрузить SEO этой страницы</p>
           <Button variant="secondary" onClick={() => void loadPage(path)}>Повторить</Button>
         </div>
       ) : null}
@@ -267,9 +267,9 @@ export function SeoEditor() {
 
           <section className="rounded-2xl border border-[color:var(--c-border)] bg-[color:var(--c-surface-1)] p-5 space-y-3">
             <h2 className="text-lg font-semibold">Превью в поиске</h2>
-            <div className="rounded-xl bg-[#0B1220] p-4">
-              <p className="text-[13px] text-[#8AB4F8]">{values.title || "Заголовок страницы"}</p>
-              <p className="text-[12px] text-[#4CAF50]">alyaev.ru{path}</p>
+            <div className="rounded-xl bg-[color:var(--c-paper-2)] p-4">
+              <p className="text-[13px] text-[color:var(--c-terracotta)]">{values.title || "Заголовок страницы"}</p>
+              <p className="text-[12px] text-[color:var(--c-success)]">alyaev.ru{path}</p>
               <p className="mt-1 text-[13px] text-[color:var(--c-text-muted)]">
                 {values.description || "Описание страницы появится здесь."}
               </p>
@@ -277,8 +277,8 @@ export function SeoEditor() {
           </section>
 
           {warnings.length > 0 ? (
-            <section className="rounded-2xl border border-[#E5A54B]/40 bg-[#E5A54B]/5 p-4">
-              <h2 className="mb-2 text-sm font-semibold text-[#E5A54B]">Предупреждения</h2>
+            <section className="rounded-2xl border border-[color:var(--c-warning)]/40 bg-[color:var(--c-warning)]/5 p-4">
+              <h2 className="mb-2 text-sm font-semibold text-[color:var(--c-warning)]">Предупреждения</h2>
               <ul className="list-disc space-y-1 pl-5 text-sm text-[color:var(--c-text-muted)]">
                 {warnings.map((w) => <li key={w}>{w}</li>)}
               </ul>
@@ -289,7 +289,7 @@ export function SeoEditor() {
             <Button onClick={() => void save()} disabled={busy}>{busy ? "Сохраняю…" : "Сохранить"}</Button>
             <Button variant="secondary" onClick={() => void loadPage(path)} disabled={busy}>Сбросить изменения</Button>
             {notice ? <span className="text-sm text-[color:var(--c-cyan)]">{notice}</span> : null}
-            {error ? <span role="alert" className="text-sm text-[#E5544B]">{error}</span> : null}
+            {error ? <span role="alert" className="text-sm text-[color:var(--c-danger)]">{error}</span> : null}
           </div>
         </>
       ) : null}

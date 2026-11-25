@@ -30,7 +30,6 @@ export default async function ReviewsPage() {
     <Section
       headingLevel={1}
           flat
-          backdrop="bgCircuitBlue"
       id="reviews" title="Отзывы клиентов" subtitle="Публикуются с согласия автора и с указанием проекта.">
       <div className="grid gap-4 md:grid-cols-2">
         {reviews.map((review) => (

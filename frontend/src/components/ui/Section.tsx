@@ -1,8 +1,6 @@
 /** Контейнер секции. Манифест: docs/manifests/ui/section.md */
 
 import { Breadcrumbs, type Crumb } from "@/components/ui/Breadcrumbs";
-import { SectionBackdrop } from "@/components/ui/SectionBackdrop";
-import type { DecorativeBackgroundName } from "@/lib/design/images";
 
 /** Секция с заголовком и вложенным контентом. */
 export function Section({
@@ -11,7 +9,6 @@ export function Section({
   subtitle,
   children,
   surface = false,
-  backdrop = "bgCircuitBlue",
   flat = false,
   breadcrumbs,
   headingLevel = 2,
@@ -20,10 +17,8 @@ export function Section({
   title?: string;
   subtitle?: string;
   children: React.ReactNode;
+  /** Тёмная секция (графит): внутри неё роли токенов переключаются классом .on-dark. */
   surface?: boolean;
-  /** Декоративный фон из реестра (docs/manifests/ui/images.md). По умолчанию включён:
-   *  иначе внутренние страницы выглядят глухой тёмной плитой. */
-  backdrop?: DecorativeBackgroundName;
   /** Первая секция страницы: верхний отступ срезан, чтобы под шапкой не висела пустая полоса. */
   flat?: boolean;
   /** Крошки для страниц второго уровня и глубже (манифест breadcrumbs.md). */
@@ -41,36 +36,30 @@ export function Section({
     <section
       id={id}
       aria-labelledby={title ? id + "-title" : undefined}
-      className={
-        "relative overflow-hidden " + (surface ? "bg-[color:var(--c-surface)]" : "bg-transparent")
-      }
+      className={"relative overflow-hidden " + (surface ? "on-dark" : "bg-transparent")}
       style={flat ? { paddingTop: "calc(var(--space-section) / 3)", paddingBottom: "var(--space-section)" } : { paddingBlock: "var(--space-section)" }}
     >
-      <SectionBackdrop
-        name={backdrop}
-        className="bg-[length:min(900px,110%)] bg-[position:right_top] opacity-[0.16]"
-      />
-      <div className="relative mx-auto w-full max-w-[1200px] px-4 sm:px-6 lg:px-8">
+      <div className="relative mx-auto w-full max-w-[1320px] px-4 sm:px-6 lg:px-8">
         {breadcrumbs ? <Breadcrumbs items={breadcrumbs} /> : null}
         {title ? (
-          <header className="mb-10 max-w-3xl">
+          <header className="mb-10 max-w-4xl">
             {Heading === "h1" ? (
               <h1
                 id={id + "-title"}
-                className="font-[family-name:var(--font-display)] text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl"
+                className="font-[family-name:var(--font-display)] text-[clamp(34px,5.5vw,68px)] font-bold uppercase leading-[0.95] tracking-[-0.02em] text-[color:var(--c-text)]"
               >
                 {title}
               </h1>
             ) : (
               <h2
                 id={id + "-title"}
-                className="font-[family-name:var(--font-display)] text-2xl font-bold tracking-tight sm:text-3xl lg:text-4xl"
+                className="font-[family-name:var(--font-display)] text-[clamp(26px,3.6vw,44px)] font-bold uppercase leading-[1] tracking-[-0.02em] text-[color:var(--c-text)]"
               >
                 {title}
               </h2>
             )}
             {subtitle ? (
-              <p className="mt-3 text-base leading-relaxed text-[color:var(--c-text-muted)]">{subtitle}</p>
+              <p className="mt-4 max-w-2xl text-base leading-relaxed text-[color:var(--c-text-muted)]">{subtitle}</p>
             ) : null}
           </header>
         ) : null}

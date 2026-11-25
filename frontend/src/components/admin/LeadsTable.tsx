@@ -136,7 +136,7 @@ export function LeadsTable() {
         <p className="text-sm text-[color:var(--c-text-muted)]">Загружаем заявки…</p>
       ) : null}
       {state === "error" ? (
-        <p className="text-sm text-[#E5544B]">Не удалось загрузить список. Обновите страницу.</p>
+        <p className="text-sm text-[color:var(--c-danger)]">Не удалось загрузить список. Обновите страницу.</p>
       ) : null}
 
       {state === "ready" && leads.length === 0 ? (

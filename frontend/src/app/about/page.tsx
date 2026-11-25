@@ -8,7 +8,7 @@ import { ButtonLink } from "@/components/ui/Button";
 import { FeatureCard } from "@/components/ui/FeatureCard";
 import { Section } from "@/components/ui/Section";
 import { canonicalUrl, openGraph } from "@/lib/seo";
-import { aboutWorkspace } from "@/lib/design/images";
+import { ownerPortrait } from "@/lib/design/images";
 
 export const metadata: Metadata = {
   title: "Обо мне и опыте",
@@ -52,11 +52,19 @@ export default function AboutPage() {
       <Section
       headingLevel={1}
           flat
-          backdrop="bgCircuitGold"
       id="about"
       breadcrumbs={[{ label: "Главная", href: "/" }, { label: "Обо мне" }]} title="Обо мне и опыте">
         <div className="grid gap-8 lg:grid-cols-[1.1fr_.9fr]">
           <div>
+            <Image
+              src={ownerPortrait.src}
+              alt={ownerPortrait.alt}
+              width={ownerPortrait.width}
+              height={ownerPortrait.height}
+              sizes="(max-width: 1024px) 100vw, 640px"
+              priority
+              className="mb-8 h-auto w-full max-w-[420px] border border-[color:var(--c-border)] object-cover"
+            />
             <p className="text-base leading-relaxed text-[color:var(--c-text)]">
               В IT с 2007 года. Работал с корпоративными информационными системами, IT-инфраструктурой,
               технической поддержкой, автоматизацией процессов и интеграцией программных решений.
@@ -66,7 +74,7 @@ export default function AboutPage() {
               для которых создаётся решение. Сначала разбираюсь, как работает процесс и где теряется время,
               затем подбираю архитектуру, разрабатываю, тестирую и документирую.
             </p>
-            <h2 className="mt-8 mb-3 text-lg font-semibold">Профессиональный опыт</h2>
+            <h2 className="mb-3 font-[family-name:var(--font-display)] text-xl font-bold uppercase tracking-[-0.01em] text-[color:var(--c-text)]">Профессиональный опыт</h2>
             <p className="text-base leading-relaxed text-[color:var(--c-text-muted)]">
               Организация и сопровождение корпоративной IT-инфраструктуры, управление техническими специалистами,
               работа со сложными обращениями пользователей, взаимодействие с разработчиками и интеграторами.
@@ -75,16 +83,8 @@ export default function AboutPage() {
               <ButtonLink href="/contacts/#lead">Обсудить задачу</ButtonLink>
             </div>
           </div>
-          <aside className="rounded-2xl border border-[color:var(--c-border)] bg-[color:var(--c-surface)] p-6">
-            <Image
-              src={aboutWorkspace.src}
-              alt={aboutWorkspace.alt}
-              width={aboutWorkspace.width}
-              height={aboutWorkspace.height}
-              sizes="(max-width: 1024px) 100vw, 420px"
-              className="mb-5 h-auto w-full rounded-xl border border-[color:var(--c-border)]"
-            />
-            <h2 className="mb-4 text-base font-semibold">Чем занимаюсь</h2>
+          <aside className="border border-[color:var(--c-border)] bg-[color:var(--c-paper-2)] p-6">
+            <h2 className="mb-4 font-[family-name:var(--font-display)] text-base font-bold uppercase tracking-[-0.01em] text-[color:var(--c-text)]">Чем занимаюсь</h2>
             <ul className="space-y-2 text-sm text-[color:var(--c-text-muted)]">
               {[
                 "Разработка и внедрение Telegram-ботов",
@@ -95,7 +95,7 @@ export default function AboutPage() {
                 "Проектирование решений на базе LLM и AI-агентов",
               ].map((item) => (
                 <li key={item} className="flex gap-2">
-                  <span aria-hidden="true" className="text-[color:var(--c-gold)]">—</span>
+                  <span aria-hidden="true" className="text-[color:var(--c-terracotta)]">—</span>
                   <span>{item}</span>
                 </li>
               ))}

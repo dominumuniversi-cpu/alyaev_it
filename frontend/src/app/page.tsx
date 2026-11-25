@@ -85,7 +85,6 @@ export default async function HomePage() {
         surface
         title="Как решаются задачи"
         subtitle="Пример: автоматическая обработка заявки без постоянного участия сотрудника."
-        backdrop="bgCircuitBlue"
       >
         <ProcessFlow steps={SCENARIO} />
       </Section>
@@ -102,7 +101,6 @@ export default async function HomePage() {
         id="stages"
         surface
         title="Этапы работы"
-        backdrop="bgEarthNetwork"
         subtitle="От заявки до поддержки — понятный процесс без сюрпризов."
       >
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">

@@ -1,60 +1,55 @@
-/** Карточка услуги. Манифест: docs/manifests/ui/service-card.md */
+/** Карточка услуги. Манифест: docs/manifests/ui/service-card.md (PERSONAL v2.0)
+ *
+ *  Визуал услуги — уникальная SVG-сцена из PersonalServiceVisual:
+ *  повторных 3D-иллюстраций (как в черновике дизайн-системы) на сайте не будет.
+ */
 
-import Image from "next/image";
 import Link from "next/link";
 
+import { PersonalServiceVisual, visualTypeFor } from "@/components/site/PersonalServiceVisual";
 import { Badge } from "@/components/ui/Badge";
 import { formatPrice, type ServiceCard as ServiceCardData } from "@/lib/api";
-import { imageForService } from "@/lib/design/images";
 
-/** Карточка услуги: иллюстрация, категория, название, описание, примеры, цена и срок. */
-/**
- * Картинка берётся из реестра по slug (запасной вариант — по категории),
- * поэтому в разметке нет ни одного ручного пути. Манифест: docs/manifests/ui/images.md
- */
+/** Карточка услуги: визуал, категория, название, описание, примеры, цена и срок. */
 export function ServiceCard({ service }: { service: ServiceCardData }) {
-  const image = imageForService(service.slug, service.category_slug);
+  const visualType = visualTypeFor(service.slug, service.category_slug);
   return (
-    <article className="group relative flex h-full flex-col rounded-2xl border border-[color:var(--c-border)] bg-[color:var(--c-surface)] p-6 transition-all duration-150 hover:-translate-y-0.5 hover:border-[color:rgba(227,188,122,.4)]">
-      <Image
-        src={image.src}
-        alt={image.alt}
-        width={image.width}
-        height={image.height}
-        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 380px"
-        className="mb-4 h-auto w-full max-w-[276px] rounded-xl border border-[color:var(--c-border)] bg-[color:var(--c-surface-2)] object-contain"
-      />
-      {service.category_title ? (
-        <div className="mb-4">
-          <Badge variant="tech">{service.category_title}</Badge>
+    <article className="group relative flex h-full flex-col border border-[color:var(--c-border)] bg-[color:var(--c-paper-2)] transition-colors duration-150 hover:border-[color:var(--c-ink)]">
+      <div className="flex items-center justify-between border-b border-[color:var(--c-border)] bg-[color:var(--c-paper)] px-4 py-2">
+        <span className="font-[family-name:var(--font-mono)] text-[10px] uppercase tracking-[0.18em] text-[color:var(--c-text-muted)]">
+          {service.category_title ?? "Услуга"}
+        </span>
+        <span aria-hidden="true" className="h-1.5 w-1.5 bg-[color:var(--c-terracotta)]" />
+      </div>
+      <div className="flex items-center justify-center border-b border-[color:var(--c-border)] px-4 py-5">
+        <PersonalServiceVisual type={visualType} className="h-[150px] w-auto" />
+      </div>
+      <div className="flex flex-1 flex-col p-5">
+        <h3 className="mb-2 font-[family-name:var(--font-display)] text-lg font-bold uppercase leading-tight tracking-[-0.01em] text-[color:var(--c-ink)]">
+          <Link
+            href={"/services/" + service.slug + "/"}
+            className="no-underline after:absolute after:inset-0 after:content-[''] hover:text-[color:var(--c-terracotta)]"
+          >
+            {service.title}
+          </Link>
+        </h3>
+        <p className="mb-4 text-sm leading-relaxed text-[color:var(--c-text-muted)]">
+          {service.short_description}
+        </p>
+        {service.examples.length > 0 ? (
+          <ul className="mb-6 space-y-1.5 text-sm text-[color:var(--c-text-muted)]">
+            {service.examples.slice(0, 3).map((example) => (
+              <li key={example} className="flex gap-2">
+                <span aria-hidden="true" className="text-[color:var(--c-terracotta)]">—</span>
+                <span>{example}</span>
+              </li>
+            ))}
+          </ul>
+        ) : null}
+        <div className="mt-auto flex flex-wrap items-center gap-2">
+          <Badge variant="price">{formatPrice(service)}</Badge>
+          {service.duration_text ? <Badge variant="muted">{service.duration_text}</Badge> : null}
         </div>
-      ) : null}
-      <h3 className="mb-2 font-[family-name:var(--font-display)] text-lg font-semibold leading-snug">
-        <Link
-          href={"/services/" + service.slug + "/"}
-          className="no-underline after:absolute after:inset-0 after:content-[''] hover:text-[color:var(--c-gold)]"
-        >
-          {service.title}
-        </Link>
-      </h3>
-      <p className="mb-4 text-sm leading-relaxed text-[color:var(--c-text-muted)]">
-        {service.short_description}
-      </p>
-      {service.examples.length > 0 ? (
-        <ul className="mb-6 space-y-1.5 text-sm text-[color:var(--c-text-muted)]">
-          {service.examples.slice(0, 3).map((example) => (
-            <li key={example} className="flex gap-2">
-              <span aria-hidden="true" className="text-[color:var(--c-gold)]">
-                —
-              </span>
-              <span>{example}</span>
-            </li>
-          ))}
-        </ul>
-      ) : null}
-      <div className="mt-auto flex flex-wrap items-center gap-2">
-        <Badge variant="price">{formatPrice(service)}</Badge>
-        {service.duration_text ? <Badge variant="muted">{service.duration_text}</Badge> : null}
       </div>
     </article>
   );

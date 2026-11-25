@@ -1,19 +1,20 @@
-/** Кнопка и ссылка-кнопка. Манифест: docs/manifests/ui/button.md */
+/** Кнопка и ссылка-кнопка. Манифест: docs/manifests/ui/button.md (PERSONAL v2.0) */
 
 import Link from "next/link";
 
 type Variant = "primary" | "secondary" | "ghost";
 type Size = "md" | "lg";
 
-const BASE =
-  "inline-flex items-center justify-center gap-2 rounded-xl font-semibold transition-colors duration-150 no-underline";
+/** База: прямоугольная кнопка, крупная типографика, без «пилюли». */
+const BASE = "inline-flex items-center justify-center gap-2 border border-transparent font-semibold no-underline transition-colors duration-150";
 
 const VARIANTS: Record<Variant, string> = {
   primary:
-    "bg-[color:var(--c-gold)] text-[#0A0C12] hover:bg-[#EFCF98] border border-transparent",
+    "bg-[color:var(--c-lime)] text-[color:var(--c-ink)] hover:bg-[color:var(--c-gold-dim)]",
   secondary:
-    "bg-transparent text-[color:var(--c-text)] border border-[color:var(--c-border-strong)] hover:border-[color:var(--c-gold)] hover:text-[color:var(--c-gold)]",
-  ghost: "bg-transparent text-[color:var(--c-cyan)] border border-transparent hover:underline",
+    "border-[color:var(--c-border-strong)] bg-transparent text-[color:var(--c-text)] hover:bg-[color:var(--c-ink)] hover:text-[color:var(--c-paper)]",
+  ghost:
+    "bg-transparent text-[color:var(--c-ink)] underline-offset-4 hover:underline",
 };
 
 const SIZES: Record<Size, string> = {

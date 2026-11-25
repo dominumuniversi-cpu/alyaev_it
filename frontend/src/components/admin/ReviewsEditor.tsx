@@ -176,7 +176,7 @@ export function ReviewsEditor() {
 
   return (
     <div className="space-y-5">
-      <div className="rounded-xl border border-[#E5A54B]/40 bg-[#E5A54B]/5 p-3 text-sm text-[color:var(--c-text-muted)]">
+      <div className="rounded-xl border border-[color:var(--c-warning)]/40 bg-[color:var(--c-warning)]/5 p-3 text-sm text-[color:var(--c-text-muted)]">
         Отзыв попадает на сайт только при включённом согласии автора. Если согласие снять,
         отзыв автоматически снимается с публикации.
       </div>
@@ -185,7 +185,7 @@ export function ReviewsEditor() {
         <Button onClick={startCreate} disabled={busy}>Новый отзыв</Button>
         <Button variant="secondary" onClick={() => void load()} disabled={busy}>Обновить</Button>
         {notice ? <span className="text-sm text-[color:var(--c-cyan)]">{notice}</span> : null}
-        {error ? <span role="alert" className="text-sm text-[#E5544B]">{error}</span> : null}
+        {error ? <span role="alert" className="text-sm text-[color:var(--c-danger)]">{error}</span> : null}
       </div>
 
       {formOpen ? (
@@ -268,7 +268,7 @@ export function ReviewsEditor() {
       {state === "loading" ? <p className="text-sm text-[color:var(--c-text-muted)]">Загружаю…</p> : null}
       {state === "error" ? (
         <div className="space-y-2">
-          <p className="text-sm text-[#E5544B]">Не удалось загрузить список отзывов</p>
+          <p className="text-sm text-[color:var(--c-danger)]">Не удалось загрузить список отзывов</p>
           <Button variant="secondary" onClick={() => void load()}>Повторить</Button>
         </div>
       ) : null}

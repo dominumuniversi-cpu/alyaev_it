@@ -63,7 +63,7 @@ export function LoginForm() {
         disabled={sending}
       />
       {error ? (
-        <p role="alert" className="text-sm text-[#E5544B]">{error}</p>
+        <p role="alert" className="text-sm text-[color:var(--c-danger)]">{error}</p>
       ) : null}
       <Button type="submit" size="lg" disabled={sending}>
         {sending ? "Проверяем…" : "Войти"}

@@ -23,6 +23,8 @@ export interface SiteImage {
 
 const BASE = "/images";
 
+/** Утверждённый портрет Дмитрия Аляева (PERSONAL v2.0). Менять файл без разрешения владельца нельзя. */
+export const ownerPortrait: SiteImage = { src: BASE + "/about/dmitry-alyaev-about.webp", width: 1086, height: 1448, alt: "Дмитрий Аляев — IT-специалист, автоматизация бизнеса и AI-разработка", category: "about" };
 /** Панель автоматизации: бот принимает заявку и передаёт результат */
 export const heroVisual: SiteImage = { src: BASE + "/hero/hero-visual.webp", width: 340, height: 300, alt: "Панель автоматизации: бот принимает заявку и передаёт результат", category: "hero" };
 /** Telegram-бот для бизнеса: приём заявок в мессенджере */
@@ -63,6 +65,7 @@ export const servicesIconsSheet: SiteImage = { src: BASE + "/icons/services-icon
 export const visualAssetsBoard: SiteImage = { src: BASE + "/reference/visual-assets-board.webp", width: 1672, height: 941, alt: "Исходная визуальная доска — только для разработки", category: "reference" };
 
 export const IMAGES = {
+  ownerPortrait,
   heroVisual,
   telegramBot,
   aiAssistant,

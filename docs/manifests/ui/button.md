@@ -1,7 +1,7 @@
 # UI-манифест: Button
 
-> Компонент: `frontend/src/components/ui/Button.tsx`  
-> Зависимости: `--c-gold`, `--c-cyan`, `--radius-md`, `--dur-fast`, `--ease-out` (см. tokens.md)
+> Компонент: `frontend/src/components/ui/Button.tsx`
+> Токены: `--c-lime`, `--c-ink`, `--c-paper`, `--c-border-strong` (см. tokens.md, PERSONAL v2.0)
 
 ## Назначение
 Единственный компонент кнопки на сайте. Любая кликабельная кнопка — только через него.
@@ -9,69 +9,58 @@
 ## Анатомия
 
 ```
-[icon-left?] [label] [icon-right?] [badge?]
+[label] [icon-right?]
 ```
+
+Прямоугольная форма (radius 0), без иконок слева по умолчанию: язык системы — типографика и линии, а не «мягкие» кнопки.
 
 ## Варианты (variant)
 
 | variant | Вид | Когда использовать | Ограничения |
 |---|---|---|---|
-| `primary` | фон `--c-gold`, текст `--c-bg`, hover `--c-gold-dim` | Главное действие секции (1 на экран) | Не более одной primary-кнопки в видимой области |
-| `secondary` | прозрачный фон, граница `--c-border-strong`, текст `--c-text` | Второе действие рядом с primary | — |
-| `ghost` | без фона, текст `--c-gold`, hover фон `--c-surface` | Действия в карточках, «Подробнее» | Не для навигации в шапке |
-| `tech` | фон `--c-cyan` 12%, текст `--c-cyan`, граница `--c-cyan` 30% | Технические/AI действия | Не для продаж |
-| `danger` | фон `--c-danger`, текст белый | Необратимые действия | Всегда + confirm-диалог |
+| `primary` | фон `--c-lime`, текст `--c-ink`, hover фон `--c-gold-dim` (#A5CE58) | Главное действие секции | Не более одной в видимой области |
+| `secondary` | прозрачный, граница `--c-border-strong`, текст `--c-text`, hover: инверсия (фон `--c-ink`, текст `--c-paper`) | Второе действие рядом с primary | — |
+| `ghost` | без границы и фона, текст `--c-ink`, `hover:underline` | Действия в тексте, «Подробнее» | Не для навигации в шапке |
 
 ## Размеры (size)
 
-| size | height | padding-x | font-size |
+| size | height | padding-x | text |
 |---|---|---|---|
-| `sm` | 36px | 14px | `--text-small` |
-| `md` (default) | 44px | 20px | `--text-body` |
-| `lg` | 52px | 28px | `--text-body` (увеличенный) |
+| `md` (default) | 44px | 20px | 14px |
+| `lg` | 52px | 28px | 16px |
 
-Требование доступности: минимальная высота 44px для кнопки на тач-устройстве (кроме inline-текст-ссылок).
+Минимальная высота на тач-устройстве — 44px.
 
 ## Состояния
 
 | Состояние | Поведение |
 |---|---|
-| default | базовые стили варианта |
-| hover | затемнение фона на 10% / подъём `--glow-gold` для primary |
-| focus-visible | outline 2px `--c-cyan`, offset 2px |
-| active | `transform: translateY(1px)` |
-| disabled | opacity .45, `cursor: not-allowed`, `aria-disabled=true`, клик не выполняется |
-| loading | спиннер 16px, текст остаётся, `disabled` на время запроса, `aria-busy=true` |
+| default | стили варианта |
+| hover | смена фона по варианту, `transition-colors 150ms` |
+| focus-visible | outline 2px `--c-terracotta`, offset 2px |
+| active | `translateY(1px)` |
+| disabled | opacity .45, `cursor: not-allowed`, клик не выполняется |
 
 ## Поведение
 
-- Если передан `href` — рендерится как `<a>` (навигация). Если `onClick` — как `<button type="button">`.
-- `type="submit"` только внутри `<form>`.
-- Кнопка с иконкой без текста обязана иметь `aria-label`.
-- Никаких `onClick` на `<div>`.
+- `ButtonLink` — навигация (`Link`), `Button` — действие (`button`, `type=submit` внутри формы).
+- Кнопка без текста обязана иметь `aria-label`.
+- Никаких `onClick` на `div`.
 
-## Props
+## Примеры
 
-| Prop | Тип | Default | Описание |
-|---|---|---|---|
-| `variant` | primary / secondary / ghost / tech / danger | primary | — |
-| `size` | sm / md / lg | md | — |
-| `href` | string | — | Переход (рендер `<Link>`) |
-| `onClick` | () => void | — | Действие |
-| `loading` | boolean | false | Блокирует повторный клик |
-| `disabled` | boolean | false | — |
-| `iconLeft` / `iconRight` | ReactNode | — | Иконка 18px |
-| `fullWidth` | boolean | false | На мобильных главная CTA растягивается |
-
-## Примеры использования
-
-- Hero: `primary lg` — «Обсудить проект»; `secondary lg` — «Посмотреть услуги».
-- Карточка услуги: `ghost sm` — «Подробнее».
-- Форма: `primary md fullWidth` — «Отправить заявку» (loading во время запроса).
-- Админка: `secondary sm` — «Редактировать»; `danger sm` — «Удалить».
+- Hero: `primary lg` «Обсудить проект ↗» + `secondary lg` «Смотреть услуги».
+- Карточка услуги: `ghost md` «Подробнее» (сейчас вся карточка — ссылка, кнопка не нужна).
+- Форма: `primary md` «Отправить заявку».
 
 ## Антипаттерны
 
 - Две primary-кнопки рядом.
-- `primary` для навигации в шапке (там — `ghost`/ссылка).
-- Своя кнопка на `<div>` в обход компонента.
+- Скруглённые «пилюли» (`rounded-full`) — сменились на радиус 0.
+- Сырые HEX (`#0A0C12`, `#EFCF98`) — были в тёмной теме v1, удалены 25.11.2026.
+
+## История
+| Дата | Что |
+|---|---|
+| 24.11.2026 | Создан: золотая кнопка, радиус 12px, тёмная тема |
+| 25.11.2026 | PERSONAL v2.0: лаймовая основная кнопка, радиус 0, инверсия на hover у secondary |

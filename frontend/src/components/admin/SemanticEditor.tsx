@@ -256,7 +256,7 @@ export function SemanticEditor() {
       </div>
 
       {notice ? <p className="text-sm text-[color:var(--c-cyan)]">{notice}</p> : null}
-      {error ? <p role="alert" className="text-sm text-[#E5544B]">{error}</p> : null}
+      {error ? <p role="alert" className="text-sm text-[color:var(--c-danger)]">{error}</p> : null}
 
       {formOpen ? (
         <form
@@ -301,7 +301,7 @@ export function SemanticEditor() {
       ) : null}
 
       {state === "loading" ? <p className="text-sm text-[color:var(--c-text-muted)]">Загружаем…</p> : null}
-      {state === "error" ? <p className="text-sm text-[#E5544B]">Не удалось загрузить список</p> : null}
+      {state === "error" ? <p className="text-sm text-[color:var(--c-danger)]">Не удалось загрузить список</p> : null}
 
       {state === "ready" && items.length === 0 ? (
         <p className="text-sm text-[color:var(--c-text-muted)]">

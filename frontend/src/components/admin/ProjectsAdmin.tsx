@@ -309,7 +309,7 @@ export function ProjectsAdmin() {
     }
   }
   if (state === "loading") return <p className="text-[color:var(--c-text-muted)]">Загружаем…</p>;
-  if (state === "error") return <p role="alert" className="text-[#E5544B]">Не удалось загрузить проекты.</p>;
+  if (state === "error") return <p role="alert" className="text-[color:var(--c-danger)]">Не удалось загрузить проекты.</p>;
 
   const clientOptions = clients.map((c) => ({ value: String(c.id), label: c.display_name }));
 

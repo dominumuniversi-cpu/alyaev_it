@@ -25,7 +25,6 @@ export default async function CalculatorPage() {
     <Section
       headingLevel={1}
           flat
-          backdrop="bgWave"
       id="calculator"
       breadcrumbs={[{ label: "Главная", href: "/" }, { label: "Калькулятор" }]}
       title="Предварительная оценка"

@@ -105,8 +105,8 @@ function date(value: string | null): string {
 /** Цвет статуса: золото — работа идёт, голубой — впереди, серый — закрыто. */
 function statusClass(status: string): string {
   if (status === "done") return "border-[color:var(--c-border)] text-[color:var(--c-text-muted)]";
-  if (status === "new") return "border-[#22B8E6]/40 text-[#22B8E6]";
-  return "border-[#E3BC7A]/40 text-[#E3BC7A]";
+  if (status === "new") return "border-[color:var(--c-terracotta)]/40 text-[color:var(--c-terracotta)]";
+  return "border-[color:var(--c-lime)]/40 text-[color:var(--c-lime)]";
 }
 
 /** Кабинет: список проектов или карточка одного проекта. */
@@ -175,7 +175,7 @@ export function AccountShell({ mode, projectId }: { mode: "list" | "detail"; pro
         </p>
         <a
           href={BASE_PATH + "/account/login"}
-          className="inline-block rounded-lg bg-[#E3BC7A] px-5 py-3 font-medium text-[#05070D]"
+          className="inline-block rounded-lg bg-[color:var(--c-lime)] px-5 py-3 font-medium text-[color:var(--c-ink)]"
         >
           Войти
         </a>
@@ -208,7 +208,7 @@ export function AccountShell({ mode, projectId }: { mode: "list" | "detail"; pro
         </div>
         <div className="flex gap-3">
           {mode === "detail" ? (
-            <a href={BASE_PATH + "/account"} className="text-sm text-[#22B8E6] hover:underline">
+            <a href={BASE_PATH + "/account"} className="text-sm text-[color:var(--c-terracotta)] hover:underline">
               ← Все проекты
             </a>
           ) : null}
@@ -300,7 +300,7 @@ function NotificationsBlock() {
                   <button
                     type="button"
                     onClick={() => void markRead(n.id)}
-                    className="text-xs text-[#22B8E6] hover:underline"
+                    className="text-xs text-[color:var(--c-terracotta)] hover:underline"
                   >
                     Отметить прочитанным
                   </button>
@@ -329,7 +329,7 @@ function ProjectList({ projects }: { projects: Project[] }) {
         <li key={p.id}>
           <a
             href={BASE_PATH + "/account/projects/" + p.id}
-            className="block h-full rounded-2xl border border-[color:var(--c-border)] bg-[color:var(--c-surface)] p-6 transition-colors hover:border-[#E3BC7A]/50"
+            className="block h-full rounded-2xl border border-[color:var(--c-border)] bg-[color:var(--c-surface)] p-6 transition-colors hover:border-[color:var(--c-lime)]/50"
           >
             <div className="mb-3 flex items-start justify-between gap-3">
               <h2 className="text-lg font-semibold">{p.title}</h2>

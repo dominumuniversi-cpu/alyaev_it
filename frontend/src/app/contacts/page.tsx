@@ -33,7 +33,6 @@ export default async function ContactsPage() {
     <Section
       headingLevel={1}
           flat
-          backdrop="bgWave"
       id="contacts"
       breadcrumbs={[{ label: "Главная", href: "/" }, { label: "Контакты" }]} title="Контакты" subtitle="Опишите задачу — отвечу и предложу вариант решения.">
       <div className="grid gap-8 lg:grid-cols-[1fr_1.2fr]">
@@ -46,7 +45,7 @@ export default async function ContactsPage() {
                 href={contacts.telegram_url || "https://t.me/" + contacts.telegram.replace(/^@/, "")}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center rounded-xl bg-[color:var(--c-gold)] px-5 py-2.5 text-sm font-semibold text-[#0A0C12] no-underline transition-colors hover:bg-[#EFCF98]"
+                className="inline-flex items-center justify-center border border-transparent bg-[color:var(--c-ink)] px-5 py-2.5 text-sm font-semibold uppercase tracking-[0.08em] text-[color:var(--c-paper)] no-underline transition-colors hover:bg-[color:var(--c-lime)] hover:text-[color:var(--c-ink)]"
               >
                 Написать в Telegram
               </a>

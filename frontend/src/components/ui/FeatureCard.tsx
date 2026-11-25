@@ -18,11 +18,11 @@ export function FeatureCard({
   tone?: "gold" | "cyan";
 }) {
   return (
-    <div className="h-full rounded-2xl border border-[color:var(--c-border)] bg-[color:var(--c-surface)] p-6">
+    <div className="h-full border-t-2 border-[color:var(--c-ink)] bg-[color:var(--c-paper-2)] p-6">
       {marker ? (
         <p
           className={
-            "mb-3 font-[family-name:var(--font-display)] text-2xl font-bold " +
+            "mb-3 font-[family-name:var(--font-mono)] text-xs uppercase tracking-[0.2em] " +
             (tone === "gold" ? "text-[color:var(--c-gold)]" : "text-[color:var(--c-cyan)]")
           }
         >
@@ -37,7 +37,7 @@ export function FeatureCard({
           }
         />
       ) : null}
-      <h3 className="mb-2 text-base font-semibold leading-snug">{title}</h3>
+      <h3 className="mb-2 font-[family-name:var(--font-display)] text-base font-bold uppercase leading-snug tracking-[-0.01em] text-[color:var(--c-ink)]">{title}</h3>
       <p className="text-sm leading-relaxed text-[color:var(--c-text-muted)]">{text}</p>
     </div>
   );

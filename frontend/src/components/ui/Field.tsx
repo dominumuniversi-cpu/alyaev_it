@@ -5,7 +5,7 @@ const BASE_INPUT =
 
 /** Стили поля: обычное состояние и состояние ошибки. */
 function inputClass(hasError: boolean): string {
-  const border = hasError ? "border-[#E5544B]" : "border-[color:var(--c-border)]";
+  const border = hasError ? "border-[color:var(--c-danger)]" : "border-[color:var(--c-border)]";
   return BASE_INPUT + " " + border;
 }
 
@@ -38,7 +38,7 @@ function Wrapper({
       ) : null}
       {children}
       {error ? (
-        <p id={id + "-error"} role="alert" className="mt-1.5 text-xs text-[#E5544B]">
+        <p id={id + "-error"} role="alert" className="mt-1.5 text-xs text-[color:var(--c-danger)]">
           {error}
         </p>
       ) : null}

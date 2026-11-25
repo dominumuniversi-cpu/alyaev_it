@@ -1,4 +1,4 @@
-/** Шапка сайта. Манифест: docs/manifests/ui/header.md */
+/** Шапка сайта. Манифест: docs/manifests/ui/header.md (PERSONAL v2.0) */
 
 "use client";
 
@@ -16,7 +16,9 @@ const NAV = [
   { href: "/contacts/", label: "Контакты" },
 ];
 
-/** Липкая шапка с навигацией и мобильным меню. */
+const CTA = "inline-flex items-center justify-center border border-transparent bg-[color:var(--c-ink)] px-5 py-2.5 text-[13px] font-semibold uppercase tracking-[0.08em] text-[color:var(--c-paper)] no-underline transition-colors hover:bg-[color:var(--c-lime)] hover:text-[color:var(--c-ink)]";
+
+/** Липкая шапка: светлая бумага, графитовый текст, лайм-CTA при наведении. */
 export function Header() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -48,28 +50,30 @@ export function Header() {
       className={
         "sticky top-0 z-50 border-b transition-colors duration-150 " +
         (scrolled
-          ? "border-[color:var(--c-border)] bg-[color:var(--c-bg)]/95 backdrop-blur"
-          : "border-transparent bg-transparent")
+          ? "border-[color:var(--c-line)] bg-[color:var(--c-paper)]/95 backdrop-blur"
+          : "border-transparent bg-[color:var(--c-paper)]")
       }
     >
-      <div className="mx-auto flex h-16 w-full max-w-[1200px] items-center justify-between gap-4 px-4 sm:px-6 lg:h-[72px] lg:px-8">
+      <div className="mx-auto flex h-16 w-full max-w-[1320px] items-center justify-between gap-4 px-4 sm:px-6 lg:h-[76px] lg:px-8">
         <Link
           href="/"
           aria-label="Дмитрий Аляев — на главную"
-          className="font-[family-name:var(--font-display)] text-base font-bold tracking-tight no-underline"
+          className="font-[family-name:var(--font-display)] text-[15px] font-bold uppercase tracking-[0.14em] text-[color:var(--c-ink)] no-underline"
         >
-          Дмитрий <span className="text-[color:var(--c-gold)]">Аляев</span>
+          Дмитрий <span className="text-[color:var(--c-terracotta)]">Аляев</span>
         </Link>
 
-        <nav aria-label="Основная навигация" className="hidden items-center gap-6 lg:flex">
+        <nav aria-label="Основная навигация" className="hidden items-center gap-6 xl:flex">
           {NAV.map((item) => (
             <Link
               key={item.href}
               href={item.href}
               aria-current={isActive(item.href) ? "page" : undefined}
               className={
-                "text-sm no-underline transition-colors hover:text-[color:var(--c-gold)] " +
-                (isActive(item.href) ? "text-[color:var(--c-gold)]" : "text-[color:var(--c-text)]")
+                "text-[13px] uppercase tracking-[0.08em] no-underline transition-colors " +
+                (isActive(item.href)
+                  ? "text-[color:var(--c-ink)] underline decoration-[color:var(--c-lime)] decoration-2 underline-offset-8"
+                  : "text-[color:var(--c-text-muted)] hover:text-[color:var(--c-ink)]")
               }
             >
               {item.label}
@@ -78,10 +82,7 @@ export function Header() {
         </nav>
 
         <div className="flex items-center gap-2">
-          <Link
-            href="/contacts/#lead"
-            className="hidden rounded-xl bg-[color:var(--c-gold)] px-5 py-2.5 text-sm font-semibold text-[#0A0C12] no-underline transition-colors hover:bg-[#EFCF98] sm:inline-flex"
-          >
+          <Link href="/contacts/#lead" className={CTA + " hidden sm:inline-flex"}>
             Обсудить проект
           </Link>
           <button
@@ -90,7 +91,7 @@ export function Header() {
             aria-controls="mobile-menu"
             aria-label={open ? "Закрыть меню" : "Открыть меню"}
             onClick={() => setOpen((value) => !value)}
-            className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-[color:var(--c-border)] text-[color:var(--c-text)] lg:hidden"
+            className="inline-flex h-10 w-10 items-center justify-center border border-[color:var(--c-line-2)] text-[color:var(--c-ink)] xl:hidden"
           >
             <span aria-hidden="true" className="text-lg">
               {open ? "✕" : "☰"}
@@ -100,22 +101,19 @@ export function Header() {
       </div>
 
       {open ? (
-        <div id="mobile-menu" className="border-t border-[color:var(--c-border)] bg-[color:var(--c-bg)] lg:hidden">
-          <nav aria-label="Мобильная навигация" className="mx-auto flex w-full max-w-[1200px] flex-col px-4 py-3 sm:px-6">
+        <div id="mobile-menu" className="border-t border-[color:var(--c-line)] bg-[color:var(--c-paper)] xl:hidden">
+          <nav aria-label="Мобильная навигация" className="mx-auto flex w-full max-w-[1320px] flex-col px-4 py-3 sm:px-6">
             {NAV.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
                 aria-current={isActive(item.href) ? "page" : undefined}
-                className="border-b border-[color:var(--c-border)] py-3 text-base no-underline last:border-0"
+                className="border-b border-[color:var(--c-line)] py-3 text-base text-[color:var(--c-ink)] no-underline last:border-0"
               >
                 {item.label}
               </Link>
             ))}
-            <Link
-              href="/contacts/#lead"
-              className="mt-3 rounded-xl bg-[color:var(--c-gold)] px-5 py-3 text-center text-sm font-semibold text-[#0A0C12] no-underline"
-            >
+            <Link href="/contacts/#lead" className={CTA + " mt-3"}>
               Обсудить проект
             </Link>
           </nav>
