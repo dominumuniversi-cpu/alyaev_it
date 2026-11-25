@@ -11,7 +11,8 @@
 | Секреты | `E:\DockerData\alyaev-it\.env` (вне репозитория!) |
 | Postgres | `E:\DockerData\alyaev-it\pgdata` |
 | Бэкапы | `E:\DockerData\alyaev-it\backups` |
-| Nginx-роут | `E:\DockerData\nginx\stands\alyaev.conf` |
+| Nginx-вхост домена | `E:\DockerData\nginx\vhosts\alyaev.ru.conf` |
+| Сертификат | `E:\DockerData\alyaeva\certbot\conf\live\alyaev.ru` |
 
 ## 2. Контейнеры
 
@@ -37,9 +38,28 @@ cd E:\!Develop\sites\MY\repo\infra
 `--env-file` обязателен: переменные `POSTGRES_*` для интерполяции берутся только оттуда,
 а `env_file:` в compose **запрещён** установленной версией compose (additional property not allowed).
 
-## 4. Nginx
+## 4. Nginx и домен
 
-Роут: `E:\DockerData\nginx\stands\alyaev.conf` (лукейшн `/alyaev/`).
+Сайт открыт по домену **https://alyaev.ru** — из корня, без префикса пути.
+Вхост: `E:\DockerData\nginx\vhosts\alyaev.ru.conf` (полный `server{}`, подключается в `http{}`).
+`www.alyaev.ru` отвечает 301 на основной хост.
+
+### BASE_PATH: почему сайт был в /alyaev/
+
+`BASE_PATH` задаёт префикс, под которым Next.js живёт. На стенде это `/alyaev`, на домене — пусто (корень).
+В compose стоит `BASE_PATH: ${FRONTEND_BASE_PATH}` **без** `:-/alyaev`.
+
+> **Ловушка (проверено 25.11.2026):** синтаксис `${VAR:-default}` в Compose не различает
+> «переменная не задана» и «переменная задана пустой» — в обоих случаях подставляется default.
+> С `:-` пустой `FRONTEND_BASE_PATH=` давал `/alyaev`, и корень домена отдавал 404.
+> Решение: убрать `:-default` из выражения, значение писать в `.env` явно.
+> Текущее значение в `E:\DockerData\alyaev-it\.env`: `FRONTEND_BASE_PATH=` (пусто = корень).
+
+### Порт 80 не используется
+
+Внешний порт 80 перехватывает оборудование провайдера — запрос до нашего nginx не доходит.
+Поэтому вхост слушает **только 443**, а сертификат валидируется через **TLS-ALPN-01** на 443.
+HTTP-запросы из локальной сети обслуживает catch-all в `nginx.conf` (301 на https).
 
 ```powershell
 docker exec proxy nginx -t
@@ -50,6 +70,44 @@ docker exec proxy nginx -s reload
 > поэтому файл в `vhosts/` должен содержать ПОЛНЫЙ `server { ... }` (как `alyaeva.pro.conf`).
 > Содержимое `stands/*.conf` — это только `location {}` и подключается внутрь `server{...}`.
 > Файл с `location` в `vhosts/` = ошибка конфига.
+
+## 4а. SSL-сертификат и автопродление
+
+| Что | Значение |
+|---|---|
+| Удостоверяющий центр | Let's Encrypt (срок 90 дней) |
+| Домены в сертификате | `alyaev.ru`, `www.alyaev.ru` |
+| Контактный e-mail аккаунта | `admin@alyaev.ru` |
+| Способ валидации | TLS-ALPN-01 на порту 443 (порт 80 снаружи недоступен) |
+| Файлы | `live\alyaev.ru\fullchain.pem` + `privkey.pem` |
+| Скрипт продления | `repo\infra\scripts\renew-cert-alyaev-ru.js` |
+| Задача планировщика | `AlyaevRu-CertRenew`, воскресенье 04:00, от SYSTEM |
+| Лог | `E:\DockerData\alyaeva\logs\cert-alyaev-ru.log` |
+
+### Как часто обновляется
+
+Сертификат Let's Encrypt живёт **90 дней**. Скрипт запускается раз в неделю, но реально что-то делает
+только когда до истечения осталось **≤ 30 дней** — так заложено в `RENEW_BEFORE_DAYS`.
+
+Зачем так: у Let's Encrypt лимит 5 выпусков на один и тот же набор доменов в неделю. Частые перевыпуски
+упираются в лимит и могут оставить сайт без сертификата. Проверка раз в неделю + порог 30 дней даёт
+широкое окно на восстановление, если очередной запуск не пройдёт.
+
+### Как продлить вручную
+
+```powershell
+node E:\!Develop\sites\MY\repo\infra\scripts\renew-cert-alyaev-ru.js          # по порогу 30 дней
+node E:\!Develop\sites\MY\repo\infra\scripts\renew-cert-alyaev-ru.js --force  # перевыпуск сразу
+```
+
+> **Простой при продлении.** Валидация TLS-ALPN требует эксклюзивного владения портом 443,
+> поэтому `proxy` останавливается на ~15 секунд. Скрипт поднимает его в `finally` при любом исходе
+> и после подъёма проверяет, что сайт отдаёт 200. Если проверка не прошла — в логе строка
+> «ВНИМАНИЕ: сайт не отвечает 200».
+
+> **Ловушка (проверено 25.11.2026):** `docker run -p 127.0.0.1:443:443` для lego **не работает** —
+> серверы Let's Encrypt подключаются снаружи и до привязки только к loopback не доходят,
+> валидация падает с `Timeout during connect`. Нужно `-p 443:443` (все интерфейсы).
 
 ## 5. Миграции
 
