@@ -15,7 +15,7 @@ export default function Page() {
     <main className="mx-auto w-full max-w-[var(--shell-max)] px-4 py-10 sm:px-6 lg:px-8">
       <AdminNav current="/admin/reviews/" />
       <h1 className="mb-1 text-2xl font-semibold">Отзывы</h1>
-      <p className="mb-6 text-sm text-[color:var(--c-text-muted)]">
+      <p className="mb-6 text-sm text-[color:var(--c-muted)]">
         Отзывы клиентов. Публикуются только с согласия автора.
       </p>
       <ReviewsEditor />

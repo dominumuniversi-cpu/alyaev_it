@@ -162,7 +162,7 @@ export function LeadForm({
     return (
       <div role="status" className="rounded-2xl border border-[rgba(63,191,127,.4)] bg-[rgba(63,191,127,.08)] p-8">
         <p className="text-base font-semibold text-[color:var(--c-success)]">Заявка отправлена</p>
-        <p className="mt-2 text-sm text-[color:var(--c-text-muted)]">
+        <p className="mt-2 text-sm text-[color:var(--c-muted)]">
           Спасибо! Свяжусь с вами, чтобы обсудить задачу и предложить решение.
         </p>
         <div className="mt-5">
@@ -231,7 +231,7 @@ export function LeadForm({
       />
 
       {/* Бриф по ТЗ 14: помогает ответить подготовленным. Ни одно поле не обязательно. */}
-      <details className="rounded-xl border border-[color:var(--c-border)] p-4">
+      <details className="rounded-xl border border-[color:var(--c-line)] p-4">
         <summary className="cursor-pointer text-sm font-medium">
           Уточнить детали (необязательно) — ответ будет полезнее
         </summary>
@@ -254,12 +254,12 @@ export function LeadForm({
       </details>
 
       <div>
-        <label className="flex items-start gap-3 text-sm text-[color:var(--c-text-muted)]">
+        <label className="flex items-start gap-3 text-sm text-[color:var(--c-muted)]">
           <input type="checkbox" name="consent" disabled={sending} aria-required="true"
             aria-invalid={errors.consent ? true : undefined}
-            className="mt-0.5 h-4 w-4 shrink-0 rounded border-[color:var(--c-border)] accent-[color:var(--c-gold)]" />
+            className="mt-0.5 h-4 w-4 shrink-0 rounded border-[color:var(--c-line)] accent-[color:var(--c-lime-ink)]" />
           <span>
-            Даю <a href={BASE_PATH + "/personal-data-consent/"} className="text-[color:var(--c-gold)] underline">согласие на обработку персональных данных</a> на условиях <a href={BASE_PATH + "/privacy/"} className="text-[color:var(--c-gold)] underline">политики</a>.
+            Даю <a href={BASE_PATH + "/personal-data-consent/"} className="text-[color:var(--c-lime-ink)] underline">согласие на обработку персональных данных</a> на условиях <a href={BASE_PATH + "/privacy/"} className="text-[color:var(--c-lime-ink)] underline">политики</a>.
           </span>
         </label>
         {errors.consent ? (

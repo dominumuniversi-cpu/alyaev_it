@@ -30,7 +30,7 @@ export function Footer({
   const email = contacts.email ?? "";
 
   return (
-    <footer className="border-t border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] text-[color:var(--c-text)]">
+    <footer className="border-t border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] text-[color:var(--c-ink)]">
       <div className="mx-auto w-full max-w-[var(--shell-max)] px-[var(--shell-gutter)] py-12">
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
           <div>

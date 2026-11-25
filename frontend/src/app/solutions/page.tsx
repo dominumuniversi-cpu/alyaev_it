@@ -60,13 +60,13 @@ export default async function SolutionsPage() {
       subtitle="Модули, которые уже написаны и проверены. Внедрение занимает меньше времени, чем разработка с нуля."
     >
       {items.length === 0 ? (
-        <p className="max-w-2xl text-[color:var(--c-text-muted)]">
+        <p className="max-w-2xl text-[color:var(--c-muted)]">
           Каталог готовится. Пока посмотрите{" "}
-          <Link href="/services/" className="text-[color:var(--c-cyan)] hover:underline">
+          <Link href="/services/" className="text-[color:var(--c-terra-ink)] hover:underline">
             услуги и цены
           </Link>{" "}
           или{" "}
-          <Link href="/contacts/" className="text-[color:var(--c-cyan)] hover:underline">
+          <Link href="/contacts/" className="text-[color:var(--c-terra-ink)] hover:underline">
             опишите задачу
           </Link>{" "}
           — предложу, что можно сделать быстрее.
@@ -76,17 +76,17 @@ export default async function SolutionsPage() {
           {items.map((item) => (
             <article
               key={item.slug}
-              className="flex flex-col rounded-2xl border border-[color:var(--c-border)] bg-[color:var(--c-surface)] p-6 transition-colors hover:border-[color:var(--c-gold)]"
+              className="flex flex-col rounded-2xl border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-6 transition-colors hover:border-[color:var(--c-lime-ink)]"
             >
               <div className="mb-3 flex flex-wrap gap-2">
                 <Badge variant="tech">{KIND_LABELS[item.kind] ?? item.kind}</Badge>
               </div>
               <h2 className="mb-2 text-lg font-semibold">
-                <Link href={"/solutions/" + item.slug + "/"} className="hover:text-[color:var(--c-gold)]">
+                <Link href={"/solutions/" + item.slug + "/"} className="hover:text-[color:var(--c-lime-ink)]">
                   {item.title}
                 </Link>
               </h2>
-              <p className="mb-4 flex-1 text-sm leading-relaxed text-[color:var(--c-text-muted)]">
+              <p className="mb-4 flex-1 text-sm leading-relaxed text-[color:var(--c-muted)]">
                 {item.summary}
               </p>
               <div className="flex flex-wrap items-center gap-2">
@@ -97,7 +97,7 @@ export default async function SolutionsPage() {
               </div>
               <Link
                 href={"/solutions/" + item.slug + "/"}
-                className="mt-4 text-sm text-[color:var(--c-cyan)] hover:underline"
+                className="mt-4 text-sm text-[color:var(--c-terra-ink)] hover:underline"
               >
                 Подробнее о решении →
               </Link>

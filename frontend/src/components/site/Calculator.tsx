@@ -79,7 +79,7 @@ export function Calculator({
       <div className="space-y-8">
         {/* Шаг 1: направление */}
         <div>
-          <h3 className="mb-3 text-sm font-semibold uppercase tracking-[0.12em] text-[color:var(--c-gold)]">
+          <h3 className="mb-3 text-sm font-semibold uppercase tracking-[0.12em] text-[color:var(--c-lime-ink)]">
             1. Что нужно
           </h3>
           <div className="grid gap-2 sm:grid-cols-2">
@@ -93,8 +93,8 @@ export function Calculator({
                   aria-pressed={active}
                   className={"rounded-xl border p-3 text-left text-sm transition-colors " +
                     (active
-                      ? "border-[color:var(--c-gold)] bg-[rgba(227,188,122,0.08)] text-[color:var(--c-text)]"
-                      : "border-[color:var(--c-border)] bg-[color:var(--c-surface)] text-[color:var(--c-text-muted)] hover:border-[color:var(--c-cyan)]")}
+                      ? "border-[color:var(--c-lime-ink)] bg-[rgba(227,188,122,0.08)] text-[color:var(--c-ink)]"
+                      : "border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] text-[color:var(--c-muted)] hover:border-[color:var(--c-terra-ink)]")}
                 >
                   {item.title}
                 </button>
@@ -105,7 +105,7 @@ export function Calculator({
 
         {/* Шаг 2: сложность */}
         <div>
-          <h3 className="mb-3 text-sm font-semibold uppercase tracking-[0.12em] text-[color:var(--c-gold)]">
+          <h3 className="mb-3 text-sm font-semibold uppercase tracking-[0.12em] text-[color:var(--c-lime-ink)]">
             2. Сложность
           </h3>
           <div className="flex flex-wrap gap-2">
@@ -119,8 +119,8 @@ export function Calculator({
                   aria-pressed={active}
                   className={"rounded-lg border px-4 py-2 text-sm transition-colors " +
                     (active
-                      ? "border-[color:var(--c-gold)] bg-[rgba(227,188,122,0.08)] text-[color:var(--c-text)]"
-                      : "border-[color:var(--c-border)] bg-[color:var(--c-surface)] text-[color:var(--c-text-muted)] hover:border-[color:var(--c-cyan)]")}
+                      ? "border-[color:var(--c-lime-ink)] bg-[rgba(227,188,122,0.08)] text-[color:var(--c-ink)]"
+                      : "border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] text-[color:var(--c-muted)] hover:border-[color:var(--c-terra-ink)]")}
                 >
                   {item.title}
                 </button>
@@ -131,7 +131,7 @@ export function Calculator({
 
         {/* Шаг 3: опции */}
         <div>
-          <h3 className="mb-3 text-sm font-semibold uppercase tracking-[0.12em] text-[color:var(--c-gold)]">
+          <h3 className="mb-3 text-sm font-semibold uppercase tracking-[0.12em] text-[color:var(--c-lime-ink)]">
             3. Дополнительные функции
           </h3>
           <ul className="space-y-2">
@@ -139,15 +139,15 @@ export function Calculator({
               const checked = selected.includes(item.slug);
               return (
                 <li key={item.slug}>
-                  <label className="flex cursor-pointer items-center gap-3 rounded-lg border border-[color:var(--c-border)] bg-[color:var(--c-surface)] p-3 text-sm">
+                  <label className="flex cursor-pointer items-center gap-3 rounded-lg border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-3 text-sm">
                     <input
                       type="checkbox"
                       checked={checked}
                       onChange={() => toggle(item.slug)}
-                      className="h-4 w-4 accent-[color:var(--c-gold)]"
+                      className="h-4 w-4 accent-[color:var(--c-lime-ink)]"
                     />
-                    <span className="flex-1 text-[color:var(--c-text)]">{item.title}</span>
-                    <span className="text-[color:var(--c-text-muted)]">+{formatPrice(item.price_delta)}</span>
+                    <span className="flex-1 text-[color:var(--c-ink)]">{item.title}</span>
+                    <span className="text-[color:var(--c-muted)]">+{formatPrice(item.price_delta)}</span>
                   </label>
                 </li>
               );
@@ -158,17 +158,17 @@ export function Calculator({
 
       {/* Итог */}
       <aside
-        className="h-fit rounded-2xl border border-[color:var(--c-border)] bg-[color:var(--c-surface)] p-6 lg:sticky lg:top-24"
+        className="h-fit rounded-2xl border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-6 lg:sticky lg:top-24"
         aria-live="polite"
       >
-        <p className="text-xs uppercase tracking-[0.12em] text-[color:var(--c-text-muted)]">Предварительно</p>
-        <p className="mt-2 font-[family-name:var(--font-display)] text-3xl font-bold text-[color:var(--c-gold)]">
+        <p className="text-xs uppercase tracking-[0.12em] text-[color:var(--c-muted)]">Предварительно</p>
+        <p className="mt-2 font-[family-name:var(--font-display)] text-3xl font-bold text-[color:var(--c-lime-ink)]">
           {formatPrice(total)}
         </p>
-        <p className="mt-4 text-xs leading-relaxed text-[color:var(--c-text-muted)]">
+        <p className="mt-4 text-xs leading-relaxed text-[color:var(--c-muted)]">
           Демонстрационный расчёт. Суммы ориентировочные, не являются коммерческим предложением.
         </p>
-        <p className="mt-2 text-xs leading-relaxed text-[color:var(--c-text-muted)]">
+        <p className="mt-2 text-xs leading-relaxed text-[color:var(--c-muted)]">
           Модели, сервер и подписки сервисов оплачиваются отдельно.
         </p>
         <div className="mt-6">

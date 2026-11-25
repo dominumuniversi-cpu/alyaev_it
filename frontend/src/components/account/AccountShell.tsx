@@ -104,7 +104,7 @@ function date(value: string | null): string {
 
 /** Цвет статуса: золото — работа идёт, голубой — впереди, серый — закрыто. */
 function statusClass(status: string): string {
-  if (status === "done") return "border-[color:var(--c-border)] text-[color:var(--c-text-muted)]";
+  if (status === "done") return "border-[color:var(--c-line)] text-[color:var(--c-muted)]";
   if (status === "new") return "border-[color:var(--c-terracotta)]/40 text-[color:var(--c-terra-ink)]";
   return "border-[color:var(--c-lime)]/40 text-[color:var(--c-lime-ink)]";
 }
@@ -161,16 +161,16 @@ export function AccountShell({ mode, projectId }: { mode: "list" | "detail"; pro
     return (
       <div className="space-y-4">
         <h1 className="text-2xl font-semibold">{heading}</h1>
-        <p className="text-[color:var(--c-text-muted)]">Загружаем…</p>
+        <p className="text-[color:var(--c-muted)]">Загружаем…</p>
       </div>
     );
   }
 
   if (state === "unauth") {
     return (
-      <div className="rounded-2xl border border-[color:var(--c-border)] bg-[color:var(--c-surface)] p-8">
+      <div className="rounded-2xl border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-8">
         <h1 className="mb-2 text-xl font-semibold">Нужен вход</h1>
-        <p className="mb-5 text-sm text-[color:var(--c-text-muted)]">
+        <p className="mb-5 text-sm text-[color:var(--c-muted)]">
           Кабинет доступен после входа. Учётную запись выдаёт исполнитель после заказа.
         </p>
         <a
@@ -185,9 +185,9 @@ export function AccountShell({ mode, projectId }: { mode: "list" | "detail"; pro
 
   if (state === "nocabinet") {
     return (
-      <div className="rounded-2xl border border-[color:var(--c-border)] bg-[color:var(--c-surface)] p-8">
+      <div className="rounded-2xl border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-8">
         <h1 className="mb-2 text-xl font-semibold">Кабинет ещё не заведён</h1>
-        <p className="text-sm text-[color:var(--c-text-muted)]">
+        <p className="text-sm text-[color:var(--c-muted)]">
           Учётная запись есть, но карточки клиента пока нет. Напишите исполнителю — он откроет доступ.
         </p>
       </div>
@@ -200,7 +200,7 @@ export function AccountShell({ mode, projectId }: { mode: "list" | "detail"; pro
         <div>
           <h1 className="text-2xl font-semibold">Личный кабинет</h1>
           {profile ? (
-            <p className="mt-1 text-sm text-[color:var(--c-text-muted)]">
+            <p className="mt-1 text-sm text-[color:var(--c-muted)]">
               {profile.display_name}
               {profile.company ? " · " + profile.company : ""}
             </p>
@@ -268,33 +268,33 @@ function NotificationsBlock() {
   if (items === null) return null;
 
   return (
-    <section className="rounded-2xl border border-[color:var(--c-border)] bg-[color:var(--c-surface)] p-6">
+    <section className="rounded-2xl border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-6">
       <h2 className="mb-1 text-lg font-semibold">Уведомления</h2>
-      <p className="mb-4 text-sm text-[color:var(--c-text-muted)]">
+      <p className="mb-4 text-sm text-[color:var(--c-muted)]">
         {unread > 0 ? "Непрочитанных: " + unread : "Всё прочитано"}
       </p>
       {items.length === 0 ? (
-        <p className="text-sm text-[color:var(--c-text-muted)]">Уведомлений пока нет.</p>
+        <p className="text-sm text-[color:var(--c-muted)]">Уведомлений пока нет.</p>
       ) : (
         <ul className="space-y-3">
           {items.map((n) => (
             <li
               key={n.id}
               className={
-                "border-b border-[color:var(--c-border)] pb-3 last:border-0 last:pb-0" +
+                "border-b border-[color:var(--c-line)] pb-3 last:border-0 last:pb-0" +
                 (n.read ? "" : " opacity-100")
               }
             >
               <div className="flex flex-wrap items-start justify-between gap-2">
                 <div>
-                  <p className={"text-sm" + (n.read ? " text-[color:var(--c-text-muted)]" : "")}>
+                  <p className={"text-sm" + (n.read ? " text-[color:var(--c-muted)]" : "")}>
                     {n.read ? "" : "● "}
                     {n.title}
                   </p>
                   {n.body ? (
-                    <p className="mt-1 whitespace-pre-line text-xs text-[color:var(--c-text-muted)]">{n.body}</p>
+                    <p className="mt-1 whitespace-pre-line text-xs text-[color:var(--c-muted)]">{n.body}</p>
                   ) : null}
-                  <p className="mt-1 text-xs text-[color:var(--c-text-muted)]">{date(n.created_at)}</p>
+                  <p className="mt-1 text-xs text-[color:var(--c-muted)]">{date(n.created_at)}</p>
                 </div>
                 {n.read ? null : (
                   <button
@@ -316,8 +316,8 @@ function NotificationsBlock() {
 function ProjectList({ projects }: { projects: Project[] }) {
   if (projects.length === 0) {
     return (
-      <div className="rounded-2xl border border-[color:var(--c-border)] bg-[color:var(--c-surface)] p-8 text-center">
-        <p className="text-[color:var(--c-text-muted)]">
+      <div className="rounded-2xl border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-8 text-center">
+        <p className="text-[color:var(--c-muted)]">
           Проектов пока нет. Как только работа начнётся, она появится здесь.
         </p>
       </div>
@@ -329,7 +329,7 @@ function ProjectList({ projects }: { projects: Project[] }) {
         <li key={p.id}>
           <a
             href={BASE_PATH + "/account/projects/" + p.id}
-            className="block h-full rounded-2xl border border-[color:var(--c-border)] bg-[color:var(--c-surface)] p-6 transition-colors hover:border-[color:var(--c-lime)]/50"
+            className="block h-full rounded-2xl border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-6 transition-colors hover:border-[color:var(--c-lime)]/50"
           >
             <div className="mb-3 flex items-start justify-between gap-3">
               <h2 className="text-lg font-semibold">{p.title}</h2>
@@ -337,14 +337,14 @@ function ProjectList({ projects }: { projects: Project[] }) {
                 {p.status_label}
               </span>
             </div>
-            <dl className="space-y-1 text-sm text-[color:var(--c-text-muted)]">
+            <dl className="space-y-1 text-sm text-[color:var(--c-muted)]">
               <div className="flex justify-between">
                 <dt>Стоимость</dt>
-                <dd className="text-[color:var(--c-text)]">{money(p.price_rub)}</dd>
+                <dd className="text-[color:var(--c-ink)]">{money(p.price_rub)}</dd>
               </div>
               <div className="flex justify-between">
                 <dt>Срок</dt>
-                <dd className="text-[color:var(--c-text)]">{date(p.due_at)}</dd>
+                <dd className="text-[color:var(--c-ink)]">{date(p.due_at)}</dd>
               </div>
             </dl>
           </a>
@@ -358,7 +358,7 @@ function ProjectList({ projects }: { projects: Project[] }) {
 function ProjectCard({ project }: { project: ProjectDetail }) {
   return (
     <div className="space-y-6">
-      <section className="rounded-2xl border border-[color:var(--c-border)] bg-[color:var(--c-surface)] p-6">
+      <section className="rounded-2xl border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-6">
         <div className="mb-4 flex flex-wrap items-center gap-3">
           <h2 className="text-xl font-semibold">{project.title}</h2>
           <span className={"rounded-full border px-3 py-1 text-xs " + statusClass(project.status)}>
@@ -366,59 +366,59 @@ function ProjectCard({ project }: { project: ProjectDetail }) {
           </span>
         </div>
         {project.description ? (
-          <p className="mb-4 whitespace-pre-line text-sm text-[color:var(--c-text-muted)]">
+          <p className="mb-4 whitespace-pre-line text-sm text-[color:var(--c-muted)]">
             {project.description}
           </p>
         ) : null}
         <dl className="grid gap-4 text-sm sm:grid-cols-3">
           <div>
-            <dt className="text-[color:var(--c-text-muted)]">Стоимость</dt>
+            <dt className="text-[color:var(--c-muted)]">Стоимость</dt>
             <dd className="mt-1">{money(project.price_rub)}</dd>
           </div>
           <div>
-            <dt className="text-[color:var(--c-text-muted)]">Начат</dt>
+            <dt className="text-[color:var(--c-muted)]">Начат</dt>
             <dd className="mt-1">{date(project.started_at)}</dd>
           </div>
           <div>
-            <dt className="text-[color:var(--c-text-muted)]">Срок</dt>
+            <dt className="text-[color:var(--c-muted)]">Срок</dt>
             <dd className="mt-1">{date(project.due_at)}</dd>
           </div>
         </dl>
       </section>
 
-      <section className="rounded-2xl border border-[color:var(--c-border)] bg-[color:var(--c-surface)] p-6">
+      <section className="rounded-2xl border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-6">
         <h3 className="mb-4 text-lg font-semibold">Задачи</h3>
         {project.tasks.length === 0 ? (
-          <p className="text-sm text-[color:var(--c-text-muted)]">Задач пока нет.</p>
+          <p className="text-sm text-[color:var(--c-muted)]">Задач пока нет.</p>
         ) : (
           <ul className="space-y-3">
             {project.tasks.map((t) => (
-              <li key={t.id} className="flex flex-wrap items-start justify-between gap-2 border-b border-[color:var(--c-border)] pb-3 last:border-0 last:pb-0">
+              <li key={t.id} className="flex flex-wrap items-start justify-between gap-2 border-b border-[color:var(--c-line)] pb-3 last:border-0 last:pb-0">
                 <div>
                   <p className="text-sm">
                     {t.status_label === "Готово" ? "✓ " : "• "}
                     {t.title}
                   </p>
                   {t.description ? (
-                    <p className="mt-1 text-xs text-[color:var(--c-text-muted)]">{t.description}</p>
+                    <p className="mt-1 text-xs text-[color:var(--c-muted)]">{t.description}</p>
                   ) : null}
                 </div>
-                <span className="text-xs text-[color:var(--c-text-muted)]">{t.status_label}</span>
+                <span className="text-xs text-[color:var(--c-muted)]">{t.status_label}</span>
               </li>
             ))}
           </ul>
         )}
       </section>
 
-      <section className="rounded-2xl border border-[color:var(--c-border)] bg-[color:var(--c-surface)] p-6">
+      <section className="rounded-2xl border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-6">
         <h3 className="mb-4 text-lg font-semibold">История</h3>
         {project.history.length === 0 ? (
-          <p className="text-sm text-[color:var(--c-text-muted)]">Изменений пока не было.</p>
+          <p className="text-sm text-[color:var(--c-muted)]">Изменений пока не было.</p>
         ) : (
           <ol className="space-y-3">
             {project.history.map((h, i) => (
               <li key={i} className="flex gap-3 text-sm">
-                <span className="w-24 shrink-0 text-[color:var(--c-text-muted)]">{date(h.created_at)}</span>
+                <span className="w-24 shrink-0 text-[color:var(--c-muted)]">{date(h.created_at)}</span>
                 <span>
                   {h.status_to_label}
                   {h.comment ? " — " + h.comment : ""}
@@ -484,22 +484,22 @@ function DocumentsBlock({ projectId }: { projectId: number }) {
   }, [reload]);
 
   return (
-    <section className="rounded-2xl border border-[color:var(--c-border)] bg-[color:var(--c-surface)] p-6">
+    <section className="rounded-2xl border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-6">
       <h3 className="mb-4 text-lg font-semibold">Документы</h3>
       {failed ? (
-        <p className="text-sm text-[color:var(--c-text-muted)]">Не удалось загрузить документы.</p>
+        <p className="text-sm text-[color:var(--c-muted)]">Не удалось загрузить документы.</p>
       ) : items === null ? (
-        <p className="text-sm text-[color:var(--c-text-muted)]">Загрузка…</p>
+        <p className="text-sm text-[color:var(--c-muted)]">Загрузка…</p>
       ) : items.length === 0 ? (
-        <p className="text-sm text-[color:var(--c-text-muted)]">Документов пока нет.</p>
+        <p className="text-sm text-[color:var(--c-muted)]">Документов пока нет.</p>
       ) : (
         <ul className="space-y-3">
           {items.map((d) => (
-            <li key={d.id} className="flex flex-wrap items-center justify-between gap-2 border-b border-[color:var(--c-border)] pb-3 last:border-0 last:pb-0">
+            <li key={d.id} className="flex flex-wrap items-center justify-between gap-2 border-b border-[color:var(--c-line)] pb-3 last:border-0 last:pb-0">
               <a href={BASE_PATH + d.download_url} className="text-sm underline">
                 {d.title}
               </a>
-              <span className="text-xs text-[color:var(--c-text-muted)]">
+              <span className="text-xs text-[color:var(--c-muted)]">
                 {DOC_CATEGORY_LABELS[d.category] ?? d.category} · {d.file_name} · {fileSize(d.size_bytes)}
               </span>
             </li>
@@ -508,7 +508,7 @@ function DocumentsBlock({ projectId }: { projectId: number }) {
       )}
 
       <form
-        className="mt-5 space-y-3 border-t border-[color:var(--c-border)] pt-5"
+        className="mt-5 space-y-3 border-t border-[color:var(--c-line)] pt-5"
         onSubmit={(e) => {
           e.preventDefault();
           void upload(e.currentTarget);
@@ -521,12 +521,12 @@ function DocumentsBlock({ projectId }: { projectId: number }) {
             name="file"
             required
             accept=".pdf,.docx,.xlsx,.zip"
-            className="text-sm text-[color:var(--c-text-muted)] file:mr-3 file:rounded-lg file:border-0 file:bg-[color:var(--c-border)] file:px-3 file:py-2 file:text-sm file:text-[color:var(--c-text)]"
+            className="text-sm text-[color:var(--c-muted)] file:mr-3 file:rounded-lg file:border-0 file:bg-[color:var(--c-paper-2)] file:px-3 file:py-2 file:text-sm file:text-[color:var(--c-ink)]"
           />
           <select
             name="category"
             defaultValue="other"
-            className="rounded-lg border border-[color:var(--c-border)] bg-[color:var(--c-bg)] px-3 py-2 text-sm text-[color:var(--c-text)]"
+            className="rounded-lg border border-[color:var(--c-line)] bg-[color:var(--c-paper)] px-3 py-2 text-sm text-[color:var(--c-ink)]"
           >
             <option value="tz">ТЗ</option>
             <option value="act">Акт</option>
@@ -537,7 +537,7 @@ function DocumentsBlock({ projectId }: { projectId: number }) {
             {busy ? "Загрузка…" : "Загрузить"}
           </Button>
         </div>
-        <p className="text-xs text-[color:var(--c-text-muted)]">
+        <p className="text-xs text-[color:var(--c-muted)]">
           PDF, DOCX, XLSX, ZIP до 20 МБ.
         </p>
         {error ? (
@@ -594,12 +594,12 @@ function MessagesBlock({ projectId }: { projectId: number }) {
   }
 
   return (
-    <section className="rounded-2xl border border-[color:var(--c-border)] bg-[color:var(--c-surface)] p-6">
+    <section className="rounded-2xl border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-6">
       <h3 className="mb-4 text-lg font-semibold">Переписка</h3>
       {items === null ? (
-        <p className="text-sm text-[color:var(--c-text-muted)]">Загрузка…</p>
+        <p className="text-sm text-[color:var(--c-muted)]">Загрузка…</p>
       ) : items.length === 0 ? (
-        <p className="text-sm text-[color:var(--c-text-muted)]">Сообщений пока нет.</p>
+        <p className="text-sm text-[color:var(--c-muted)]">Сообщений пока нет.</p>
       ) : (
         <ul className="mb-4 space-y-3">
           {items.map((m) => (
@@ -611,12 +611,12 @@ function MessagesBlock({ projectId }: { projectId: number }) {
                 className={
                   "max-w-[80%] rounded-xl px-3 py-2 text-sm " +
                   (m.author_role === "client"
-                    ? "bg-[color:var(--c-bg)] border border-[color:var(--c-gold)]"
-                    : "bg-[color:var(--c-bg)] border border-[color:var(--c-border)]")
+                    ? "bg-[color:var(--c-paper)] border border-[color:var(--c-lime-ink)]"
+                    : "bg-[color:var(--c-paper)] border border-[color:var(--c-line)]")
                 }
               >
                 <p className="whitespace-pre-line">{m.body}</p>
-                <p className="mt-1 text-xs text-[color:var(--c-text-muted)]">
+                <p className="mt-1 text-xs text-[color:var(--c-muted)]">
                   {m.author_role === "client" ? "Вы" : "Студия"} · {date(m.created_at)}
                 </p>
               </div>
@@ -633,7 +633,7 @@ function MessagesBlock({ projectId }: { projectId: number }) {
           rows={2}
           maxLength={5000}
           placeholder="Написать сообщение…"
-          className="min-w-[240px] flex-1 rounded-xl border border-[color:var(--c-border)] bg-[color:var(--c-bg)] p-3 text-sm"
+          className="min-w-[240px] flex-1 rounded-xl border border-[color:var(--c-line)] bg-[color:var(--c-paper)] p-3 text-sm"
         />
         <Button type="submit" disabled={busy || !text.trim()}>
           {busy ? "Отправка…" : "Отправить"}
@@ -662,7 +662,7 @@ function LogoutButton() {
       type="button"
       onClick={onClick}
       disabled={busy}
-      className="text-sm text-[color:var(--c-text-muted)] hover:text-[color:var(--c-text)] disabled:opacity-50"
+      className="text-sm text-[color:var(--c-muted)] hover:text-[color:var(--c-ink)] disabled:opacity-50"
     >
       {busy ? "Выходим…" : "Выйти"}
     </button>

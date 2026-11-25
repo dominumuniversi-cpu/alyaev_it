@@ -40,7 +40,7 @@ export default async function ContactsPage() {
           <h2 className="mb-3 text-base font-semibold">Как связаться напрямую</h2>
           {contacts.telegram ? (
             <div className="mt-3">
-              <p className="mb-3 text-base">Telegram: <span className="text-[color:var(--c-gold)]">{contacts.telegram}</span></p>
+              <p className="mb-3 text-base">Telegram: <span className="text-[color:var(--c-lime-ink)]">{contacts.telegram}</span></p>
               <a
                 href={contacts.telegram_url || "https://t.me/" + contacts.telegram.replace(/^@/, "")}
                 target="_blank"
@@ -53,17 +53,17 @@ export default async function ContactsPage() {
           ) : null}
           {contacts.email ? (
             <p className="mt-2 text-base">
-              E-mail: <span className="text-[color:var(--c-gold)]">{contacts.email}</span>
+              E-mail: <span className="text-[color:var(--c-lime-ink)]">{contacts.email}</span>
             </p>
           ) : null}
-          <p className="mt-6 text-sm leading-relaxed text-[color:var(--c-text-muted)]">
+          <p className="mt-6 text-sm leading-relaxed text-[color:var(--c-muted)]">
             Если удобнее формой — заполните её справа. Поля со звёздочкой обязательны.
           </p>
-          <p className="mt-4 text-sm leading-relaxed text-[color:var(--c-text-muted)]">
+          <p className="mt-4 text-sm leading-relaxed text-[color:var(--c-muted)]">
             Данные из формы использую только чтобы ответить на вашу заявку.
           </p>
         </div>
-        <div id="lead" className="rounded-2xl border border-[color:var(--c-border)] bg-[color:var(--c-surface)] p-6 sm:p-8">
+        <div id="lead" className="rounded-2xl border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-6 sm:p-8">
           <h2 className="mb-6 text-base font-semibold">Оставить заявку</h2>
           <LeadForm taskOptions={taskOptions} serviceTitles={serviceTitles} />
         </div>

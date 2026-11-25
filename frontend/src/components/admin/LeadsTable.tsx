@@ -120,7 +120,7 @@ export function LeadsTable() {
             key={status || "all"}
             type="button"
             onClick={() => setFilter(status)}
-            className={"rounded-lg border px-3 py-1.5 text-sm transition-colors " + (filter === status ? "border-[color:var(--c-gold)] text-[color:var(--c-gold)]" : "border-[color:var(--c-border)] text-[color:var(--c-text-muted)] hover:text-[color:var(--c-text)]")}
+            className={"rounded-lg border px-3 py-1.5 text-sm transition-colors " + (filter === status ? "border-[color:var(--c-lime-ink)] text-[color:var(--c-lime-ink)]" : "border-[color:var(--c-line)] text-[color:var(--c-muted)] hover:text-[color:var(--c-ink)]")}
           >
             {status ? STATUS_LABELS[status] : "Все"}
             {" (" + (status ? (counts[status] ?? 0) : Object.values(counts).reduce((a, b) => a + b, 0)) + ")"}
@@ -129,44 +129,44 @@ export function LeadsTable() {
       </div>
 
       {message ? (
-        <p className="mb-4 text-sm text-[color:var(--c-text-muted)]" role="status">{message}</p>
+        <p className="mb-4 text-sm text-[color:var(--c-muted)]" role="status">{message}</p>
       ) : null}
 
       {state === "loading" ? (
-        <p className="text-sm text-[color:var(--c-text-muted)]">Загружаем заявки…</p>
+        <p className="text-sm text-[color:var(--c-muted)]">Загружаем заявки…</p>
       ) : null}
       {state === "error" ? (
         <p className="text-sm text-[color:var(--c-danger)]">Не удалось загрузить список. Обновите страницу.</p>
       ) : null}
 
       {state === "ready" && leads.length === 0 ? (
-        <p className="rounded-xl border border-[color:var(--c-border)] bg-[color:var(--c-surface)] p-6 text-sm text-[color:var(--c-text-muted)]">
+        <p className="rounded-xl border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-6 text-sm text-[color:var(--c-muted)]">
           Заявок пока нет. Они появятся здесь, как только кто-то отправит форму на сайте.
         </p>
       ) : null}
 
       <div className="space-y-4">
         {leads.map((lead) => (
-          <article key={lead.public_id} className="rounded-xl border border-[color:var(--c-border)] bg-[color:var(--c-surface)] p-5">
+          <article key={lead.public_id} className="rounded-xl border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-5">
             <div className="mb-3 flex flex-wrap items-center gap-3">
               <h2 className="text-base font-semibold">{lead.name}</h2>
               <Badge variant="status">{STATUS_LABELS[lead.status] ?? lead.status}</Badge>
-              <span className="text-xs text-[color:var(--c-text-muted)]">{formatDate(lead.created_at)}</span>
+              <span className="text-xs text-[color:var(--c-muted)]">{formatDate(lead.created_at)}</span>
             </div>
-            <p className="mb-2 text-sm text-[color:var(--c-gold)]">{lead.contact_value}</p>
-            <p className="mb-3 whitespace-pre-wrap text-sm leading-relaxed text-[color:var(--c-text-muted)]">{lead.message}</p>
-            <div className="mb-3 flex flex-wrap gap-3 text-xs text-[color:var(--c-text-muted)]">
+            <p className="mb-2 text-sm text-[color:var(--c-lime-ink)]">{lead.contact_value}</p>
+            <p className="mb-3 whitespace-pre-wrap text-sm leading-relaxed text-[color:var(--c-muted)]">{lead.message}</p>
+            <div className="mb-3 flex flex-wrap gap-3 text-xs text-[color:var(--c-muted)]">
               {lead.task_type ? <span>Задача: {lead.task_type}</span> : null}
               {lead.company_site ? <span>Сайт: {lead.company_site}</span> : null}
               {lead.source_page ? <span>Источник: {lead.source_page}</span> : null}
             </div>
             {/* Ответы брифа: клиент выбрал их сам — без них смысл брифа теряется. */}
             {Object.keys(lead.brief ?? {}).length > 0 ? (
-              <dl className="mb-3 grid gap-1 text-xs text-[color:var(--c-text-muted)] sm:grid-cols-2">
+              <dl className="mb-3 grid gap-1 text-xs text-[color:var(--c-muted)] sm:grid-cols-2">
                 {BRIEF_LABELS.filter(([, key]) => lead.brief[key]).map(([label, key]) => (
                   <div key={key}>
                     <dt className="inline">{label}: </dt>
-                    <dd className="inline text-[color:var(--c-text)]">{lead.brief[key]}</dd>
+                    <dd className="inline text-[color:var(--c-ink)]">{lead.brief[key]}</dd>
                   </div>
                 ))}
               </dl>

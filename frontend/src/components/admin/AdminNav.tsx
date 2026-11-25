@@ -32,8 +32,8 @@ export function AdminNav({ current }: { current: string }) {
             className={
               "rounded-xl border px-4 py-2 text-sm font-medium no-underline transition-colors " +
               (active
-                ? "border-[color:var(--c-gold)] bg-[color:var(--c-surface-2)] text-[color:var(--c-gold)]"
-                : "border-[color:var(--c-border)] text-[color:var(--c-text-muted)] hover:border-[color:var(--c-border-strong)] hover:text-[color:var(--c-text)]")
+                ? "border-[color:var(--c-lime-ink)] bg-[color:var(--c-paper)] text-[color:var(--c-lime-ink)]"
+                : "border-[color:var(--c-line)] text-[color:var(--c-muted)] hover:border-[color:var(--c-line-2)] hover:text-[color:var(--c-ink)]")
             }
           >
             {s.label}

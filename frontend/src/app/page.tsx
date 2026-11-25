@@ -69,7 +69,7 @@ export default async function HomePage() {
             ))}
           </div>
         ) : (
-          <p className="text-[color:var(--c-text-muted)]">Каталог услуг обновляется.</p>
+          <p className="text-[color:var(--c-muted)]">Каталог услуг обновляется.</p>
         )}
         <div className="mt-8">
           <ButtonLink href="/services/" variant="secondary">
@@ -119,10 +119,10 @@ export default async function HomePage() {
       <Section id="lead" title="Есть задача, которую можно автоматизировать?">
         <div className="grid gap-8 rounded-[var(--radius-md)] border border-[color:var(--c-ink)] bg-[color:var(--c-lime)] p-6 text-[color:var(--c-lime-ink)] sm:p-8 lg:grid-cols-[1fr_1.1fr]">
           <div>
-            <p className="text-base leading-relaxed text-[color:var(--c-text-muted)]">
+            <p className="text-base leading-relaxed text-[color:var(--c-muted)]">
               Опишите, что сейчас приходится делать вручную. Предложу подходящее решение и предварительно оценю стоимость.
             </p>
-            <ul className="mt-6 space-y-2 text-sm text-[color:var(--c-text-muted)]">
+            <ul className="mt-6 space-y-2 text-sm text-[color:var(--c-muted)]">
               <li>— Отвечаю лично, без менеджеров-посредников.</li>
               <li>— Сначала разбираем процесс, потом оцениваем работу.</li>
               <li>— Не берусь за задачи, которые не принесут пользы.</li>

@@ -63,21 +63,21 @@ export default function AboutPage() {
               height={ownerPortrait.height}
               sizes="(max-width: 1024px) 100vw, 640px"
               priority
-              className="h-auto w-full border border-[color:var(--c-border)] object-cover"
+              className="h-auto w-full border border-[color:var(--c-line)] object-cover"
             />
           </div>
           <div>
-            <p className="text-base leading-relaxed text-[color:var(--c-text)]">
+            <p className="text-base leading-relaxed text-[color:var(--c-ink)]">
               В IT с 2007 года. Работал с корпоративными информационными системами, IT-инфраструктурой,
               технической поддержкой, автоматизацией процессов и интеграцией программных решений.
             </p>
-            <p className="mt-4 text-base leading-relaxed text-[color:var(--c-text-muted)]">
+            <p className="mt-4 text-base leading-relaxed text-[color:var(--c-muted)]">
               Подход основан на понимании не только технической стороны задачи, но и бизнес-процессов,
               для которых создаётся решение. Сначала разбираюсь, как работает процесс и где теряется время,
               затем подбираю архитектуру, разрабатываю, тестирую и документирую.
             </p>
-            <h2 className="mb-3 font-[family-name:var(--font-display)] text-xl font-bold uppercase tracking-[-0.01em] text-[color:var(--c-text)]">Профессиональный опыт</h2>
-            <p className="text-base leading-relaxed text-[color:var(--c-text-muted)]">
+            <h2 className="mb-3 font-[family-name:var(--font-display)] text-xl font-bold uppercase tracking-[-0.01em] text-[color:var(--c-ink)]">Профессиональный опыт</h2>
+            <p className="text-base leading-relaxed text-[color:var(--c-muted)]">
               Организация и сопровождение корпоративной IT-инфраструктуры, управление техническими специалистами,
               работа со сложными обращениями пользователей, взаимодействие с разработчиками и интеграторами.
             </p>
@@ -85,8 +85,8 @@ export default function AboutPage() {
               <ButtonLink href="/contacts/#lead">Обсудить задачу</ButtonLink>
             </div>
             <aside className="mt-10 border-t border-[color:var(--c-line)] pt-6">
-            <h2 className="mb-4 font-[family-name:var(--font-display)] text-base font-bold uppercase tracking-[-0.01em] text-[color:var(--c-text)]">Чем занимаюсь</h2>
-            <ul className="space-y-2 text-sm text-[color:var(--c-text-muted)]">
+            <h2 className="mb-4 font-[family-name:var(--font-display)] text-base font-bold uppercase tracking-[-0.01em] text-[color:var(--c-ink)]">Чем занимаюсь</h2>
+            <ul className="space-y-2 text-sm text-[color:var(--c-muted)]">
               {[
                 "Разработка и внедрение Telegram-ботов",
                 "AI-ассистенты и системы работы с базами знаний",
@@ -115,7 +115,7 @@ export default function AboutPage() {
       </Section>
 
       <Section id="mission" title="Мой подход">
-        <p className="max-w-3xl text-base leading-relaxed text-[color:var(--c-text-muted)]">
+        <p className="max-w-3xl text-base leading-relaxed text-[color:var(--c-muted)]">
           Не предлагаю автоматизацию ради автоматизации. Моя цель — создавать инструменты, которые решают
           конкретные задачи бизнеса. Технологии должны упрощать работу, а не создавать новые проблемы.
         </p>

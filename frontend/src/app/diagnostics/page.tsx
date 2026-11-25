@@ -53,9 +53,9 @@ export default async function DiagnosticsPage() {
       >
         <div className="grid gap-4 sm:grid-cols-2">
           {OUTCOMES.map((item) => (
-            <div key={item.title} className="rounded-2xl border border-[color:var(--c-border)] bg-[color:var(--c-surface)] p-5">
+            <div key={item.title} className="rounded-2xl border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-5">
               <h2 className="mb-2 text-base font-semibold">{item.title}</h2>
-              <p className="text-sm leading-relaxed text-[color:var(--c-text-muted)]">{item.text}</p>
+              <p className="text-sm leading-relaxed text-[color:var(--c-muted)]">{item.text}</p>
             </div>
           ))}
         </div>
@@ -64,17 +64,17 @@ export default async function DiagnosticsPage() {
       <Section id="diagnostics-steps" title="Как это происходит" surface>
         <ol className="grid gap-4 sm:grid-cols-3">
           {STEPS.map((step, index) => (
-            <li key={step.title} className="rounded-2xl border border-[color:var(--c-border)] bg-[color:var(--c-bg)] p-5">
+            <li key={step.title} className="rounded-2xl border border-[color:var(--c-line)] bg-[color:var(--c-paper)] p-5">
               <Badge variant="tech">Шаг {index + 1}</Badge>
               <h3 className="mb-2 mt-3 text-base font-semibold">{step.title}</h3>
-              <p className="text-sm leading-relaxed text-[color:var(--c-text-muted)]">{step.text}</p>
+              <p className="text-sm leading-relaxed text-[color:var(--c-muted)]">{step.text}</p>
             </li>
           ))}
         </ol>
       </Section>
 
       <Section id="diagnostics-limits" title="Чего здесь не будет">
-        <ul className="max-w-3xl space-y-2 text-sm leading-relaxed text-[color:var(--c-text-muted)]">
+        <ul className="max-w-3xl space-y-2 text-sm leading-relaxed text-[color:var(--c-muted)]">
           {NOT_FOR.map((item) => (
             <li key={item} className="flex gap-2">
               <span aria-hidden="true" className="text-[color:var(--c-danger)]">—</span>
@@ -82,20 +82,20 @@ export default async function DiagnosticsPage() {
             </li>
           ))}
         </ul>
-        <p className="mt-4 max-w-3xl text-sm leading-relaxed text-[color:var(--c-text-muted)]">
+        <p className="mt-4 max-w-3xl text-sm leading-relaxed text-[color:var(--c-muted)]">
           Точную смету и готовое техзадание разбор не заменяет — это следующий шаг, если он имеет смысл.
         </p>
       </Section>
 
       <Section id="diagnostics-form" title="Оставить заявку на разбор" surface>
         <div className="max-w-2xl">
-          <p className="mb-5 text-sm leading-relaxed text-[color:var(--c-text-muted)]">
+          <p className="mb-5 text-sm leading-relaxed text-[color:var(--c-muted)]">
             Заявка уходит в общую форму — отдельной анкеты нет: смысл разбора в разговоре, а не в заполнении полей.
           </p>
           {/* Источник передаётся ссылкой: LeadForm читает ?source= из адреса, а не из пропса. */}
           <Link
             href="/contacts/?source=diagnostics"
-            className="inline-flex items-center justify-center rounded-xl bg-[color:var(--c-gold)] px-6 py-3 text-sm font-semibold text-[color:var(--c-bg)] transition hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--c-gold)]"
+            className="inline-flex items-center justify-center rounded-xl bg-[color:var(--c-lime)] px-6 py-3 text-sm font-semibold text-[color:var(--c-paper)] transition hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--c-gold)]"
           >
             Оставить заявку на разбор
           </Link>

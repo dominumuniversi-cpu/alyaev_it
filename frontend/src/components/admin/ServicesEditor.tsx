@@ -96,7 +96,7 @@ export function ServicesEditor() {
     } catch { setError("Сеть недоступна"); }
   }
 
-  if (state === "loading") return <p className="text-sm text-[color:var(--c-text-muted)]">Загружаем услуги…</p>;
+  if (state === "loading") return <p className="text-sm text-[color:var(--c-muted)]">Загружаем услуги…</p>;
   if (state === "error") return <p className="text-sm text-[color:var(--c-danger)]">Не удалось загрузить услуги.</p>;
 
   return (
@@ -104,10 +104,10 @@ export function ServicesEditor() {
       {error ? <p role="alert" className="mb-4 text-sm text-[color:var(--c-danger)]">{error}</p> : null}
       <div className="space-y-3">
         {items.map((service) => (
-          <div key={service.id} className="rounded-xl border border-[color:var(--c-border)] bg-[color:var(--c-surface)] p-5">
+          <div key={service.id} className="rounded-xl border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-5">
             <div className="mb-3 flex flex-wrap items-center gap-3">
               <h3 className="text-base font-semibold">{service.title}</h3>
-              <span className="text-xs text-[color:var(--c-text-muted)]">
+              <span className="text-xs text-[color:var(--c-muted)]">
                 {service.status === "published" ? "опубликована" : "черновик"}
               </span>
               {saved === service.id ? (

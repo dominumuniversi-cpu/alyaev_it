@@ -48,7 +48,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
 
 const List = ({ items, tone }: { items: string[]; tone: "plus" | "minus" }) =>
   items.length === 0 ? null : (
-    <ul className="space-y-2 text-sm text-[color:var(--c-text-muted)]">
+    <ul className="space-y-2 text-sm text-[color:var(--c-muted)]">
       {items.map((item) => (
         <li key={item} className="flex gap-2">
           <span
@@ -82,29 +82,29 @@ function CategoryPage({ category }: { category: CategoryFull }) {
           {category.services.map((service) => (
             <article
               key={service.slug}
-              className="flex flex-col rounded-xl border border-[color:var(--c-border)] bg-[color:var(--c-surface)] p-6"
+              className="flex flex-col rounded-xl border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-6"
             >
               <div className="mb-2 flex items-start justify-between gap-3">
                 <h3 className="text-lg font-semibold">{service.title}</h3>
-                <span className="whitespace-nowrap text-sm text-[color:var(--c-gold)]">
+                <span className="whitespace-nowrap text-sm text-[color:var(--c-lime-ink)]">
                   {formatPrice(service)}
                 </span>
               </div>
-              <p className="mb-3 text-sm leading-relaxed text-[color:var(--c-text-muted)]">
+              <p className="mb-3 text-sm leading-relaxed text-[color:var(--c-muted)]">
                 {service.short_description}
               </p>
               {service.examples.length > 0 ? (
-                <ul className="mb-4 space-y-1.5 text-sm text-[color:var(--c-text-muted)]">
+                <ul className="mb-4 space-y-1.5 text-sm text-[color:var(--c-muted)]">
                   {service.examples.slice(0, 3).map((example) => (
                     <li key={example} className="flex gap-2">
-                      <span aria-hidden="true" className="text-[color:var(--c-cyan)]">→</span>
+                      <span aria-hidden="true" className="text-[color:var(--c-terra-ink)]">→</span>
                       <span>{example}</span>
                     </li>
                   ))}
                 </ul>
               ) : null}
               <div className="mt-auto flex items-center justify-between gap-3 pt-2">
-                <span className="text-xs text-[color:var(--c-text-muted)]">Срок: {service.duration_text}</span>
+                <span className="text-xs text-[color:var(--c-muted)]">Срок: {service.duration_text}</span>
                 <ButtonLink href={"/services/" + service.slug} variant="secondary">Подробнее</ButtonLink>
               </div>
             </article>
@@ -113,7 +113,7 @@ function CategoryPage({ category }: { category: CategoryFull }) {
       </Section>
 
       <Section id="category-cta" title="Не нашли подходящий формат?">
-        <p className="mb-5 max-w-2xl text-[color:var(--c-text-muted)]">
+        <p className="mb-5 max-w-2xl text-[color:var(--c-muted)]">
           Опишите задачу — предложу решение и предварительно оценю стоимость.
         </p>
         <ButtonLink href="/contacts/" size="lg">Обсудить задачу</ButtonLink>
@@ -164,7 +164,7 @@ export default async function ServicePage({ params }: Params) {
       </div>
 
       {service.body_md ? (
-        <p className="mb-8 max-w-3xl whitespace-pre-line text-base leading-relaxed text-[color:var(--c-text-muted)]">
+        <p className="mb-8 max-w-3xl whitespace-pre-line text-base leading-relaxed text-[color:var(--c-muted)]">
           {service.body_md}
         </p>
       ) : null}
@@ -176,9 +176,9 @@ export default async function ServicePage({ params }: Params) {
             {service.examples.map((example) => (
               <li
                 key={example}
-                className="rounded-xl border border-[color:var(--c-border)] bg-[color:var(--c-surface)] p-4 text-sm text-[color:var(--c-text-muted)]"
+                className="rounded-xl border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-4 text-sm text-[color:var(--c-muted)]"
               >
-                <span aria-hidden="true" className="mr-2 text-[color:var(--c-cyan)]">→</span>
+                <span aria-hidden="true" className="mr-2 text-[color:var(--c-terra-ink)]">→</span>
                 {example}
               </li>
             ))}
@@ -187,26 +187,26 @@ export default async function ServicePage({ params }: Params) {
       ) : null}
 
       <div className="grid gap-6 lg:grid-cols-2">
-        <div className="rounded-2xl border border-[color:var(--c-border)] bg-[color:var(--c-surface)] p-6">
+        <div className="rounded-2xl border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-6">
           <h2 className="mb-3 text-base font-semibold">Что входит в стоимость</h2>
           <List items={service.included} tone="plus" />
         </div>
-        <div className="rounded-2xl border border-[color:var(--c-border)] bg-[color:var(--c-surface)] p-6">
+        <div className="rounded-2xl border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-6">
           <h2 className="mb-3 text-base font-semibold">Что не входит</h2>
           <List items={service.excluded} tone="minus" />
         </div>
-        <div className="rounded-2xl border border-[color:var(--c-border)] bg-[color:var(--c-surface)] p-6">
+        <div className="rounded-2xl border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-6">
           <h2 className="mb-3 text-base font-semibold">Что нужно от вас</h2>
           <List items={service.client_data} tone="plus" />
         </div>
-        <div className="rounded-2xl border border-[color:var(--c-border)] bg-[color:var(--c-surface)] p-6">
+        <div className="rounded-2xl border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-6">
           <h2 className="mb-3 text-base font-semibold">Возможные дополнительные расходы</h2>
           <List items={service.extra_costs} tone="minus" />
         </div>
       </div>
 
       {service.warranty_text ? (
-        <p className="mt-6 text-sm text-[color:var(--c-text-muted)]">Гарантия: {service.warranty_text}</p>
+        <p className="mt-6 text-sm text-[color:var(--c-muted)]">Гарантия: {service.warranty_text}</p>
       ) : null}
 
       {service.faq.length > 0 ? (
@@ -216,14 +216,14 @@ export default async function ServicePage({ params }: Params) {
             {service.faq.map((item) => (
               <details
                 key={item.q}
-                className="group rounded-xl border border-[color:var(--c-border)] bg-[color:var(--c-surface)] p-4"
+                className="group rounded-xl border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-4"
               >
                 <summary className="cursor-pointer list-none text-sm font-medium marker:hidden">
-                  <span className="mr-2 text-[color:var(--c-gold)] group-open:hidden" aria-hidden="true">+</span>
-                  <span className="mr-2 hidden text-[color:var(--c-gold)] group-open:inline" aria-hidden="true">−</span>
+                  <span className="mr-2 text-[color:var(--c-lime-ink)] group-open:hidden" aria-hidden="true">+</span>
+                  <span className="mr-2 hidden text-[color:var(--c-lime-ink)] group-open:inline" aria-hidden="true">−</span>
                   {item.q}
                 </summary>
-                <p className="mt-3 pl-6 text-sm leading-relaxed text-[color:var(--c-text-muted)]">{item.a}</p>
+                <p className="mt-3 pl-6 text-sm leading-relaxed text-[color:var(--c-muted)]">{item.a}</p>
               </details>
             ))}
           </div>
@@ -238,11 +238,11 @@ export default async function ServicePage({ params }: Params) {
               <li key={item.slug}>
                 <Link
                   href={"/solutions/" + item.slug + "/"}
-                  className="flex h-full flex-col rounded-xl border border-[color:var(--c-border)] bg-[color:var(--c-surface)] p-4 transition-colors hover:border-[color:var(--c-gold)]"
+                  className="flex h-full flex-col rounded-xl border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-4 transition-colors hover:border-[color:var(--c-lime-ink)]"
                 >
                   <span className="text-sm font-medium">{item.title}</span>
-                  <span className="mt-1 text-xs leading-relaxed text-[color:var(--c-text-muted)]">{item.summary}</span>
-                  <span className="mt-2 text-xs text-[color:var(--c-cyan)]">Внедрение быстрее, чем разработка с нуля →</span>
+                  <span className="mt-1 text-xs leading-relaxed text-[color:var(--c-muted)]">{item.summary}</span>
+                  <span className="mt-2 text-xs text-[color:var(--c-terra-ink)]">Внедрение быстрее, чем разработка с нуля →</span>
                 </Link>
               </li>
             ))}
@@ -250,8 +250,8 @@ export default async function ServicePage({ params }: Params) {
         </div>
       ) : null}
 
-      <div className="mt-8 rounded-2xl border border-[color:var(--c-border)] bg-[color:var(--c-surface)] p-6">
-        <p className="text-sm text-[color:var(--c-text-muted)]">
+      <div className="mt-8 rounded-2xl border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-6">
+        <p className="text-sm text-[color:var(--c-muted)]">
           Указанная цена является стартовой. Итоговая стоимость определяется после анализа задачи и согласования технического задания.
         </p>
         <div className="mt-4">

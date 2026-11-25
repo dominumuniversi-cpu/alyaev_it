@@ -82,11 +82,11 @@ export function AuditLog() {
   useEffect(() => { void load(); }, [load]);
 
   if (state === "loading" && items.length === 0) {
-    return <p className="text-sm text-[color:var(--c-text-muted)]">Загружаем журнал…</p>;
+    return <p className="text-sm text-[color:var(--c-muted)]">Загружаем журнал…</p>;
   }
   if (state === "error") {
     return (
-      <div className="rounded-2xl border border-[color:var(--c-border)] bg-[color:var(--c-surface)] p-6">
+      <div className="rounded-2xl border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-6">
         <p className="mb-4 text-sm">Не удалось загрузить журнал.</p>
         <Button onClick={() => void load()}>Повторить</Button>
       </div>
@@ -110,21 +110,21 @@ export function AuditLog() {
       </div>
 
       {items.length === 0 ? (
-        <div className="rounded-2xl border border-[color:var(--c-border)] bg-[color:var(--c-surface)] p-6">
-          <p className="text-sm text-[color:var(--c-text-muted)]">
+        <div className="rounded-2xl border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-6">
+          <p className="text-sm text-[color:var(--c-muted)]">
             Изменений пока не было. Здесь появятся создание и правка услуг, статей,
             кейсов, отзывов, SEO и семантики — с указанием, кто их сделал.
           </p>
         </div>
       ) : (
         <>
-          <p className="mb-3 text-sm text-[color:var(--c-text-muted)]">
+          <p className="mb-3 text-sm text-[color:var(--c-muted)]">
             Всего записей: {total}. Показаны последние {items.length}.
           </p>
           <div className="overflow-x-auto">
             <table className="w-full border-collapse text-sm">
               <thead>
-                <tr className="border-b border-[color:var(--c-border)] text-left">
+                <tr className="border-b border-[color:var(--c-line)] text-left">
                   <th className="py-2 pr-4 font-medium">Когда</th>
                   <th className="py-2 pr-4 font-medium">Кто</th>
                   <th className="py-2 pr-4 font-medium">Что</th>
@@ -136,7 +136,7 @@ export function AuditLog() {
                 {items.map((row) => {
                   const changes = changesOf(row.payload);
                   return (
-                    <tr key={row.id} className="border-b border-[color:var(--c-border)] align-top">
+                    <tr key={row.id} className="border-b border-[color:var(--c-line)] align-top">
                       <td className="py-3 pr-4 whitespace-nowrap">{formatDate(row.created_at)}</td>
                       <td className="py-3 pr-4">{row.actor}</td>
                       <td className="py-3 pr-4">{labels[row.action] ?? row.action_label}</td>
@@ -144,7 +144,7 @@ export function AuditLog() {
                         <Badge variant="muted">{row.entity}</Badge>
                         {row.entity_id ? <span className="ml-1 opacity-60">#{row.entity_id}</span> : null}
                       </td>
-                      <td className="py-3 text-[color:var(--c-text-muted)]">
+                      <td className="py-3 text-[color:var(--c-muted)]">
                         {changes.length > 0 ? (
                           <ul className="space-y-1">
                             {changes.map((c) => <li key={c}>{c}</li>)}

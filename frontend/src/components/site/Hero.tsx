@@ -38,7 +38,7 @@ export function Hero() {
           <p className="mt-7 max-w-[42ch] text-lg leading-relaxed text-[color:var(--c-ink-2)] sm:text-xl">
             Проектирую и внедряю цифровые решения: AI-ассистентов, автоматизацию, интеграции и инструменты для работы с данными.
           </p>
-          <p className="mt-4 font-[family-name:var(--font-mono)] text-xs uppercase tracking-[0.16em] text-[color:var(--c-text-muted)]">
+          <p className="mt-4 font-[family-name:var(--font-mono)] text-xs uppercase tracking-[0.16em] text-[color:var(--c-muted)]">
             {DIRECTIONS.join(" · ")}
           </p>
           <div className="mt-9 flex flex-wrap gap-3">
@@ -49,7 +49,7 @@ export function Hero() {
               Смотреть услуги
             </ButtonLink>
           </div>
-          <ul className="mt-9 flex flex-wrap gap-x-6 gap-y-2 text-sm text-[color:var(--c-text-muted)]">
+          <ul className="mt-9 flex flex-wrap gap-x-6 gap-y-2 text-sm text-[color:var(--c-muted)]">
             {POINTS.map((point) => (
               <li key={point} className="flex items-center gap-2">
                 <span aria-hidden="true" className="text-[color:var(--c-terra-ink)]">—</span>
@@ -73,7 +73,7 @@ function HeroSchema() {
   return (
     <div className="border border-[color:var(--c-line-2)] on-dark:bg-[color:var(--c-ink-2)] bg-[color:var(--c-paper-2)]">
       <div className="flex items-center justify-between border-b border-[color:var(--c-line)] px-4 py-3">
-        <span className="font-[family-name:var(--font-mono)] text-[10px] uppercase tracking-[0.2em] text-[color:var(--c-text-muted)]">
+        <span className="font-[family-name:var(--font-mono)] text-[10px] uppercase tracking-[0.2em] text-[color:var(--c-muted)]">
           Схема обработки
         </span>
         <span aria-hidden="true" className="h-2 w-2 bg-[color:var(--c-lime)]" />
@@ -95,12 +95,12 @@ function HeroSchema() {
             </span>
             <span>
               <span className="block text-sm font-semibold text-[color:var(--c-ink)]">{step.label}</span>
-              <span className="block text-sm text-[color:var(--c-text-muted)]">{step.text}</span>
+              <span className="block text-sm text-[color:var(--c-muted)]">{step.text}</span>
             </span>
           </li>
         ))}
       </ol>
-      <p className="border-t border-[color:var(--c-line)] px-4 py-3 font-[family-name:var(--font-mono)] text-[10px] uppercase tracking-[0.18em] text-[color:var(--c-text-muted)]">
+      <p className="border-t border-[color:var(--c-line)] px-4 py-3 font-[family-name:var(--font-mono)] text-[10px] uppercase tracking-[0.18em] text-[color:var(--c-muted)]">
         input → logic → automation
       </p>
     </div>

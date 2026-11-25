@@ -5,7 +5,7 @@ type Variant = "tech" | "price" | "muted" | "status";
 const STYLES: Record<Variant, string> = {
   tech: "text-[color:var(--c-ink)] border-[color:var(--c-line-2)] bg-[color:var(--c-lime)]",
   price: "text-[color:var(--c-ink)] border-[color:var(--c-terracotta)] bg-transparent font-semibold",
-  muted: "text-[color:var(--c-text-muted)] border-[color:var(--c-border)] bg-transparent",
+  muted: "text-[color:var(--c-muted)] border-[color:var(--c-line)] bg-transparent",
   status: "text-[color:var(--c-ink)] border-[color:var(--c-line-2)] on-dark:bg-[color:var(--c-ink)] bg-[color:var(--c-paper)]",
 };
 

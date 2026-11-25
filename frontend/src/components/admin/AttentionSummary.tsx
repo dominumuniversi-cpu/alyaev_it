@@ -42,8 +42,8 @@ export function AttentionSummary() {
   }
 
   return (
-    <section className="mb-6 rounded-2xl border border-[color:var(--c-border)] bg-[color:var(--c-surface)] p-5">
-      <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-[color:var(--c-text-muted)]">
+    <section className="mb-6 rounded-2xl border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-5">
+      <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-[color:var(--c-muted)]">
         Требует внимания
       </h2>
       <ul className="flex flex-wrap gap-3">
@@ -51,10 +51,10 @@ export function AttentionSummary() {
           <li key={item.key}>
             <a
               href={BASE_PATH + item.href}
-              className="inline-flex items-center gap-2 rounded-lg border border-[color:var(--c-border)] px-4 py-2 text-sm hover:border-[color:var(--c-gold)]"
+              className="inline-flex items-center gap-2 rounded-lg border border-[color:var(--c-line)] px-4 py-2 text-sm hover:border-[color:var(--c-lime-ink)]"
             >
-              <span className="font-semibold text-[color:var(--c-gold)]">{data[item.key]}</span>
-              <span className="text-[color:var(--c-text-muted)]">{item.label}</span>
+              <span className="font-semibold text-[color:var(--c-lime-ink)]">{data[item.key]}</span>
+              <span className="text-[color:var(--c-muted)]">{item.label}</span>
             </a>
           </li>
         ))}

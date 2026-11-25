@@ -17,7 +17,7 @@ export default function AdminServicesPage() {
       <AdminNav current="/admin/services/" />
       <div className="mb-6">
         <h1 className="text-2xl font-semibold">Услуги и цены</h1>
-        <p className="mt-1 text-sm text-[color:var(--c-text-muted)]">
+        <p className="mt-1 text-sm text-[color:var(--c-muted)]">
           Изменения сразу видны на сайте. Пустая цена означает «по запросу».
         </p>
       </div>

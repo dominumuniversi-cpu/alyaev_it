@@ -8,5 +8,5 @@ export const metadata: Metadata = {
 
 /** Пропускает содержимое без шапки сайта. */
 export default function LoginLayout({ children }: { children: React.ReactNode }) {
-  return <div className="min-h-screen bg-[color:var(--c-bg)]">{children}</div>;
+  return <div className="min-h-screen bg-[color:var(--c-paper)]">{children}</div>;
 }

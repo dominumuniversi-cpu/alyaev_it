@@ -13,9 +13,10 @@ type Size = ButtonSize;
 
 /** Варианты различаются только цветом и состоянием наведения. */
 const VARIANTS: Record<Variant, string> = {
-  primary: "bg-[color:var(--c-lime)] text-[color:var(--c-ink)] hover:bg-[color:var(--c-gold-dim)]",
+  primary:
+    "bg-[color:var(--c-lime)] text-[color:var(--c-lime-ink)] hover:opacity-90",
   secondary:
-    "border-[color:var(--c-border-strong)] bg-transparent text-[color:var(--c-text)] hover:bg-[color:var(--c-ink)] hover:text-[color:var(--c-paper)]",
+    "border-[color:var(--c-line-2)] bg-transparent text-[color:var(--c-ink)] hover:bg-[color:var(--c-ink)] hover:text-[color:var(--c-paper)]",
   ghost: "bg-transparent text-[color:var(--c-ink)] underline-offset-4 hover:underline",
 };
 

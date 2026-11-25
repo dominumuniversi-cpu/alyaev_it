@@ -35,7 +35,7 @@ export const DISPLAY_H1 =
 
 /** Заголовок секции. */
 export const DISPLAY_H2 =
-  "font-[family-name:var(--font-display)] text-[clamp(26px,3.6vw,44px)] font-bold uppercase leading-[1] tracking-[-0.02em] text-[color:var(--c-text)]";
+  "font-[family-name:var(--font-display)] text-[clamp(26px,3.6vw,44px)] font-bold uppercase leading-[1] tracking-[-0.02em] text-[color:var(--c-ink)]";
 
 /** Вертикальный ритм секции: один шаг на весь сайт. */
 export const SECTION_SPACE = "py-[var(--space-section)]";

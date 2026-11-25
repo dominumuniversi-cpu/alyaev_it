@@ -75,7 +75,7 @@ export function Header() {
                 "text-[13px] uppercase tracking-[0.08em] no-underline transition-colors " +
                 (isActive(item.href)
                   ? "text-[color:var(--c-ink)] underline decoration-[color:var(--c-lime)] decoration-2 underline-offset-8"
-                  : "text-[color:var(--c-text-muted)] hover:text-[color:var(--c-ink)]")
+                  : "text-[color:var(--c-muted)] hover:text-[color:var(--c-ink)]")
               }
             >
               {item.label}
@@ -117,7 +117,7 @@ export function Header() {
               </Link>
             ))}
             <div className="mt-4 flex items-center justify-between border-t border-[color:var(--c-line)] pt-4">
-              <span className="font-[family-name:var(--font-mono)] text-[11px] uppercase tracking-[0.14em] text-[color:var(--c-text-muted)]">
+              <span className="font-[family-name:var(--font-mono)] text-[11px] uppercase tracking-[0.14em] text-[color:var(--c-muted)]">
                 Тема оформления
               </span>
               <ThemeToggle />

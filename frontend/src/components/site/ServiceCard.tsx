@@ -16,14 +16,14 @@ export function ServiceCard({ service }: { service: ServiceCardData }) {
   return (
     <article
       data-service-card={service.slug}
-      className="group relative flex h-full flex-col border border-[color:var(--c-border)] on-dark:bg-[color:var(--c-ink-2)] bg-[color:var(--c-paper-2)] transition-colors duration-150 hover:border-[color:var(--c-ink)]">
-      <div className="flex items-center justify-between border-b border-[color:var(--c-border)] on-dark:bg-[color:var(--c-ink)] bg-[color:var(--c-paper)] px-4 py-2">
-        <span className="font-[family-name:var(--font-mono)] text-[10px] uppercase tracking-[0.18em] text-[color:var(--c-text-muted)]">
+      className="group relative flex h-full flex-col border border-[color:var(--c-line)] on-dark:bg-[color:var(--c-ink-2)] bg-[color:var(--c-paper-2)] transition-colors duration-150 hover:border-[color:var(--c-ink)]">
+      <div className="flex items-center justify-between border-b border-[color:var(--c-line)] on-dark:bg-[color:var(--c-ink)] bg-[color:var(--c-paper)] px-4 py-2">
+        <span className="font-[family-name:var(--font-mono)] text-[10px] uppercase tracking-[0.18em] text-[color:var(--c-muted)]">
           {service.category_title ?? "Услуга"}
         </span>
         <span aria-hidden="true" className="h-1.5 w-1.5 bg-[color:var(--c-terracotta)]" />
       </div>
-      <div className="flex items-center justify-center border-b border-[color:var(--c-border)] px-4 py-5">
+      <div className="flex items-center justify-center border-b border-[color:var(--c-line)] px-4 py-5">
         <PersonalServiceVisual type={visualType} className="h-[150px] w-auto" />
       </div>
       <div className="flex flex-1 flex-col p-5">
@@ -35,11 +35,11 @@ export function ServiceCard({ service }: { service: ServiceCardData }) {
             {service.title}
           </Link>
         </h3>
-        <p className="mb-4 text-sm leading-relaxed text-[color:var(--c-text-muted)]">
+        <p className="mb-4 text-sm leading-relaxed text-[color:var(--c-muted)]">
           {service.short_description}
         </p>
         {service.examples.length > 0 ? (
-          <ul className="mb-6 space-y-1.5 text-sm text-[color:var(--c-text-muted)]">
+          <ul className="mb-6 space-y-1.5 text-sm text-[color:var(--c-muted)]">
             {service.examples.slice(0, 3).map((example) => (
               <li key={example} className="flex gap-2">
                 <span aria-hidden="true" className="text-[color:var(--c-terra-ink)]">—</span>

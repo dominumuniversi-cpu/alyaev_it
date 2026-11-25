@@ -23,7 +23,7 @@ export function FeatureCard({
         <p
           className={
             "mb-3 font-[family-name:var(--font-mono)] text-xs uppercase tracking-[0.2em] " +
-            (tone === "gold" ? "text-[color:var(--c-gold)]" : "text-[color:var(--c-cyan)]")
+            (tone === "gold" ? "text-[color:var(--c-lime-ink)]" : "text-[color:var(--c-terra-ink)]")
           }
         >
           {marker}
@@ -33,12 +33,12 @@ export function FeatureCard({
         <Icon
           name={icon}
           className={
-            "mb-3 h-7 w-7 " + (tone === "gold" ? "text-[color:var(--c-gold)]" : "text-[color:var(--c-cyan)]")
+            "mb-3 h-7 w-7 " + (tone === "gold" ? "text-[color:var(--c-lime-ink)]" : "text-[color:var(--c-terra-ink)]")
           }
         />
       ) : null}
       <h3 className="mb-2 font-[family-name:var(--font-display)] text-base font-bold uppercase leading-snug tracking-[-0.01em] text-[color:var(--c-ink)]">{title}</h3>
-      <p className="text-sm leading-relaxed text-[color:var(--c-text-muted)]">{text}</p>
+      <p className="text-sm leading-relaxed text-[color:var(--c-muted)]">{text}</p>
     </div>
   );
 }

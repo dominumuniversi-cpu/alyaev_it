@@ -45,7 +45,7 @@ export function ThemeToggle({ compact = false }: { compact?: boolean }) {
 
   return (
     <button type="button" onClick={toggle} aria-label={label} title={label} aria-pressed={isDark}
-      className="inline-flex h-9 items-center gap-2 rounded-pill border border-[color:var(--c-line-2)] px-3 font-[family-name:var(--font-mono)] text-[11px] uppercase tracking-[0.14em] text-[color:var(--c-text)] transition-colors hover:border-[color:var(--c-ink)] hover:text-[color:var(--c-ink)]"
+      className="inline-flex h-9 items-center gap-2 rounded-pill border border-[color:var(--c-line-2)] px-3 font-[family-name:var(--font-mono)] text-[11px] uppercase tracking-[0.14em] text-[color:var(--c-ink)] transition-colors hover:border-[color:var(--c-ink)] hover:text-[color:var(--c-ink)]"
     >
       <span aria-hidden="true" className="text-[13px] leading-none">
         {ready && isDark ? "◐" : "◑"}

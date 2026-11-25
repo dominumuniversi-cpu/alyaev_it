@@ -9,5 +9,5 @@ export const metadata: Metadata = {
 
 /** Просто пропускает содержимое: шапка сайта здесь лишняя. */
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
-  return <div className="min-h-screen bg-[color:var(--c-bg)]">{children}</div>;
+  return <div className="min-h-screen bg-[color:var(--c-paper)]">{children}</div>;
 }

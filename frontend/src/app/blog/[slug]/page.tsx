@@ -72,7 +72,7 @@ function renderBody(md: string) {
         <div key={index} className="mb-6 overflow-x-auto">
           <table className="w-full border-collapse text-sm">
             <thead>
-              <tr className="border-b border-[color:var(--c-border)] text-left">
+              <tr className="border-b border-[color:var(--c-line)] text-left">
                 {head.map((h) => (
                   <th key={h} className="py-2 pr-4 font-medium">{h}</th>
                 ))}
@@ -80,7 +80,7 @@ function renderBody(md: string) {
             </thead>
             <tbody>
               {rows.map((row) => (
-                <tr key={row.join("-")} className="border-b border-[color:var(--c-border)]">
+                <tr key={row.join("-")} className="border-b border-[color:var(--c-line)]">
                   {row.map((cell, i) => (
                     <td key={i} className="py-2 pr-4">{cell}</td>
                   ))}
@@ -95,7 +95,7 @@ function renderBody(md: string) {
     // Список: все строки начинаются с - или *.
     if (lines.every((l) => /^[-*]\s/.test(l))) {
       return (
-        <ul key={index} className="mb-4 list-disc space-y-2 pl-6 text-[color:var(--c-text-muted)]">
+        <ul key={index} className="mb-4 list-disc space-y-2 pl-6 text-[color:var(--c-muted)]">
           {lines.map((l) => (
             <li key={l}>{renderInline(l.replace(/^[-*]\s+/, ""))}</li>
           ))}
@@ -105,7 +105,7 @@ function renderBody(md: string) {
 
     // Жирный текст **...** внутри абзаца иначе выводился бы звёздочками.
     return (
-      <p key={index} className="mb-4 text-base leading-relaxed text-[color:var(--c-text-muted)]">
+      <p key={index} className="mb-4 text-base leading-relaxed text-[color:var(--c-muted)]">
         {renderInline(block)}
       </p>
     );
@@ -117,7 +117,7 @@ function renderInline(text: string) {
   const parts = text.split(/(\*\*[^*]+\*\*)/g);
   return parts.map((part, i) =>
     part.startsWith("**") && part.endsWith("**") ? (
-      <strong key={i} className="font-semibold text-[color:var(--c-text)]">
+      <strong key={i} className="font-semibold text-[color:var(--c-ink)]">
         {part.slice(2, -2)}
       </strong>
     ) : (
@@ -167,7 +167,7 @@ export default async function ArticlePage({ params }: { params: Promise<Params> 
               <li key={item.slug}>
                 <Link
                   href={"/blog/" + item.slug + "/"}
-                  className="flex h-full flex-col rounded-xl border border-[color:var(--c-border)] bg-[color:var(--c-surface)] p-4 transition-colors hover:border-[color:var(--c-gold)]"
+                  className="flex h-full flex-col rounded-xl border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-4 transition-colors hover:border-[color:var(--c-lime-ink)]"
                 >
                   <span className="text-sm font-medium">{item.title}</span>
                 </Link>
@@ -185,13 +185,13 @@ export default async function ArticlePage({ params }: { params: Promise<Params> 
               <li key={item.slug}>
                 <Link
                   href={"/services/" + item.slug + "/"}
-                  className="flex h-full flex-col rounded-xl border border-[color:var(--c-border)] bg-[color:var(--c-surface)] p-4 transition-colors hover:border-[color:var(--c-gold)]"
+                  className="flex h-full flex-col rounded-xl border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-4 transition-colors hover:border-[color:var(--c-lime-ink)]"
                 >
                   <span className="text-sm font-medium">{item.title}</span>
-                  <span className="mt-1 text-xs leading-relaxed text-[color:var(--c-text-muted)]">
+                  <span className="mt-1 text-xs leading-relaxed text-[color:var(--c-muted)]">
                     {item.short_description}
                   </span>
-                  <span className="mt-2 text-xs text-[color:var(--c-gold)]">{formatPrice(item)}</span>
+                  <span className="mt-2 text-xs text-[color:var(--c-lime-ink)]">{formatPrice(item)}</span>
                 </Link>
               </li>
             ))}
@@ -199,8 +199,8 @@ export default async function ArticlePage({ params }: { params: Promise<Params> 
         </div>
       ) : null}
 
-      <div className="mt-10 rounded-2xl border border-[color:var(--c-border)] bg-[color:var(--c-surface)] p-6">
-        <p className="text-sm text-[color:var(--c-text-muted)]">
+      <div className="mt-10 rounded-2xl border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-6">
+        <p className="text-sm text-[color:var(--c-muted)]">
           Если в вашем бизнесе есть похожая задача — обсудим, что именно стоит автоматизировать.
         </p>
         <div className="mt-4">

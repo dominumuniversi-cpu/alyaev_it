@@ -38,15 +38,15 @@ export default async function Page() {
       id="page"
       breadcrumbs={[{ label: "Главная", href: "/" }, { label: "Блог" }]} title={"Статьи и разборы"}>
       {articles.length === 0 ? (
-        <p className="max-w-2xl text-base leading-relaxed text-[color:var(--c-text-muted)]">
+        <p className="max-w-2xl text-base leading-relaxed text-[color:var(--c-muted)]">
           {"Готовлю материалы о практической автоматизации: разборы сценариев, ограничения технологий и стоимость решений. Следите за обновлениями."}
         </p>
       ) : (
         <div className="grid gap-5 md:grid-cols-2">
           {articles.map((article) => (
-            <article key={article.slug} className="rounded-2xl border border-[color:var(--c-border)] bg-[color:var(--c-surface)] p-6">
+            <article key={article.slug} className="rounded-2xl border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-6">
               {article.published_at ? (
-                <time className="text-xs uppercase tracking-wide text-[color:var(--c-text-muted)]" dateTime={article.published_at}>
+                <time className="text-xs uppercase tracking-wide text-[color:var(--c-muted)]" dateTime={article.published_at}>
                   {formatDate(article.published_at)}
                 </time>
               ) : null}
@@ -56,7 +56,7 @@ export default async function Page() {
                 </Link>
               </h2>
               {article.excerpt ? (
-                <p className="text-sm leading-relaxed text-[color:var(--c-text-muted)]">{article.excerpt}</p>
+                <p className="text-sm leading-relaxed text-[color:var(--c-muted)]">{article.excerpt}</p>
               ) : null}
             </article>
           ))}

@@ -198,12 +198,12 @@ export function PortfolioEditor() {
       <div className="flex flex-wrap items-center gap-3">
         <Button onClick={startCreate} disabled={busy}>Новый кейс</Button>
         <Button variant="secondary" onClick={() => void load()} disabled={busy}>Обновить</Button>
-        {notice ? <span className="text-sm text-[color:var(--c-cyan)]">{notice}</span> : null}
+        {notice ? <span className="text-sm text-[color:var(--c-terra-ink)]">{notice}</span> : null}
         {error ? <span role="alert" className="text-sm text-[color:var(--c-danger)]">{error}</span> : null}
       </div>
 
       {formOpen ? (
-        <section className="rounded-2xl border border-[color:var(--c-border)] bg-[color:var(--c-surface-1)] p-5 space-y-4">
+        <section className="rounded-2xl border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-5 space-y-4">
           <h2 className="text-lg font-semibold">{editingId ? "Редактирование кейса" : "Новый кейс"}</h2>
           <TextField
             id="slug"
@@ -278,7 +278,7 @@ export function PortfolioEditor() {
               type="checkbox"
               checked={draft.published}
               onChange={(e) => setDraft({ ...draft, published: e.target.checked })}
-              className="h-4 w-4 rounded border-[color:var(--c-border)]"
+              className="h-4 w-4 rounded border-[color:var(--c-line)]"
             />
             Показывать на сайте
           </label>
@@ -289,7 +289,7 @@ export function PortfolioEditor() {
         </section>
       ) : null}
 
-      {state === "loading" ? <p className="text-sm text-[color:var(--c-text-muted)]">Загружаю…</p> : null}
+      {state === "loading" ? <p className="text-sm text-[color:var(--c-muted)]">Загружаю…</p> : null}
       {state === "error" ? (
         <div className="space-y-2">
           <p className="text-sm text-[color:var(--c-danger)]">Не удалось загрузить список</p>
@@ -297,15 +297,15 @@ export function PortfolioEditor() {
         </div>
       ) : null}
       {state === "ready" && items.length === 0 ? (
-        <p className="text-sm text-[color:var(--c-text-muted)]">
+        <p className="text-sm text-[color:var(--c-muted)]">
           Кейсов пока нет. Нажмите «Новый кейс», чтобы добавить первый.
         </p>
       ) : null}
 
       {state === "ready" && items.length > 0 ? (
-        <div className="overflow-x-auto rounded-2xl border border-[color:var(--c-border)]">
+        <div className="overflow-x-auto rounded-2xl border border-[color:var(--c-line)]">
           <table className="w-full text-sm">
-            <thead className="bg-[color:var(--c-surface-2)] text-left text-[color:var(--c-text-muted)]">
+            <thead className="bg-[color:var(--c-paper)] text-left text-[color:var(--c-muted)]">
               <tr>
                 <th className="px-4 py-3 font-medium">Название</th>
                 <th className="px-4 py-3 font-medium">Адрес</th>
@@ -316,9 +316,9 @@ export function PortfolioEditor() {
             </thead>
             <tbody>
               {items.map((a) => (
-                <tr key={a.id} className="border-t border-[color:var(--c-border)]">
+                <tr key={a.id} className="border-t border-[color:var(--c-line)]">
                   <td className="px-4 py-3">{a.title}</td>
-                  <td className="px-4 py-3 text-[color:var(--c-text-muted)]">/portfolio/{a.slug}</td>
+                  <td className="px-4 py-3 text-[color:var(--c-muted)]">/portfolio/{a.slug}</td>
                   <td className="px-4 py-3">
                     <Badge variant="muted">{STATUS_LABELS[a.status] ?? a.status}</Badge>
                   </td>

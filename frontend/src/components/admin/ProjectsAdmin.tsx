@@ -116,16 +116,16 @@ function ProjectChat({ projectId }: { projectId: number }) {
   }
 
   return (
-    <div className="mt-4 space-y-3 border-t border-[color:var(--c-border)] pt-4">
+    <div className="mt-4 space-y-3 border-t border-[color:var(--c-line)] pt-4">
       {items === null ? (
-        <p className="text-sm text-[color:var(--c-text-muted)]">Загрузка…</p>
+        <p className="text-sm text-[color:var(--c-muted)]">Загрузка…</p>
       ) : items.length === 0 ? (
-        <p className="text-sm text-[color:var(--c-text-muted)]">Сообщений пока нет.</p>
+        <p className="text-sm text-[color:var(--c-muted)]">Сообщений пока нет.</p>
       ) : (
         <ul className="space-y-2">
           {items.map((m) => (
-            <li key={m.id} className="rounded-xl border border-[color:var(--c-border)] p-3">
-              <p className="text-xs text-[color:var(--c-text-muted)]">
+            <li key={m.id} className="rounded-xl border border-[color:var(--c-line)] p-3">
+              <p className="text-xs text-[color:var(--c-muted)]">
                 {m.author_role === "client" ? "Клиент" : "Студия"}
               </p>
               <p className="mt-1 whitespace-pre-line text-sm">{m.body}</p>
@@ -147,7 +147,7 @@ function ProjectChat({ projectId }: { projectId: number }) {
           {busy ? "Отправка…" : "Ответить"}
         </Button>
       </form>
-      {failed ? <p className="text-sm text-[color:var(--c-text-muted)]">{failed}</p> : null}
+      {failed ? <p className="text-sm text-[color:var(--c-muted)]">{failed}</p> : null}
     </div>
   );
 }
@@ -308,7 +308,7 @@ export function ProjectsAdmin() {
       setNotice("Сеть недоступна.");
     }
   }
-  if (state === "loading") return <p className="text-[color:var(--c-text-muted)]">Загружаем…</p>;
+  if (state === "loading") return <p className="text-[color:var(--c-muted)]">Загружаем…</p>;
   if (state === "error") return <p role="alert" className="text-[color:var(--c-danger)]">Не удалось загрузить проекты.</p>;
 
   const clientOptions = clients.map((c) => ({ value: String(c.id), label: c.display_name }));
@@ -316,15 +316,15 @@ export function ProjectsAdmin() {
   return (
     <div className="space-y-8">
       {notice ? (
-        <p role="status" className="rounded-xl border border-[color:var(--c-border)] bg-[color:var(--c-surface-2)] px-4 py-3 text-sm">
+        <p role="status" className="rounded-xl border border-[color:var(--c-line)] bg-[color:var(--c-paper)] px-4 py-3 text-sm">
           {notice}
         </p>
       ) : null}
 
-      <form onSubmit={onCreate} className="rounded-2xl border border-[color:var(--c-border)] bg-[color:var(--c-surface)] p-6">
+      <form onSubmit={onCreate} className="rounded-2xl border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-6">
         <h2 className="mb-4 text-lg font-semibold">Новый проект</h2>
         {clients.length === 0 ? (
-          <p className="text-sm text-[color:var(--c-text-muted)]">
+          <p className="text-sm text-[color:var(--c-muted)]">
             Сначала создайте клиента в разделе «Клиенты». Проект без клиента не заводится.
           </p>
         ) : (
@@ -347,17 +347,17 @@ export function ProjectsAdmin() {
       </form>
 
       {projects.length === 0 ? (
-        <p className="rounded-2xl border border-[color:var(--c-border)] bg-[color:var(--c-surface)] p-8 text-center text-[color:var(--c-text-muted)]">
+        <p className="rounded-2xl border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-8 text-center text-[color:var(--c-muted)]">
           Проектов пока нет.
         </p>
       ) : (
         <ul className="space-y-4">
           {projects.map((p) => (
-            <li key={p.id} className="rounded-2xl border border-[color:var(--c-border)] bg-[color:var(--c-surface)] p-5">
+            <li key={p.id} className="rounded-2xl border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-5">
               <div className="flex flex-wrap items-start justify-between gap-4">
                 <div>
                   <h3 className="text-base font-semibold">{p.title}</h3>
-                  <p className="text-sm text-[color:var(--c-text-muted)]">
+                  <p className="text-sm text-[color:var(--c-muted)]">
                     {p.client_name} · {money(p.price_rub)}
                   </p>
                 </div>
@@ -373,7 +373,7 @@ export function ProjectsAdmin() {
                     value={p.status}
                     disabled={busy === p.id}
                     onChange={(e) => void onStatus(p, e.target.value)}
-                    className="w-full rounded-[10px] border border-[color:var(--c-border)] bg-[color:var(--c-surface-2)] px-3 py-2 text-sm"
+                    className="w-full rounded-[10px] border border-[color:var(--c-line)] bg-[color:var(--c-paper)] px-3 py-2 text-sm"
                   >
                     {STATUS_OPTIONS.map((o) => (
                       <option key={o.value} value={o.value}>{o.label}</option>
@@ -392,9 +392,9 @@ export function ProjectsAdmin() {
                 </Button>
               </div>
               {taskFor === p.id ? (
-                <div className="mt-4 space-y-3 border-t border-[color:var(--c-border)] pt-4">
+                <div className="mt-4 space-y-3 border-t border-[color:var(--c-line)] pt-4">
                   {(tasks[p.id] ?? []).length === 0 ? (
-                    <p className="text-sm text-[color:var(--c-text-muted)]">Задач пока нет.</p>
+                    <p className="text-sm text-[color:var(--c-muted)]">Задач пока нет.</p>
                   ) : (
                     <ul className="space-y-2">
                       {(tasks[p.id] ?? []).map((task) => (
@@ -404,15 +404,15 @@ export function ProjectsAdmin() {
                             type="checkbox"
                             checked={task.status === "done"}
                             onChange={(e) => void onTaskStatus(p.id, task, e.target.checked ? "done" : "todo")}
-                            className="h-4 w-4 rounded border-[color:var(--c-border)]"
+                            className="h-4 w-4 rounded border-[color:var(--c-line)]"
                           />
                           <label
                             htmlFor={"task-done-" + task.id}
                             className={
                               "cursor-pointer text-sm " +
                               (task.status === "done"
-                                ? "text-[color:var(--c-text-muted)] line-through"
-                                : "text-[color:var(--c-text)]")
+                                ? "text-[color:var(--c-muted)] line-through"
+                                : "text-[color:var(--c-ink)]")
                             }
                           >
                             {task.title}

@@ -35,13 +35,13 @@ export default async function ReviewsPage() {
         {reviews.map((review) => (
           <figure
             key={review.author_name + review.text.slice(0, 20)}
-            className="rounded-xl border border-[color:var(--c-border)] bg-[color:var(--c-surface)] p-6"
+            className="rounded-xl border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-6"
           >
-            <blockquote className="text-base leading-relaxed text-[color:var(--c-text)]">
+            <blockquote className="text-base leading-relaxed text-[color:var(--c-ink)]">
               {review.text}
             </blockquote>
-            <figcaption className="mt-4 text-sm text-[color:var(--c-text-muted)]">
-              <span className="font-medium text-[color:var(--c-text)]">{review.author_name}</span>
+            <figcaption className="mt-4 text-sm text-[color:var(--c-muted)]">
+              <span className="font-medium text-[color:var(--c-ink)]">{review.author_name}</span>
               {review.author_position ? <span>, {review.author_position}</span> : null}
               {review.project_title ? <span> · {review.project_title}</span> : null}
               {review.published_at ? (

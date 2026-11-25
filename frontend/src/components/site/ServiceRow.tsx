@@ -21,7 +21,7 @@ export function ServiceRow({ service, index }: { service: ServiceCardData; index
           <span className="font-[family-name:var(--font-mono)] text-[11px] uppercase tracking-[0.22em] text-[color:var(--c-terra-ink)]">
             {number}
           </span>
-          <span className="font-[family-name:var(--font-mono)] text-[11px] uppercase tracking-[0.18em] text-[color:var(--c-text-muted)]">
+          <span className="font-[family-name:var(--font-mono)] text-[11px] uppercase tracking-[0.18em] text-[color:var(--c-muted)]">
             {service.category_title ?? "Услуга"}
           </span>
         </div>
@@ -30,11 +30,11 @@ export function ServiceRow({ service, index }: { service: ServiceCardData; index
             {service.title}
           </Link>
         </h3>
-        <p className="mb-4 max-w-[52ch] text-base leading-relaxed text-[color:var(--c-text-muted)]">
+        <p className="mb-4 max-w-[52ch] text-base leading-relaxed text-[color:var(--c-muted)]">
           {service.short_description}
         </p>
         {service.examples.length > 0 ? (
-          <ul className="mb-5 space-y-1.5 text-sm text-[color:var(--c-text-muted)]">
+          <ul className="mb-5 space-y-1.5 text-sm text-[color:var(--c-muted)]">
             {service.examples.slice(0, 3).map((example) => (
               <li key={example} className="flex gap-2">
                 <span aria-hidden="true" className="text-[color:var(--c-terra-ink)]">

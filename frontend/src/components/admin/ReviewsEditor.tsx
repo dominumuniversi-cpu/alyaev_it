@@ -176,7 +176,7 @@ export function ReviewsEditor() {
 
   return (
     <div className="space-y-5">
-      <div className="rounded-xl border border-[color:var(--c-warning)]/40 bg-[color:var(--c-warning)]/5 p-3 text-sm text-[color:var(--c-text-muted)]">
+      <div className="rounded-xl border border-[color:var(--c-warning)]/40 bg-[color:var(--c-warning)]/5 p-3 text-sm text-[color:var(--c-muted)]">
         Отзыв попадает на сайт только при включённом согласии автора. Если согласие снять,
         отзыв автоматически снимается с публикации.
       </div>
@@ -184,12 +184,12 @@ export function ReviewsEditor() {
       <div className="flex flex-wrap items-center gap-3">
         <Button onClick={startCreate} disabled={busy}>Новый отзыв</Button>
         <Button variant="secondary" onClick={() => void load()} disabled={busy}>Обновить</Button>
-        {notice ? <span className="text-sm text-[color:var(--c-cyan)]">{notice}</span> : null}
+        {notice ? <span className="text-sm text-[color:var(--c-terra-ink)]">{notice}</span> : null}
         {error ? <span role="alert" className="text-sm text-[color:var(--c-danger)]">{error}</span> : null}
       </div>
 
       {formOpen ? (
-        <section className="rounded-2xl border border-[color:var(--c-border)] bg-[color:var(--c-surface-1)] p-5 space-y-4">
+        <section className="rounded-2xl border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-5 space-y-4">
           <h2 className="text-lg font-semibold">{editingId ? "Редактирование отзыва" : "Новый отзыв"}</h2>
           <TextField
             id="author_name"
@@ -219,7 +219,7 @@ export function ReviewsEditor() {
             value={draft.project_title}
             onChange={(e) => setDraft({ ...draft, project_title: e.target.value })}
           />
-          <div className="rounded-xl border border-[color:var(--c-border)] p-3 space-y-3">
+          <div className="rounded-xl border border-[color:var(--c-line)] p-3 space-y-3">
             <label className="flex items-center gap-2 text-sm">
               <input
                 type="checkbox"
@@ -265,7 +265,7 @@ export function ReviewsEditor() {
         </section>
       ) : null}
 
-      {state === "loading" ? <p className="text-sm text-[color:var(--c-text-muted)]">Загружаю…</p> : null}
+      {state === "loading" ? <p className="text-sm text-[color:var(--c-muted)]">Загружаю…</p> : null}
       {state === "error" ? (
         <div className="space-y-2">
           <p className="text-sm text-[color:var(--c-danger)]">Не удалось загрузить список отзывов</p>
@@ -273,16 +273,16 @@ export function ReviewsEditor() {
         </div>
       ) : null}
       {state === "ready" && items.length === 0 ? (
-        <p className="text-sm text-[color:var(--c-text-muted)]">
+        <p className="text-sm text-[color:var(--c-muted)]">
           Отзывов пока нет. Это нормально: блок на сайте просто не показывается.
           Когда появится первый — нажмите «Новый отзыв».
         </p>
       ) : null}
 
       {state === "ready" && items.length > 0 ? (
-        <div className="overflow-x-auto rounded-2xl border border-[color:var(--c-border)]">
+        <div className="overflow-x-auto rounded-2xl border border-[color:var(--c-line)]">
           <table className="w-full text-sm">
-            <thead className="bg-[color:var(--c-surface-2)] text-left text-[color:var(--c-text-muted)]">
+            <thead className="bg-[color:var(--c-paper)] text-left text-[color:var(--c-muted)]">
               <tr>
                 <th className="px-4 py-3 font-medium">Автор</th>
                 <th className="px-4 py-3 font-medium">Согласие</th>
@@ -293,11 +293,11 @@ export function ReviewsEditor() {
             </thead>
             <tbody>
               {items.map((a) => (
-                <tr key={a.id} className="border-t border-[color:var(--c-border)]">
+                <tr key={a.id} className="border-t border-[color:var(--c-line)]">
                   <td className="px-4 py-3">
                     <div>{a.author_name}</div>
                     {a.author_position ? (
-                      <div className="text-xs text-[color:var(--c-text-muted)]">{a.author_position}</div>
+                      <div className="text-xs text-[color:var(--c-muted)]">{a.author_position}</div>
                     ) : null}
                   </td>
                   <td className="px-4 py-3">

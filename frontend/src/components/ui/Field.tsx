@@ -1,11 +1,11 @@
 /** Поле формы: метка, подсказка, ошибка. Манифест: docs/manifests/ui/field.md */
 
 const BASE_INPUT =
-  "w-full rounded-[10px] border bg-[color:var(--c-surface-2)] px-3.5 py-2.5 text-sm text-[color:var(--c-text)] placeholder:text-[color:var(--c-text-muted)]/60 transition-colors focus:outline-none focus:ring-2 focus:ring-[color:var(--c-cyan)] focus:ring-offset-2 focus:ring-offset-[color:var(--c-bg)]";
+  "w-full rounded-[10px] border bg-[color:var(--c-paper)] px-3.5 py-2.5 text-sm text-[color:var(--c-ink)] placeholder:text-[color:var(--c-muted)]/60 transition-colors focus:outline-none focus:ring-2 focus:ring-[color:var(--c-cyan)] focus:ring-offset-2 focus:ring-offset-[color:var(--c-bg)]";
 
 /** Стили поля: обычное состояние и состояние ошибки. */
 function inputClass(hasError: boolean): string {
-  const border = hasError ? "border-[color:var(--c-danger)]" : "border-[color:var(--c-border)]";
+  const border = hasError ? "border-[color:var(--c-danger)]" : "border-[color:var(--c-line)]";
   return BASE_INPUT + " " + border;
 }
 
@@ -27,12 +27,12 @@ function Wrapper({
 }) {
   return (
     <div>
-      <label htmlFor={id} className="mb-1.5 block text-sm font-medium text-[color:var(--c-text)]">
+      <label htmlFor={id} className="mb-1.5 block text-sm font-medium text-[color:var(--c-ink)]">
         {label}
-        {required ? <span className="ml-1 text-[color:var(--c-gold)]">*</span> : null}
+        {required ? <span className="ml-1 text-[color:var(--c-lime-ink)]">*</span> : null}
       </label>
       {hint ? (
-        <p id={id + "-hint"} className="mb-1.5 text-xs text-[color:var(--c-text-muted)]">
+        <p id={id + "-hint"} className="mb-1.5 text-xs text-[color:var(--c-muted)]">
           {hint}
         </p>
       ) : null}

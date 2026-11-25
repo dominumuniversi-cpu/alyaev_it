@@ -255,15 +255,15 @@ export function SemanticEditor() {
         <Button variant="primary" onClick={startCreate} disabled={busy}>Добавить запрос</Button>
       </div>
 
-      {notice ? <p className="text-sm text-[color:var(--c-cyan)]">{notice}</p> : null}
+      {notice ? <p className="text-sm text-[color:var(--c-terra-ink)]">{notice}</p> : null}
       {error ? <p role="alert" className="text-sm text-[color:var(--c-danger)]">{error}</p> : null}
 
       {formOpen ? (
         <form
-          className="space-y-4 rounded-[14px] border border-[color:var(--c-border)] p-5"
+          className="space-y-4 rounded-[14px] border border-[color:var(--c-line)] p-5"
           onSubmit={(e) => { e.preventDefault(); void save(); }}
         >
-          <h3 className="text-base font-semibold text-[color:var(--c-text)]">
+          <h3 className="text-base font-semibold text-[color:var(--c-ink)]">
             {creating ? "Новый запрос" : "Правка запроса"}
           </h3>
           <TextField id="q-query" label="Поисковый запрос" required maxLength={200}
@@ -300,11 +300,11 @@ export function SemanticEditor() {
         </form>
       ) : null}
 
-      {state === "loading" ? <p className="text-sm text-[color:var(--c-text-muted)]">Загружаем…</p> : null}
+      {state === "loading" ? <p className="text-sm text-[color:var(--c-muted)]">Загружаем…</p> : null}
       {state === "error" ? <p className="text-sm text-[color:var(--c-danger)]">Не удалось загрузить список</p> : null}
 
       {state === "ready" && items.length === 0 ? (
-        <p className="text-sm text-[color:var(--c-text-muted)]">
+        <p className="text-sm text-[color:var(--c-muted)]">
           Ядро пока пустое. Начните с самых частотных запросов по каждой услуге —
           по одному-двум на группу достаточно, чтобы понять, куда целиться.
         </p>
@@ -314,7 +314,7 @@ export function SemanticEditor() {
         <div className="overflow-x-auto">
           <table className="w-full text-left text-sm">
             <thead>
-              <tr className="border-b border-[color:var(--c-border)] text-[color:var(--c-text-muted)]">
+              <tr className="border-b border-[color:var(--c-line)] text-[color:var(--c-muted)]">
                 <th className="py-2 pr-3">Запрос</th>
                 <th className="py-2 pr-3">Группа</th>
                 <th className="py-2 pr-3">Страница</th>
@@ -326,20 +326,20 @@ export function SemanticEditor() {
             </thead>
             <tbody>
               {items.map((item) => (
-                <tr key={item.id} className="border-b border-[color:var(--c-border)]/50">
-                  <td className="py-2 pr-3 text-[color:var(--c-text)]">{item.query}</td>
-                  <td className="py-2 pr-3 text-[color:var(--c-text-muted)]">
+                <tr key={item.id} className="border-b border-[color:var(--c-line)]/50">
+                  <td className="py-2 pr-3 text-[color:var(--c-ink)]">{item.query}</td>
+                  <td className="py-2 pr-3 text-[color:var(--c-muted)]">
                     {GROUP_LABELS[item.group_slug] ?? item.group_slug}
                   </td>
-                  <td className="py-2 pr-3 text-[color:var(--c-text-muted)]">{item.target_path}</td>
-                  <td className="py-2 pr-3 text-[color:var(--c-text-muted)]">
+                  <td className="py-2 pr-3 text-[color:var(--c-muted)]">{item.target_path}</td>
+                  <td className="py-2 pr-3 text-[color:var(--c-muted)]">
                     {item.frequency === null ? "—" : item.frequency}
                   </td>
                   <td className="py-2 pr-3">
                     <input
                       type="number" min={1} defaultValue={item.position ?? ""}
                       aria-label={"Позиция запроса " + item.query}
-                      className="w-20 rounded-[8px] border border-[color:var(--c-border)] bg-[color:var(--c-surface-2)] px-2 py-1 text-sm text-[color:var(--c-text)]"
+                      className="w-20 rounded-[8px] border border-[color:var(--c-line)] bg-[color:var(--c-paper)] px-2 py-1 text-sm text-[color:var(--c-ink)]"
                       onBlur={(e) => {
                         const next = e.target.value;
                         const current = item.position === null ? "" : String(item.position);

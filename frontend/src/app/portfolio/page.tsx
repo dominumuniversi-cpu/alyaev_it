@@ -114,7 +114,7 @@ export default async function PortfolioPage() {
                 {project.title}
               </Link>
             </h2>
-            <p className="mb-4 text-sm leading-relaxed text-[color:var(--c-text-muted)]">
+            <p className="mb-4 text-sm leading-relaxed text-[color:var(--c-muted)]">
               {project.summary}
             </p>
             <div className="flex flex-wrap gap-2">
@@ -133,7 +133,7 @@ export default async function PortfolioPage() {
         ))}
       </div>
       <div className="mt-[var(--space-section)] border-t border-[color:var(--c-line)] pt-8">
-        <p className="text-sm text-[color:var(--c-text-muted)]">
+        <p className="text-sm text-[color:var(--c-muted)]">
           Такие решения собираются под конкретный процесс. Если задача похожа на одну из них — обсудим,
           что именно нужно в вашем случае.
         </p>

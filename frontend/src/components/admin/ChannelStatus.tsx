@@ -30,10 +30,10 @@ export function ChannelStatus() {
   return (
     <div
       role="status"
-      className="mb-6 rounded-xl border border-[color:var(--c-danger)] bg-[color:var(--c-surface)] p-4 text-sm"
+      className="mb-6 rounded-xl border border-[color:var(--c-danger)] bg-[color:var(--c-paper-2)] p-4 text-sm"
     >
       <p className="font-semibold text-[color:var(--c-danger)]">Уведомления в Telegram не настроены</p>
-      <p className="mt-1 text-[color:var(--c-text-muted)]">
+      <p className="mt-1 text-[color:var(--c-muted)]">
         Новые заявки приходят только сюда, в админку. Пока не заданы токен бота и получатель,
         об обращении можно узнать, только открыв эту страницу.
       </p>

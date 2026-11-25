@@ -37,7 +37,7 @@ function renderBody(md: string) {
         {block.slice(3)}
       </h2>
     ) : (
-      <p key={index} className="mb-4 text-base leading-relaxed text-[color:var(--c-text-muted)]">
+      <p key={index} className="mb-4 text-base leading-relaxed text-[color:var(--c-muted)]">
         {block}
       </p>
     ),
@@ -98,8 +98,8 @@ export default async function PortfolioItemPage({ params }: { params: Promise<Pa
           </>
         ) : null}
       </div>
-      <div className="mt-10 rounded-2xl border border-[color:var(--c-border)] bg-[color:var(--c-surface)] p-6">
-        <p className="text-sm text-[color:var(--c-text-muted)]">
+      <div className="mt-10 rounded-2xl border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-6">
+        <p className="text-sm text-[color:var(--c-muted)]">
           Похожая задача в вашем бизнесе? Обсудим, что именно стоит автоматизировать.
         </p>
         <div className="mt-4">

@@ -135,7 +135,7 @@ export function ClientsAdmin() {
     }
   }
 
-  if (state === "loading") return <p className="text-[color:var(--c-text-muted)]">Загружаем…</p>;
+  if (state === "loading") return <p className="text-[color:var(--c-muted)]">Загружаем…</p>;
   if (state === "error") return <p role="alert" className="text-[color:var(--c-danger)]">Не удалось загрузить клиентов.</p>;
 
   return (
@@ -143,12 +143,12 @@ export function ClientsAdmin() {
       {creds ? <CredentialsCard creds={creds} onClose={() => setCreds(null)} /> : null}
 
       {notice ? (
-        <p role="status" className="rounded-xl border border-[color:var(--c-border)] bg-[color:var(--c-surface-2)] px-4 py-3 text-sm">
+        <p role="status" className="rounded-xl border border-[color:var(--c-line)] bg-[color:var(--c-paper)] px-4 py-3 text-sm">
           {notice}
         </p>
       ) : null}
 
-      <form onSubmit={onCreate} className="rounded-2xl border border-[color:var(--c-border)] bg-[color:var(--c-surface)] p-6">
+      <form onSubmit={onCreate} className="rounded-2xl border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-6">
         <h2 className="mb-4 text-lg font-semibold">Новый клиент</h2>
         <div className="grid gap-4 sm:grid-cols-2">
           <TextField id="display_name" name="display_name" label="Имя или название" required />
@@ -160,13 +160,13 @@ export function ClientsAdmin() {
       </form>
 
       {clients.length === 0 ? (
-        <p className="rounded-2xl border border-[color:var(--c-border)] bg-[color:var(--c-surface)] p-8 text-center text-[color:var(--c-text-muted)]">
+        <p className="rounded-2xl border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] p-8 text-center text-[color:var(--c-muted)]">
           Клиентов пока нет. Создайте первого — затем выдайте ему доступ.
         </p>
       ) : (
-        <div className="overflow-x-auto rounded-2xl border border-[color:var(--c-border)]">
+        <div className="overflow-x-auto rounded-2xl border border-[color:var(--c-line)]">
           <table className="w-full min-w-[720px] text-sm">
-            <thead className="bg-[color:var(--c-surface-2)] text-left">
+            <thead className="bg-[color:var(--c-paper)] text-left">
               <tr>
                 <th className="px-4 py-3 font-medium">Клиент</th>
                 <th className="px-4 py-3 font-medium">Проекты</th>
@@ -177,18 +177,18 @@ export function ClientsAdmin() {
             </thead>
             <tbody>
               {clients.map((c) => (
-                <tr key={c.id} className="border-t border-[color:var(--c-border)]">
+                <tr key={c.id} className="border-t border-[color:var(--c-line)]">
                   <td className="px-4 py-3">
                     <div>{c.display_name}</div>
                     {c.company ? (
-                      <div className="text-xs text-[color:var(--c-text-muted)]">{c.company}</div>
+                      <div className="text-xs text-[color:var(--c-muted)]">{c.company}</div>
                     ) : null}
                   </td>
                   <td className="px-4 py-3">{c.projects_count}</td>
                   <td className="px-4 py-3">
                     {c.has_login ? <Badge variant="tech">выдан</Badge> : <Badge variant="muted">нет входа</Badge>}
                   </td>
-                  <td className="px-4 py-3 text-[color:var(--c-text-muted)]">{shortDate(c.created_at)}</td>
+                  <td className="px-4 py-3 text-[color:var(--c-muted)]">{shortDate(c.created_at)}</td>
                   <td className="px-4 py-3">
                     <div className="flex flex-wrap gap-2">
                       {c.has_login ? (
@@ -215,18 +215,18 @@ export function ClientsAdmin() {
 /** Карточка с выданными данными входа. Показывается один раз — потом не восстановить. */
 function CredentialsCard({ creds, onClose }: { creds: Credentials; onClose: () => void }) {
   return (
-    <div className="rounded-2xl border border-[color:var(--c-lime)]/60 bg-[color:var(--c-surface-2)] p-6">
+    <div className="rounded-2xl border border-[color:var(--c-lime)]/60 bg-[color:var(--c-paper)] p-6">
       <h2 className="mb-2 text-lg font-semibold text-[color:var(--c-lime-ink)]">Данные для входа</h2>
-      <p className="mb-4 text-sm text-[color:var(--c-text-muted)]">
+      <p className="mb-4 text-sm text-[color:var(--c-muted)]">
         {creds.warning || "Пароль показывается один раз. Передайте его клиенту и закройте это окно."}
       </p>
       <dl className="space-y-2 font-mono text-sm">
         <div className="flex flex-wrap gap-2">
-          <dt className="text-[color:var(--c-text-muted)]">Почта:</dt>
+          <dt className="text-[color:var(--c-muted)]">Почта:</dt>
           <dd>{creds.email}</dd>
         </div>
         <div className="flex flex-wrap gap-2">
-          <dt className="text-[color:var(--c-text-muted)]">Пароль:</dt>
+          <dt className="text-[color:var(--c-muted)]">Пароль:</dt>
           <dd className="select-all font-semibold">{creds.password}</dd>
         </div>
       </dl>
