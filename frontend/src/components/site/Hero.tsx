@@ -21,7 +21,7 @@ const SCHEME = [
 export function Hero() {
   return (
     <section aria-labelledby="hero-title" className="relative overflow-hidden border-b border-[color:var(--c-line)]">
-      <div className="mx-auto grid w-full max-w-[var(--shell-max)] gap-10 px-[var(--shell-gutter)] pb-[var(--space-section)] pt-10 lg:grid-cols-[1.12fr_.88fr] lg:items-end lg:gap-12 lg:pt-14">
+      <div className="mx-auto grid w-full max-w-[var(--shell-max)] gap-10 px-[var(--shell-gutter)] pb-[var(--space-section)] pt-10 lg:grid-cols-[1.25fr_.75fr] lg:items-end lg:gap-12 lg:pt-14">
         <div>
           <p className={EYEBROW + " mb-6 text-[11px] text-[color:var(--c-terra-ink)]"}>
             Автоматизация бизнеса / AI-разработка / системная интеграция

@@ -13,6 +13,7 @@ export function Section({
   flat = false,
   breadcrumbs,
   headingLevel = 2,
+  eyebrow,
 }: {
   id: string;
   title?: string;
@@ -22,6 +23,9 @@ export function Section({
   surface?: boolean;
   /** Первая секция страницы: верхний отступ срезан, чтобы под шапкой не висела пустая полоса. */
   flat?: boolean;
+  /** Служебная подпись справа от заголовка (моно-капс): «01 / УСЛУГИ», «ПРОЦЕСС» и т. п. По пакету темы —
+   *  заголовок слева, подпись справа, выровнены по нижней линии. */
+  eyebrow?: string;
   /** Крошки для страниц второго уровня и глубже (манифест breadcrumbs.md). */
   breadcrumbs?: Crumb[];
   /**
@@ -43,7 +47,14 @@ export function Section({
       <div className="relative mx-auto w-full max-w-[var(--shell-max)] px-[var(--shell-gutter)]">
         {breadcrumbs ? <Breadcrumbs items={breadcrumbs} /> : null}
         {title ? (
-          <header className="mb-10 max-w-[min(100%,74ch)]">
+          <header
+          className={
+            eyebrow
+              ? "mb-10 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between sm:gap-8"
+              : "mb-10 max-w-[min(100%,74ch)]"
+          }
+        >
+            <div className={eyebrow ? "max-w-[min(100%,74ch)]" : undefined}>
             {Heading === "h1" ? (
               <h1
                 id={id + "-title"}
@@ -61,6 +72,12 @@ export function Section({
             )}
             {subtitle ? (
               <p className="mt-4 max-w-2xl text-base leading-relaxed text-[color:var(--c-muted)]">{subtitle}</p>
+            ) : null}
+            </div>
+            {eyebrow ? (
+              <span className="font-[family-name:var(--font-mono)] text-[11px] uppercase tracking-[0.22em] text-[color:var(--c-terra-ink)] sm:pb-2">
+                {eyebrow}
+              </span>
             ) : null}
           </header>
         ) : null}

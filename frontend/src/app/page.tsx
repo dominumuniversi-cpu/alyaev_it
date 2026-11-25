@@ -59,6 +59,7 @@ export default async function HomePage() {
 
       <Section
         id="services"
+        eyebrow="01 / услуги"
         title="Услуги"
         subtitle="Понятные цены и сроки. Указанные цены являются стартовыми — итоговая стоимость определяется после анализа задачи."
       >
@@ -80,6 +81,7 @@ export default async function HomePage() {
 
       <Section
         id="scenario"
+        eyebrow="02 / решение"
         surface
         title="Как решаются задачи"
         subtitle="Пример: автоматическая обработка заявки без постоянного участия сотрудника."
@@ -87,7 +89,7 @@ export default async function HomePage() {
         <ProcessFlow steps={SCENARIO} />
       </Section>
 
-      <Section id="advantages" title="Почему со мной">
+      <Section id="advantages" eyebrow="04 / почему я" title="Почему со мной">
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {ADVANTAGES.map((item) => (
             <FeatureCard key={item.title} icon={item.icon as IconName} title={item.title} text={item.text} />
@@ -97,6 +99,7 @@ export default async function HomePage() {
 
       <Section
         id="stages"
+        eyebrow="03 / процесс"
         surface
         title="Этапы работы"
         subtitle="От заявки до поддержки — понятный процесс без сюрпризов."
