@@ -27,15 +27,19 @@ export function ButtonLink({
   variant = "primary",
   size = "md",
   className = "",
+  external = false,
 }: {
   href: string;
   children: React.ReactNode;
   variant?: Variant;
   size?: Size;
   className?: string;
+  /** Внешняя ссылка (Telegram, почта): открывается в новой вкладке. */
+  external?: boolean;
 }) {
+  const linkProps = external ? { target: "_blank", rel: "noopener noreferrer" } : {};
   return (
-    <Link href={href} className={[BUTTON_BASE, VARIANTS[variant], BUTTON_SIZES[size], className].join(" ")}>
+    <Link href={href} {...linkProps} className={[BUTTON_BASE, VARIANTS[variant], BUTTON_SIZES[size], className].join(" ")}>
       {children}
     </Link>
   );

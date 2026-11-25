@@ -6,7 +6,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
-import { SelectField, TextAreaField, TextField } from "@/components/ui/Field";
+import { SelectField, TextAreaField, TextField, INPUT_CLASS } from "@/components/ui/Field";
 
 const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH ?? "/alyaev";
 
@@ -339,7 +339,7 @@ export function SemanticEditor() {
                     <input
                       type="number" min={1} defaultValue={item.position ?? ""}
                       aria-label={"Позиция запроса " + item.query}
-                      className="w-20 rounded-[8px] border border-[color:var(--c-line)] bg-[color:var(--c-paper)] px-2 py-1 text-sm text-[color:var(--c-ink)]"
+                      className={INPUT_CLASS + " w-20"}
                       onBlur={(e) => {
                         const next = e.target.value;
                         const current = item.position === null ? "" : String(item.position);

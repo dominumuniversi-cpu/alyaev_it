@@ -10,7 +10,7 @@ import { useCallback, useEffect, useState } from "react";
 
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
-import { SelectField, TextAreaField, TextField } from "@/components/ui/Field";
+import { SelectField, TextAreaField, TextField, INPUT_CLASS } from "@/components/ui/Field";
 
 const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH ?? "/alyaev";
 
@@ -373,7 +373,7 @@ export function ProjectsAdmin() {
                     value={p.status}
                     disabled={busy === p.id}
                     onChange={(e) => void onStatus(p, e.target.value)}
-                    className="w-full rounded-[10px] border border-[color:var(--c-line)] bg-[color:var(--c-paper)] px-3 py-2 text-sm"
+                    className={INPUT_CLASS}
                   >
                     {STATUS_OPTIONS.map((o) => (
                       <option key={o.value} value={o.value}>{o.label}</option>

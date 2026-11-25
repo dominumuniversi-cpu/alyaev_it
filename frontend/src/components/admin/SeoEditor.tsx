@@ -6,7 +6,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
-import { TextAreaField, TextField } from "@/components/ui/Field";
+import { TextAreaField, TextField, INPUT_CLASS } from "@/components/ui/Field";
 
 const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH ?? "/alyaev";
 
@@ -162,7 +162,7 @@ export function SeoEditor() {
               id="page-path"
               value={path}
               onChange={(e) => setPath(e.target.value)}
-              className="w-full rounded-[10px] border border-[color:var(--c-line)] bg-[color:var(--c-paper)] px-3.5 py-2.5 text-sm"
+              className={INPUT_CLASS}
             >
               {["/", "/services/", "/portfolio/", "/blog/", "/about/", "/contacts/", "/calculator/", "/diagnostics/", "/reviews/"].map((p) => (
                 <option key={p} value={p}>{p}</option>

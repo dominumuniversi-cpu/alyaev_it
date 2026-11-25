@@ -3,6 +3,8 @@
 import type { Metadata } from "next";
 
 import Link from "next/link";
+
+import { ButtonLink } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { Section } from "@/components/ui/Section";
 import { canonicalUrl, openGraph } from "@/lib/seo";
@@ -93,12 +95,9 @@ export default async function DiagnosticsPage() {
             Заявка уходит в общую форму — отдельной анкеты нет: смысл разбора в разговоре, а не в заполнении полей.
           </p>
           {/* Источник передаётся ссылкой: LeadForm читает ?source= из адреса, а не из пропса. */}
-          <Link
-            href="/contacts/?source=diagnostics"
-            className="inline-flex items-center justify-center rounded-xl bg-[color:var(--c-lime)] px-6 py-3 text-sm font-semibold text-[color:var(--c-paper)] transition hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--c-gold)]"
-          >
+          <ButtonLink href="/contacts/?source=diagnostics" size="lg">
             Оставить заявку на разбор
-          </Link>
+          </ButtonLink>
         </div>
       </Section>
     </>

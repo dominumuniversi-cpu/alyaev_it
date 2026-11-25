@@ -7,6 +7,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import { ThemeToggle } from "@/components/layout/ThemeToggle";
+import { ButtonLink } from "@/components/ui/Button";
 
 const NAV = [
   { href: "/services/", label: "Услуги" },
@@ -17,8 +18,6 @@ const NAV = [
   { href: "/diagnostics/", label: "Разбор процесса" },
   { href: "/contacts/", label: "Контакты" },
 ];
-
-const CTA = "inline-flex items-center justify-center border border-transparent bg-[color:var(--c-ink)] px-5 py-2.5 text-[13px] font-semibold uppercase tracking-[0.08em] text-[color:var(--c-paper)] no-underline transition-colors hover:bg-[color:var(--c-lime)] hover:text-[color:var(--c-ink)]";
 
 /** Липкая шапка: светлая бумага, графитовый текст, лайм-CTA при наведении. */
 export function Header() {
@@ -85,9 +84,9 @@ export function Header() {
 
         <div className="flex items-center gap-2">
           <ThemeToggle />
-          <Link href="/contacts/#lead" className={CTA + " hidden sm:inline-flex"}>
-            Обсудить проект
-          </Link>
+          <span className="hidden sm:inline-flex">
+            <ButtonLink href="/contacts/#lead">Обсудить проект</ButtonLink>
+          </span>
           <button
             type="button"
             aria-expanded={open}
@@ -122,9 +121,9 @@ export function Header() {
               </span>
               <ThemeToggle />
             </div>
-            <Link href="/contacts/#lead" className={CTA + " mt-4"}>
-              Обсудить проект
-            </Link>
+            <div className="mt-4">
+              <ButtonLink href="/contacts/#lead">Обсудить проект</ButtonLink>
+            </div>
           </nav>
         </div>
       ) : null}

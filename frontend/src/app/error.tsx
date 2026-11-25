@@ -3,7 +3,7 @@
 /** Страница 500: ошибка сервера без стектрейса и паники. ТЗ 11.5.
  *  Обязательно клиентский компонент: Next требует его для перехвата рендер-ошибок. */
 
-import { ButtonLink } from "@/components/ui/Button";
+import { Button, ButtonLink } from "@/components/ui/Button";
 
 /** Перехватывает ошибку сегмента и предлагает пути назад. */
 export default function Error({ reset }: { error: Error & { digest?: string }; reset: () => void }) {
@@ -17,13 +17,9 @@ export default function Error({ reset }: { error: Error & { digest?: string }; r
         Задача не в вас: страница не смогла загрузиться из-за сбоя. Попробуйте обновить — обычно помогает.
       </p>
       <div className="mt-8 flex flex-wrap gap-3">
-        <button
-          type="button"
-          onClick={reset}
-          className="rounded-lg border border-[color:var(--c-lime-ink)] bg-[color:var(--c-lime)] px-5 py-2.5 text-sm font-medium text-[color:var(--c-paper)] transition-opacity hover:opacity-90"
-        >
+        <Button type="button" onClick={reset}>
           Попробовать снова
-        </button>
+        </Button>
         <ButtonLink href="/" variant="secondary">На главную</ButtonLink>
         <ButtonLink href="/contacts/" variant="secondary">Связаться</ButtonLink>
       </div>

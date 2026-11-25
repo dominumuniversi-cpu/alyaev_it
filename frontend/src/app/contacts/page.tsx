@@ -6,6 +6,7 @@ import { LeadForm } from "@/components/site/LeadForm";
 import { Section } from "@/components/ui/Section";
 import { fetchServices, fetchSettings } from "@/lib/api";
 import { canonicalUrl, openGraph } from "@/lib/seo";
+import { ButtonLink } from "@/components/ui/Button";
 
 export const metadata: Metadata = {
   title: "Контакты",
@@ -41,14 +42,12 @@ export default async function ContactsPage() {
           {contacts.telegram ? (
             <div className="mt-3">
               <p className="mb-3 text-base">Telegram: <span className="text-[color:var(--c-lime-ink)]">{contacts.telegram}</span></p>
-              <a
+              <ButtonLink
                 href={contacts.telegram_url || "https://t.me/" + contacts.telegram.replace(/^@/, "")}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center border border-transparent bg-[color:var(--c-ink)] px-5 py-2.5 text-sm font-semibold uppercase tracking-[0.08em] text-[color:var(--c-paper)] no-underline transition-colors hover:bg-[color:var(--c-lime)] hover:text-[color:var(--c-ink)]"
+                external
               >
                 Написать в Telegram
-              </a>
+              </ButtonLink>
             </div>
           ) : null}
           {contacts.email ? (

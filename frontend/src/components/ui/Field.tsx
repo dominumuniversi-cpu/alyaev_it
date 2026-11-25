@@ -1,7 +1,13 @@
 /** Поле формы: метка, подсказка, ошибка. Манифест: docs/manifests/ui/field.md */
 
+/** Единственное место, где задан вид поля ввода. Меняешь здесь — меняется везде,
+ *  включая элементы, свёрстанные вручную через INPUT_CLASS (манифест ui/field.md). */
 const BASE_INPUT =
-  "w-full rounded-[10px] border bg-[color:var(--c-paper)] px-3.5 py-2.5 text-sm text-[color:var(--c-ink)] placeholder:text-[color:var(--c-muted)]/60 transition-colors focus:outline-none focus:ring-2 focus:ring-[color:var(--c-cyan)] focus:ring-offset-2 focus:ring-offset-[color:var(--c-bg)]";
+  "w-full rounded-[10px] border bg-[color:var(--c-paper)] px-3.5 py-2.5 text-sm text-[color:var(--c-ink)] placeholder:text-[color:var(--c-muted)]/60 transition-colors focus:outline-none focus:ring-2 focus:ring-[color:var(--c-terracotta)] focus:ring-offset-2 focus:ring-offset-[color:var(--c-paper)]";
+
+/** Классы поля для самодельных select/input, которые не влезают в Field.
+ *  Экспортируется, чтобы не копировать строку стилей по страницам. */
+export const INPUT_CLASS = BASE_INPUT + " border-[color:var(--c-line)]";
 
 /** Стили поля: обычное состояние и состояние ошибки. */
 function inputClass(hasError: boolean): string {

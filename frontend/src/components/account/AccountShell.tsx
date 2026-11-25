@@ -9,7 +9,8 @@
 
 import { useCallback, useEffect, useState } from "react";
 
-import { Button } from "@/components/ui/Button";
+import { Button, ButtonLink } from "@/components/ui/Button";
+import { INPUT_CLASS } from "@/components/ui/Field";
 
 const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH ?? "/alyaev";
 
@@ -173,12 +174,7 @@ export function AccountShell({ mode, projectId }: { mode: "list" | "detail"; pro
         <p className="mb-5 text-sm text-[color:var(--c-muted)]">
           Кабинет доступен после входа. Учётную запись выдаёт исполнитель после заказа.
         </p>
-        <a
-          href={BASE_PATH + "/account/login"}
-          className="inline-block rounded-lg bg-[color:var(--c-lime)] px-5 py-3 font-medium text-[color:var(--c-ink)]"
-        >
-          Войти
-        </a>
+        <ButtonLink href={BASE_PATH + "/account/login"}>Войти</ButtonLink>
       </div>
     );
   }
@@ -526,7 +522,7 @@ function DocumentsBlock({ projectId }: { projectId: number }) {
           <select
             name="category"
             defaultValue="other"
-            className="rounded-lg border border-[color:var(--c-line)] bg-[color:var(--c-paper)] px-3 py-2 text-sm text-[color:var(--c-ink)]"
+            className={INPUT_CLASS}
           >
             <option value="tz">ТЗ</option>
             <option value="act">Акт</option>
@@ -633,7 +629,7 @@ function MessagesBlock({ projectId }: { projectId: number }) {
           rows={2}
           maxLength={5000}
           placeholder="Написать сообщение…"
-          className="min-w-[240px] flex-1 rounded-xl border border-[color:var(--c-line)] bg-[color:var(--c-paper)] p-3 text-sm"
+          className={INPUT_CLASS + " min-w-[240px] flex-1 p-3"}
         />
         <Button type="submit" disabled={busy || !text.trim()}>
           {busy ? "Отправка…" : "Отправить"}
