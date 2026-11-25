@@ -80,7 +80,7 @@ docker exec proxy nginx -s reload
 | Контактный e-mail аккаунта | `admin@alyaev.ru` |
 | Способ валидации | TLS-ALPN-01 на порту 443 (порт 80 снаружи недоступен) |
 | Файлы | `live\alyaev.ru\fullchain.pem` + `privkey.pem` |
-| Скрипт продления | `repo\infra\scripts\renew-cert-alyaev-ru.js` |
+| Скрипт продления | ``infra/scripts/renew-cert-alyaev-ru.js`` |
 | Задача планировщика | `AlyaevRu-CertRenew`, воскресенье 04:00, от SYSTEM |
 | Лог | `E:\DockerData\alyaeva\logs\cert-alyaev-ru.log` |
 
@@ -96,8 +96,8 @@ docker exec proxy nginx -s reload
 ### Как продлить вручную
 
 ```powershell
-node E:\!Develop\sites\MY\repo\infra\scripts\renew-cert-alyaev-ru.js          # по порогу 30 дней
-node E:\!Develop\sites\MY\repo\infra\scripts\renew-cert-alyaev-ru.js --force  # перевыпуск сразу
+node E:\!Develop\sites\MY\`infra/scripts/renew-cert-alyaev-ru.js`          # по порогу 30 дней
+node E:\!Develop\sites\MY\`infra/scripts/renew-cert-alyaev-ru.js` --force  # перевыпуск сразу
 ```
 
 > **Простой при продлении.** Валидация TLS-ALPN требует эксклюзивного владения портом 443,
