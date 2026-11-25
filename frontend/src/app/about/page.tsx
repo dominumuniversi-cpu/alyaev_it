@@ -54,7 +54,7 @@ export default function AboutPage() {
           flat
       id="about"
       breadcrumbs={[{ label: "Главная", href: "/" }, { label: "Обо мне" }]} title="Обо мне и опыте">
-        <div className="grid gap-8 lg:grid-cols-[1.1fr_.9fr]">
+        <div className="grid gap-10 lg:grid-cols-[minmax(280px,420px)_minmax(0,1fr)] lg:items-start lg:gap-[clamp(32px,5vw,72px)]">
           <div>
             <Image
               src={ownerPortrait.src}
@@ -63,7 +63,7 @@ export default function AboutPage() {
               height={ownerPortrait.height}
               sizes="(max-width: 1024px) 100vw, 640px"
               priority
-              className="mb-8 h-auto w-full max-w-[420px] border border-[color:var(--c-border)] object-cover"
+              className="h-auto w-full border border-[color:var(--c-border)] object-cover"
             />
             <p className="text-base leading-relaxed text-[color:var(--c-text)]">
               В IT с 2007 года. Работал с корпоративными информационными системами, IT-инфраструктурой,
