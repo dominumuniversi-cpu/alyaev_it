@@ -44,7 +44,9 @@ export default async function ServicesPage() {
       <div className="space-y-12">
         {[...groups.entries()].map(([title, items]) => (
           <div key={title}>
-            <h2 className="mb-5 font-[family-name:var(--font-display)] text-xl font-bold">{title}</h2>
+            <h2 className="mb-6 border-b border-[color:var(--c-line)] pb-3 font-[family-name:var(--font-display)] text-[clamp(22px,2.6vw,32px)] font-bold uppercase leading-none tracking-[-0.02em] text-[color:var(--c-ink)]">
+              {title}
+            </h2>
             <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
               {items.map((service) => (
                 <ServiceCard key={service.slug} service={service} />

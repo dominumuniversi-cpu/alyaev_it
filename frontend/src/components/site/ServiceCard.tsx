@@ -14,7 +14,9 @@ import { formatPrice, type ServiceCard as ServiceCardData } from "@/lib/api";
 export function ServiceCard({ service }: { service: ServiceCardData }) {
   const visualType = visualTypeFor(service.slug, service.category_slug);
   return (
-    <article className="group relative flex h-full flex-col border border-[color:var(--c-border)] bg-[color:var(--c-paper-2)] transition-colors duration-150 hover:border-[color:var(--c-ink)]">
+    <article
+      data-service-card={service.slug}
+      className="group relative flex h-full flex-col border border-[color:var(--c-border)] bg-[color:var(--c-paper-2)] transition-colors duration-150 hover:border-[color:var(--c-ink)]">
       <div className="flex items-center justify-between border-b border-[color:var(--c-border)] bg-[color:var(--c-paper)] px-4 py-2">
         <span className="font-[family-name:var(--font-mono)] text-[10px] uppercase tracking-[0.18em] text-[color:var(--c-text-muted)]">
           {service.category_title ?? "Услуга"}
