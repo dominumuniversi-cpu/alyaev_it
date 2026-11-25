@@ -6,7 +6,8 @@
 
 import Link from "next/link";
 
-import { PersonalServiceVisual, visualTypeFor } from "@/components/site/PersonalServiceVisual";
+import { KitServiceVisual, type KitServiceType } from "@/components/site/KitServiceVisual";
+import { visualTypeFor } from "@/components/site/PersonalServiceVisual";
 import { Badge } from "@/components/ui/Badge";
 import { formatPrice, type ServiceCard as ServiceCardData } from "@/lib/api";
 import { EYEBROW } from "@/lib/design/ui";
@@ -14,6 +15,16 @@ import { EYEBROW } from "@/lib/design/ui";
 /** Строка услуги: номер, название, описание, примеры, цена и срок, сцена справа. */
 export function ServiceRow({ service, index }: { service: ServiceCardData; index: number }) {
   const visualType = visualTypeFor(service.slug, service.category_slug);
+  /** Тип сцены нашего сайта → иллюстрация направления из пакета темы. */
+  const KIT_BY_VISUAL: Record<string, KitServiceType> = {
+    telegram: "telegram",
+    ai: "ai",
+    knowledge: "knowledge",
+    automation: "automation",
+    parser: "parser",
+    integration: "integration",
+  };
+  const kitType: KitServiceType = KIT_BY_VISUAL[visualType] ?? "integration";
   const number = String(index + 1).padStart(2, "0");
   return (
     <article data-service-card={service.slug} className="group relative grid gap-6 border-b border-[color:var(--c-line)] py-8 lg:grid-cols-[1.05fr_.95fr] lg:items-center lg:gap-12">
@@ -56,10 +67,9 @@ export function ServiceRow({ service, index }: { service: ServiceCardData; index
         </div>
       </div>
       <div className="on-dark:bg-[color:var(--c-ink-2)] flex items-center justify-center overflow-hidden border border-[color:var(--c-line)] bg-[color:var(--c-paper-2)] px-4 py-6">
-        <PersonalServiceVisual
-          type={visualType}
-          className="h-[190px] w-auto transition-transform duration-300 motion-safe:group-hover:scale-[1.04]"
-        />
+        <div className="h-[190px] w-full max-w-[260px] transition-transform duration-300 motion-safe:group-hover:scale-[1.04]">
+          <KitServiceVisual type={kitType} />
+        </div>
       </div>
     </article>
   );
