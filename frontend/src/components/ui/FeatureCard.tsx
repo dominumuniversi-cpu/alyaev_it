@@ -1,15 +1,20 @@
 /** Карточка тезиса. Манифест: docs/manifests/ui/feature-card.md */
 
+import { Icon, type IconName } from "@/components/ui/Icon";
+
 /** Тезис с номером или иконкой: преимущества и этапы. */
 export function FeatureCard({
   title,
   text,
   marker,
+  icon,
   tone = "gold",
 }: {
   title: string;
   text: string;
   marker?: string;
+  /** Пиктограмма сверху карточки (см. Icon). */
+  icon?: IconName;
   tone?: "gold" | "cyan";
 }) {
   return (
@@ -23,6 +28,14 @@ export function FeatureCard({
         >
           {marker}
         </p>
+      ) : null}
+      {icon ? (
+        <Icon
+          name={icon}
+          className={
+            "mb-3 h-7 w-7 " + (tone === "gold" ? "text-[color:var(--c-gold)]" : "text-[color:var(--c-cyan)]")
+          }
+        />
       ) : null}
       <h3 className="mb-2 text-base font-semibold leading-snug">{title}</h3>
       <p className="text-sm leading-relaxed text-[color:var(--c-text-muted)]">{text}</p>

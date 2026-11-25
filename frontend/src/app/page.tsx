@@ -2,6 +2,8 @@
 
 import { ButtonLink } from "@/components/ui/Button";
 import { FeatureCard } from "@/components/ui/FeatureCard";
+import type { IconName } from "@/components/ui/Icon";
+import { ProcessFlow } from "@/components/ui/ProcessFlow";
 import { Section } from "@/components/ui/Section";
 import { Hero } from "@/components/site/Hero";
 import { ServiceCard } from "@/components/site/ServiceCard";
@@ -10,13 +12,14 @@ import { fetchServices } from "@/lib/api";
 import { LeadForm } from "@/components/site/LeadForm";
 import { canonicalUrl, siteBase } from "@/lib/seo";
 
+/** Иконки преимуществ — по листу advantages-icons-sheet. */
 const ADVANTAGES = [
-  { title: "Понимание бизнес-процессов", text: "Сначала разбираю процесс, потом предлагаю решение — не наоборот." },
-  { title: "Системный подход", text: "Автоматизация встраивается в существующие системы, а не живёт отдельно." },
-  { title: "Интеграция с инфраструктурой", text: "Работа с 1С, CRM и внутренними сервисами через API." },
-  { title: "Контроль качества", text: "Тестирование на реальных данных и обработка ошибок." },
-  { title: "Документирование", text: "Инструкции и схема решения — чтобы система была понятна не только разработчику." },
-  { title: "Возможность развития", text: "Архитектура рассчитана на добавление новых функций." },
+  { icon: "shield", title: "Понимание бизнес-процессов", text: "Сначала разбираю процесс, потом предлагаю решение — не наоборот." },
+  { icon: "handshake", title: "Системный подход", text: "Автоматизация встраивается в существующие системы, а не живёт отдельно." },
+  { icon: "headset", title: "Интеграция с инфраструктурой", text: "Работа с 1С, CRM и внутренними сервисами через API." },
+  { icon: "bolt", title: "Контроль качества", text: "Тестирование на реальных данных и обработка ошибок." },
+  { icon: "cloud-up", title: "Документирование", text: "Инструкции и схема решения — чтобы система была понятна не только разработчику." },
+  { icon: "gear", title: "Возможность развития", text: "Архитектура рассчитана на добавление новых функций." },
 ];
 
 const STAGES = [
@@ -82,24 +85,15 @@ export default async function HomePage() {
         surface
         title="Как решаются задачи"
         subtitle="Пример: автоматическая обработка заявки без постоянного участия сотрудника."
+        backdrop="bgCircuitBlue"
       >
-        <ol className="grid gap-5 md:grid-cols-2 lg:grid-cols-5">
-          {SCENARIO.map((step, index) => (
-            <li key={step.title} className="rounded-2xl border border-[color:var(--c-border)] bg-[color:var(--c-bg)] p-5">
-              <p className="mb-2 font-[family-name:var(--font-display)] text-sm font-bold text-[color:var(--c-cyan)]">
-                Шаг {index + 1}
-              </p>
-              <h3 className="mb-2 text-sm font-semibold leading-snug">{step.title}</h3>
-              <p className="text-sm leading-relaxed text-[color:var(--c-text-muted)]">{step.text}</p>
-            </li>
-          ))}
-        </ol>
+        <ProcessFlow steps={SCENARIO} />
       </Section>
 
       <Section id="advantages" title="Почему со мной">
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {ADVANTAGES.map((item) => (
-            <FeatureCard key={item.title} title={item.title} text={item.text} />
+            <FeatureCard key={item.title} icon={item.icon as IconName} title={item.title} text={item.text} />
           ))}
         </div>
       </Section>
@@ -108,6 +102,7 @@ export default async function HomePage() {
         id="stages"
         surface
         title="Этапы работы"
+        backdrop="bgEarthNetwork"
         subtitle="От заявки до поддержки — понятный процесс без сюрпризов."
       >
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">

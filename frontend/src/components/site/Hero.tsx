@@ -4,6 +4,7 @@ import Image from "next/image";
 
 import { ButtonLink } from "@/components/ui/Button";
 import { heroVisual } from "@/lib/design/images";
+import { SectionBackdrop } from "@/components/ui/SectionBackdrop";
 
 // Только то, чего нет в лиде выше: Telegram-боты и AI-ассистенты там уже названы.
 const DIRECTIONS = ["CRM", "API", "1С", "Сайты", "Автоматизация"];
@@ -20,6 +21,10 @@ export function Hero() {
       aria-labelledby="hero-title"
       className="relative overflow-hidden border-b border-[color:var(--c-border)]"
     >
+      <SectionBackdrop
+        name="bgCircuitGold"
+        className="bg-[length:760px] bg-[position:right_center] opacity-[0.14]"
+      />
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0"

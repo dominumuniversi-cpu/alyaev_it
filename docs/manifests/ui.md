@@ -24,6 +24,8 @@
 | [`ui/section.md`](ui/section.md) | Section (контейнер секции) — контейнер секции: отступы, фон, ширина |
 | [`ui/breadcrumbs.md`](ui/breadcrumbs.md) | Breadcrumbs (хлебные крошки) — хлебные крошки на внутренних страницах |
 | [`ui/accordion.md`](ui/accordion.md) | Accordion (FAQ) — FAQ-аккордеон: разметка, доступность, состояния |
+| [`ui/icons.md`](ui/icons.md) | Icon — пиктограммы SVG, правила вместо нарезки листов иконок |
+| [`ui/process-flow.md`](ui/process-flow.md) | ProcessFlow — инфографика шагов процесса (главная, `#scenario`) |
 
 ## Блоки страниц
 

@@ -177,3 +177,38 @@ Slug услуги приходит из `GET /api/v1/public/services` (`category
 - `tokens.md` — цвета для затемнения. Файл токенов на самом деле `frontend/src/app/globals.css` (в манифесте указан несуществующий `src/styles/tokens.css`, а токена `--c-bg-2` нет — есть `--c-surface-2`).
 - `seo-panel.md` — поле OG image есть, но OG-картинка сейчас нигде не отдаётся; внешний вид этой задачи не решает.
 - `uploads.md` — загруженные файлы (`/api/v1/public/files/{stored_name}`) не заменяют набор из `public/images`.
+
+## Как пользоваться материалами целиком (разбор доски, 25.11.2026)
+
+Исходная доска `reference/visual-assets-board.webp` разобрана вижном — вот её состав и куда что идёт:
+
+| Блок на доске | Куда на сайте |
+|---|---|
+| `hero-main` — ноутбук с дашбордом | Hero, правая колонка (сделано) |
+| 6 карточек услуг (бот, ИИ, база знаний, автоматизация, парсеры, интеграции) | ServiceCard (сделано) |
+| `about-me` — рабочее место с кодом | /about/ (сделано) |
+| `portfolio` — 3D-дашборд, `growth` — город со стрелкой роста | /portfolio/ (сделано) |
+| `services-icons` — 6 линейных иконок | `Icon` (SVG), манифест `icons.md` (сделано) |
+| `advantages-icons` — 5 неоновых плашек | `Icon` в FeatureCard (сделано) |
+| `integrations` — схема «облако ↔ 1С/CRM/БД» | инфографика ProcessFlow / будущая схема интеграций |
+| `bg-tech-1` (микросхемы), `bg-tech-2` (соты) | подложки технических секций (Hero, «Как решаются задачи») |
+| `bg-earth` (цифровой глобус), `bg-wave` (неоновые волны) | фоны секций и CTA-блоков |
+| `mobile-telegram`, `servers` | иллюстрации мобильных решений и инфраструктуры (задел) |
+| `Структура папок` — дерево проекта | внутренние документы, на сайт не идёт |
+
+Ограничение: доска — эскиз на тёмном фоне, не макет. Текст с неё не переносится (правила HTML-текста
+из README пакета), картинки не режутся, пиктограммы рисуются SVG.
+
+## Сборка образа (иначе картинки не отдаются)
+
+`frontend/Dockerfile` объявляет `ARG BASE_PATH=/alyaev`. Если собрать образ без `--build-arg`,
+в роуты попадает префикс `/alyaev`, и сайт в корне домена отдаёт 404 — включая `/images/**`.
+
+```
+docker build -t alyaev-it-frontend:latest \
+  --build-arg BASE_PATH= --build-arg SITE_URL=https://alyaev.ru \
+  -f frontend/Dockerfile frontend
+```
+
+Проверка после пересборки: `docker exec alyaev-web sh -c "head -c 200 /app/.next/routes-manifest.json"`
+должен показать `"basePath": ""`. Затем `curl -k -H 'Host: alyaev.ru' https://192.168.8.49/images/hero/hero-visual.webp` → 200.

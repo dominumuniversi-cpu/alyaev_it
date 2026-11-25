@@ -1,6 +1,8 @@
 /** Контейнер секции. Манифест: docs/manifests/ui/section.md */
 
 import { Breadcrumbs, type Crumb } from "@/components/ui/Breadcrumbs";
+import { SectionBackdrop } from "@/components/ui/SectionBackdrop";
+import type { DecorativeBackgroundName } from "@/lib/design/images";
 
 /** Секция с заголовком и вложенным контентом. */
 export function Section({
@@ -9,6 +11,7 @@ export function Section({
   subtitle,
   children,
   surface = false,
+  backdrop,
   breadcrumbs,
   headingLevel = 2,
 }: {
@@ -17,6 +20,8 @@ export function Section({
   subtitle?: string;
   children: React.ReactNode;
   surface?: boolean;
+  /** Декоративный фон из реестра (docs/manifests/ui/images.md); самый «дешёвый» способ оживить секцию. */
+  backdrop?: DecorativeBackgroundName;
   /** Крошки для страниц второго уровня и глубже (манифест breadcrumbs.md). */
   breadcrumbs?: Crumb[];
   /**
@@ -32,10 +37,15 @@ export function Section({
     <section
       id={id}
       aria-labelledby={title ? id + "-title" : undefined}
-      className={surface ? "bg-[color:var(--c-surface)]" : "bg-transparent"}
+      className={
+        "relative overflow-hidden " + (surface ? "bg-[color:var(--c-surface)]" : "bg-transparent")
+      }
       style={{ paddingBlock: "var(--space-section)" }}
     >
-      <div className="mx-auto w-full max-w-[1200px] px-4 sm:px-6 lg:px-8">
+      {backdrop ? (
+        <SectionBackdrop name={backdrop} className="bg-[length:min(900px,120%)] opacity-[0.18]" />
+      ) : null}
+      <div className="relative mx-auto w-full max-w-[1200px] px-4 sm:px-6 lg:px-8">
         {breadcrumbs ? <Breadcrumbs items={breadcrumbs} /> : null}
         {title ? (
           <header className="mb-10 max-w-3xl">
