@@ -1,6 +1,7 @@
 /** Контейнер секции. Манифест: docs/manifests/ui/section.md */
 
 import { Breadcrumbs, type Crumb } from "@/components/ui/Breadcrumbs";
+import { DISPLAY_H1, DISPLAY_H2 } from "@/lib/design/ui";
 
 /** Секция с заголовком и вложенным контентом. */
 export function Section({
@@ -46,14 +47,14 @@ export function Section({
             {Heading === "h1" ? (
               <h1
                 id={id + "-title"}
-                className="font-[family-name:var(--font-display)] text-[clamp(34px,5.5vw,68px)] font-bold uppercase leading-[0.95] tracking-[-0.02em] text-[color:var(--c-ink)]"
+                className={DISPLAY_H1}
               >
                 {title}
               </h1>
             ) : (
               <h2
                 id={id + "-title"}
-                className="font-[family-name:var(--font-display)] text-[clamp(26px,3.6vw,44px)] font-bold uppercase leading-[1] tracking-[-0.02em] text-[color:var(--c-ink)]"
+                className={DISPLAY_H2}
               >
                 {title}
               </h2>

@@ -31,7 +31,11 @@ export const EYEBROW =
 
 /** Заголовок первого уровня: крупная display-типографика на всю ширину. */
 export const DISPLAY_H1 =
-  "font-[family-name:var(--font-display)] text-[clamp(38px,7vw,92px)] font-bold uppercase leading-[0.92] tracking-[-0.03em] text-[color:var(--c-ink)]";
+  "font-[family-name:var(--font-display)] text-[clamp(34px,5.5vw,68px)] font-bold uppercase leading-[0.95] tracking-[-0.02em] text-[color:var(--c-ink)]";
+
+/** Заголовок первого экрана: крупнее секционного, до 104px. */
+export const DISPLAY_HERO =
+  "font-[family-name:var(--font-display)] text-[clamp(40px,6.4vw,104px)] font-bold uppercase leading-[0.9] tracking-[-0.035em] text-[color:var(--c-ink)]";
 
 /** Заголовок секции. */
 export const DISPLAY_H2 =

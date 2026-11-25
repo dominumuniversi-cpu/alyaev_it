@@ -1,6 +1,7 @@
 /** Главный экран. Манифест: docs/manifests/ui/hero.md (PERSONAL v2.0) */
 
 import { ButtonLink } from "@/components/ui/Button";
+import { DISPLAY_HERO, EYEBROW } from "@/lib/design/ui";
 import { HeroArt } from "@/components/site/HeroArt";
 
 const DIRECTIONS = ["CRM", "API", "1С", "Сайты", "Автоматизация"];
@@ -22,12 +23,12 @@ export function Hero() {
     <section aria-labelledby="hero-title" className="relative overflow-hidden border-b border-[color:var(--c-line)]">
       <div className="mx-auto grid w-full max-w-[var(--shell-max)] gap-10 px-[var(--shell-gutter)] pb-[var(--space-section)] pt-10 lg:grid-cols-[1.12fr_.88fr] lg:items-end lg:gap-12 lg:pt-14">
         <div>
-          <p className="mb-6 font-[family-name:var(--font-mono)] text-[11px] uppercase tracking-[0.22em] text-[color:var(--c-terra-ink)]">
+          <p className={EYEBROW + " mb-6 text-[11px] text-[color:var(--c-terra-ink)]"}>
             Автоматизация бизнеса / AI-разработка / системная интеграция
           </p>
           <h1
             id="hero-title"
-            className="font-[family-name:var(--font-display)] text-[clamp(40px,6.4vw,104px)] font-bold uppercase leading-[0.9] tracking-[-0.035em] text-[color:var(--c-ink)]"
+            className={DISPLAY_HERO}
           >
             Сложные процессы.
             <br />

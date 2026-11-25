@@ -9,6 +9,7 @@ import Link from "next/link";
 import { PersonalServiceVisual, visualTypeFor } from "@/components/site/PersonalServiceVisual";
 import { Badge } from "@/components/ui/Badge";
 import { formatPrice, type ServiceCard as ServiceCardData } from "@/lib/api";
+import { EYEBROW } from "@/lib/design/ui";
 
 /** Строка услуги: номер, название, описание, примеры, цена и срок, сцена справа. */
 export function ServiceRow({ service, index }: { service: ServiceCardData; index: number }) {
@@ -18,7 +19,7 @@ export function ServiceRow({ service, index }: { service: ServiceCardData; index
     <article data-service-card={service.slug} className="group relative grid gap-6 border-b border-[color:var(--c-line)] py-8 lg:grid-cols-[1.05fr_.95fr] lg:items-center lg:gap-12">
       <div>
         <div className="mb-3 flex items-center gap-3">
-          <span className="font-[family-name:var(--font-mono)] text-[11px] uppercase tracking-[0.22em] text-[color:var(--c-terra-ink)]">
+          <span className={EYEBROW + " text-[11px] text-[color:var(--c-terra-ink)]"}>
             {number}
           </span>
           <span className="font-[family-name:var(--font-mono)] text-[11px] uppercase tracking-[0.18em] text-[color:var(--c-muted)]">
